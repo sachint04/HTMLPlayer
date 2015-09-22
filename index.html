@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>HTML Player</title>
+        <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+                Remove this if you use the .htaccess -->
+        <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!-- <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> -->
+        <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
+        <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'> -->
+
+        <!-- CSS Includes -->
+        <link rel="stylesheet" type="text/css" href="css/globals.css"/>
+        <link rel="stylesheet" type="text/css" href="css/themes/default/skin.css"/>
+        <link rel="stylesheet" type="text/css" href="css/themes/default/uislider.css"/>
+
+
+
+        <!---Media files---->
+
+        <!--[if lt IE 9]>
+            <link rel="stylesheet" type="text/css" href="css/ie8-support.css" />
+        <![endif]-->
+    </head>
+    <body>
+        <!--[if lt IE 9]>
+            <img src="images/Bg_Img_01a.jpg" id="bg-img" />
+        <![endif]-->
+        <div id="loader" class="text-hide">
+            Loading <img src="images/loading_black.gif" alt=""/>
+        </div>
+        <div id="application_wrapper">
+            <div id="application">
+            <!-- Logger -->
+            <div id="logger" class="hide" style="display:none;">
+                <h1 id="log_title">Debugger</h1>
+                <p id="log_body"></p>
+                <ul id="log_nav">
+                    <li><a id="minimize" href="">minimize</a></li>
+                    <li><a id="maximize" href="">maxmize</a></li>
+                    <li><a id="close" href="">close</a></li>
+                </ul>
+            </div>
+
+            <!-- Loader -->
+
+            <div class="overlay"></div>
+
+            <!-- Popup Container -->
+            <div id="popup_container" class="reveal-modal small" >
+            </div>
+
+            <!-- AJAX Page Wrapper -->
+            <div id="content_wrapper">
+                <!-- The UI Top Band gets appended here -->
+                <section id="content" role="main" aria-live="polite" tabindex="-1">
+                    <!-- The Page Content gets loaded here -->
+                </section>
+                <!-- The UI Bottom Band gets appended here -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Javascript Includes -->
+
+        <!--[if lt IE 9]>
+            <script src="js/libs/es5-shim.min.js" type="text/javascript"></script>
+            <script src="js/libs/json3.min.js" type="text/javascript"></script>
+        <![endif]-->
+
+        <script data-main="js/main.js" type="text/javascript" src="js/libs/require.min.js"></script>
+    </body>
+</html>

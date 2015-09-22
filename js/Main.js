@@ -1,124 +1,109 @@
-require.config({
-    shim:{
-		
+/*
+ Created on : Aug 18, 2015, 1:30:11 PM
+ Author     : Vincent.Gomes
+ */
+/* ------------
+ * Polyfills
+ * ------------ */
+//  Protect against IE8 not having developer console open.
+var console = window.console || {
+    "log" : function(){
     },
-    paths:{
-        jquery				: 'libs/jquery-1.9.1.min',
-        x2js				: 'libs/xml2json.min'
+    "error" : function(){
+    },
+    "trace" : function(){
     }
-});
-
-if (typeof Object.create !== 'function') {
-    Object.create = function (o) {
-        function F() {}
+};
+if(typeof Object.create !== 'function'){
+    Object.create = function(o){
+        function F(){
+        }
         F.prototype = o;
         return new F();
     };
 }
-
 // Credit to Douglas Crockford for this bind method
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function (oThis) {
-        if (typeof this !== "function") {
+if(!Function.prototype.bind){
+    Function.prototype.bind = function(oThis){
+        if(typeof this !== "function"){
             // closest thing possible to the ECMAScript 5 internal IsCallable function
-            throw new TypeError ("Function.prototype.bind - what is trying to be bound is not callable");
+            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
         }
 
-        var aArgs = Array.prototype.slice.call (arguments, 1),
+        var aArgs = Array.prototype.slice.call(arguments, 1),
                 fToBind = this,
-                fNOP = function () {
+                fNOP = function(){
                 },
-                fBound = function () {
-                    return fToBind.apply (this instanceof fNOP && oThis
-                            ? this
-                            : oThis,
-                            aArgs.concat (Array.prototype.slice.call (arguments)));
+                fBound = function(){
+                    return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
                 };
 
         fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP ();
+        fBound.prototype = new fNOP();
 
         return fBound;
     };
 }
-
 /*
  * Array.indexOf fix for IE8
  * Recommended Polyfill MDC: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
  */
-if (!Array.prototype.indexOf) {
-	Array.prototype.indexOf = function(searchElement, fromIndex) {
-		if (this === undefined || this === null) {
-			throw new TypeError('"this" is null or not defined');
-		}
+if(!Array.prototype.indexOf){
+    Array.prototype.indexOf = function(searchElement, fromIndex){
+        if(this === undefined || this === null){
+            throw new TypeError('"this" is null or not defined');
+        }
 
-		var length = this.length >>> 0;// Hack to convert object.length to a UInt32
+        var length = this.length >>> 0;// Hack to convert object.length to a UInt32
 
-		fromIndex = +fromIndex || 0;
+        fromIndex = +fromIndex || 0;
 
-		if (Math.abs(fromIndex) === Infinity) {
-			fromIndex = 0;
-		}
+        if(Math.abs(fromIndex) === Infinity){
+            fromIndex = 0;
+        }
 
-		if (fromIndex < 0) {
-			fromIndex += length;
-			if (fromIndex < 0) {
-				fromIndex = 0;
-			}
-		}
+        if(fromIndex < 0){
+            fromIndex += length;
+            if(fromIndex < 0){
+                fromIndex = 0;
+            }
+        }
 
-		for (; fromIndex < length; fromIndex++) {
-			if (this[fromIndex] === searchElement) {
-				return fromIndex;
-			}
-		}
+        for(; fromIndex < length; fromIndex++){
+            if(this[fromIndex] === searchElement){
+                return fromIndex;
+            }
+        }
 
-		return -1;
-	};
+        return -1;
+    };
 }
-
-var isMobile	 = function(){
-	var hasTouch = false;
-    if(navigator.userAgent.match(/Android/i)){
-    	hasTouch = true;
-    }else if(navigator.userAgent.match(/BlackBerry/i)){
-    	hasTouch = true;
-    }else if(navigator.userAgent.match(/iPhone|iPad|iPod/i)){
-    	hasTouch = true;
-    }else if(navigator.userAgent.match(/IEMobile/i)){
-    	hasTouch = true;
-    }
-    return hasTouch;
-}();
-
-
-require([
-	// Load our app module and pass it to our definition function
-	'framework/ResourceLoader'
-], function(ResourceLoader){
-	// The "app" dependency is passed in as "Application"
-	var oScope = this;
-	var contentFolder = 'ME_AE_DIA_U6_B10_MCQ2';
-	// var contentFolder = 'MCQ';
-
-    require(['content/'+contentFolder+'/page.js'], function(page){
-	 	var $container = $('#page_container');	
-           var oResourcePaths = 	['content/'+contentFolder+'/page.css',
-           							'content/'+contentFolder+'/page.html',
-           							'content/'+contentFolder+'/page.xml',
-            						];
-		var callback = function(oScope, aReso, oLoader, page){
-	 			var oPage = new page($container, aReso[0], aReso[1], aReso[2]);
-				oPage.init();
-				
-	  			oLoader.destroy();
-	  			oLoader = null;
-			};
-			
-	 	var rl = new ResourceLoader();
-    	rl.loadResource(oResourcePaths, this, callback,[page]);    		
-     });
-		
+// ** Declare the Require Config
+require.config({
+    waitseconds : 200,
+    shim:{
+        'jqueryui':{
+            deps: ['jquery']
+        },
+        'jqueryuitouch':{
+            deps: ['jquery']
+        }
+    },
+    paths : {
+        jquery              : 'libs/jquery-1.11.3.min',
+        x2js                : 'libs/xml2json.min',
+        sm2                 : 'libs/soundmanager2-jsmin',
+        jqueryui            : 'libs/jquery-ui-1.11.3.min',
+        jqueryuitouch       : 'libs/jqueryui_touch',
+    },
+    /*baseUrl: "../../js",*/
+    callback : init()
 });
-
-
+// ** Application start point
+function init(){
+    require([
+        'core/DFEApplication'
+    ], function(DFEApplication){
+        DFEApplication.init();
+    });
+}

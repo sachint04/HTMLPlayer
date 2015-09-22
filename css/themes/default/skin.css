@@ -1,0 +1,112 @@
+/* Default Font Face, Color & Size */
+*:focus {
+    outline: none;
+}
+.full-width {
+    width: 100%
+}
+.full-height {
+    width: 100%
+}
+.body-text-container ul {
+    padding-left: 20px;
+}
+.outline{
+    border:1px solid #d0d0b9;
+}
+/* Styles for the Main Content Wrapper */
+
+#content_wrapper > #content {
+    position: relative;
+    width: 100%;
+    /*height: 605px;*/
+    padding-top: 30px;
+    background-color: #ffffff;
+}
+
+/* IOS play button */
+#ios_play {
+    background-color: rgba(0,0,0,0.4);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 9;
+    width: 1014px;
+    height: 650px;
+}
+#ios_play button {
+    background: transparent !important;
+    margin: 20% auto;
+    padding: 0 !important;
+    width: 95px;
+    position: relative;
+    display: inherit;
+    border: none;
+}
+/*-------------------end------------------ */
+.ui-skin {
+    background: url('../../../images/spritesheet.png') no-repeat scroll 0px 0px transparent;
+}
+
+#swiffycontainer{
+    height: 615px;
+}
+/* ------------- AUDIO PANEL -----------------*/
+#audio {
+    display: inline-block !important;
+}
+
+#panel_audiocontrols {
+	position: relative;
+}
+#panel_audiocontrols.disabled {
+    /*opacity: 0.4;*/
+}
+#panel_audiocontrols.disabled .ui-skin.hover {
+    cursor: default;
+}
+.ui-play-btn {
+    width: 30px;
+    height: 30px;
+    background-position-x: -13px;
+    background-position-y: -15px;
+    position: absolute;
+}
+.ui-play-btn:hover {
+    background-position-y: -40px;
+}
+.ui-pause-btn {
+    width: 30px;
+    height: 30px;
+    background-position-x: -47px;
+    background-position-y: -15px;
+}
+.ui-pause-btn:hover {
+    background-position-y: -40px;
+}
+#slider_playhead_seek.ui-slider {
+	position: absolute;
+    float: left;
+    height: 2px;
+    left: 40px;
+    top: 14px;
+    width: 70%;
+    max-width: 650px;
+}
+/* ----- Audio Panel End -----------*/
+
+/* ----------- UI buttons End -------------*/
+
+
+/*
+#swiffyHolder {
+    width: 745px;
+    height: 533px;
+    overflow: hidden;
+}
+#swiffycontainer {
+    width: 745px;
+    height: 533px;
+    position: absolute;
+}*/
+

@@ -1,0 +1,146 @@
+<!-- The ID below for the root div tag wil be replaced dynamically by the Pages GUID -->
+<div id="content" class="page-content swiffy-page">
+    <div id="page_wrapper">
+    	<div id="swiffy_holder">
+    	    <div id="swiffycontainer">
+
+    	    </div>
+    	</div>
+    	<div id="audiopanelcontainer">
+
+    	</div>
+    </div>
+</div>
+
+<script>
+    'use strict';
+    //var page = function(){}();
+        var nRequireLoadedInterval,
+            sPageName = 'ME_MP_DEF_U6_B1',
+            oResources = {
+                xml: 'page.xml',
+                css: 'page.css'
+            };
+        if(window.require){
+            console.log("Require is defined");
+            // If require is there defined by some other developer
+            console.log('DFEApplication defined : '+require.defined('core/DFEApplication'));
+            if(!require.defined('core/DFEApplication')){
+                // But still the DFEApplication is not defined then the page is supposed to be in a standalone mode
+                declareRequireConfig.call(this);
+            }else{
+                init();
+            }
+        }else{
+            console.log("Require is not found");
+            initStandaloneMode.call(this);
+        }
+        function initStandaloneMode(){
+            console.log("** Standalone **");
+            // Define require config
+            var oScope = this,
+                sCssPath = "../../css/globals.css",
+                sAudioPanelCssPath = "../../css/themes/default/skin.css",
+                sUISliderCssPath = "../../css/themes/default/uislider.css",
+                sRequireJSPath = '../../js/libs/require.min.js',
+                style = document.createElement('link'),
+                audioPanelStyle = document.createElement('link'),
+                UISliderStyle = document.createElement('link'),
+                script = document.createElement("script");
+
+            /* Append the JS Script Tag for require JS */
+            script.setAttribute("type", "text/javascript");
+            //script.setAttribute("data-main", "page");
+            script.setAttribute("src", sRequireJSPath);
+            document.body.appendChild(script);
+
+            /* Append the CSS */
+            style.setAttribute("type", "text/css");
+            style.setAttribute("rel", "stylesheet");
+            style.setAttribute("href", sCssPath);
+            document.head.appendChild(style);
+
+            audioPanelStyle.setAttribute("type", "text/css");
+            audioPanelStyle.setAttribute("rel", "stylesheet");
+            audioPanelStyle.setAttribute("href", sAudioPanelCssPath);
+            document.head.appendChild(audioPanelStyle);
+
+            UISliderStyle.setAttribute("type", "text/css");
+            UISliderStyle.setAttribute("rel", "stylesheet");
+            UISliderStyle.setAttribute("href", sUISliderCssPath);
+            document.head.appendChild(UISliderStyle);
+
+            nRequireLoadedInterval = setInterval(function(){
+                if(window.require){
+                    declareRequireConfig.call(oScope);
+                }
+            }, 100);
+        }
+        function declareRequireConfig(){
+            console.log('declareRequireConfig() ');
+            clearInterval(nRequireLoadedInterval);
+
+            // ** Declare the Require Config
+            require.config({
+                waitseconds : 200,
+                shim:{
+                    'jqueryui':{
+                        deps: ['jquery']
+                    },
+                    'jqueryuitouch':{
+                        deps: ['jquery']
+                    }
+                },
+                paths : {
+                    jquery              : 'libs/jquery-1.11.3.min',
+                    x2js                : 'libs/xml2json.min',
+                    sm2                 : 'libs/soundmanager2-jsmin',
+                    jqueryui            : 'libs/jquery-ui-1.11.3.min',
+                    jqueryuitouch       : 'libs/jqueryui_touch',
+                },
+                baseUrl: "../../js",
+                callback : setEnvironment()
+            });
+        }
+        function setEnvironment(){
+            var oScope = this;
+            require([
+                'model/Constants'
+            ], function($, Page, Constants){
+                Constants.setEnvironment(true);
+                init.call(this);
+            });
+        }
+        function init(p_fnCallback){
+            console.log('init() ');
+            var oScope = this;
+            require([
+                'jquery',
+                'controller/view/AbstractPage',
+            ], function($, Page){
+                var oPage = new Page();
+                oPage.init($('#content'), oResources, sPageName);
+                //p_fnCallback.call(oScope);
+            });
+        }
+        if(DFEPages === undefined || DFEPages === null){
+            var DFEPages = new Object();
+        }
+        DFEPages.page = {
+            init : function(p_fnCallback){
+                console.log('init() ');
+                var oScope = this;
+                require([
+                    'jquery',
+                    'controller/view/AbstractPage'
+                    /*'../content/' + sPageName + '/page'*/
+                ], function($, Page){
+                    var oPage = new Page();
+                    oPage.init($('#content'), oResources, sPageName);
+                    //p_fnCallback.call(oScope);
+                });
+            }
+        }
+
+
+</script>
