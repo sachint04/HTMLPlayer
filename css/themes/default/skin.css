@@ -109,4 +109,28 @@
     height: 533px;
     position: absolute;
 }*/
+.MCQ.row{
+	padding:10px;
+}
 
+.MCQ.row .question{
+	margin-bottom:15px;	
+}
+#quizpanel {
+    width: 746px;
+    height: 35px;
+    background-color: #504E4C;
+    position: relative;
+    clear:both;
+    float:left;
+}
+#quizpanel #btnShowSolution {
+    cursor: pointer;
+    background-color: #364159;
+    color: #fff;
+    height: 100%;
+    border: none;
+    width: 150px;
+    margin: 0 auto;
+    position: relative;
+}

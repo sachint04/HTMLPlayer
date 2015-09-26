@@ -1,16 +1,35 @@
+<!--<div id="ME_AE_DIA_U6_B10_MCQ2" class="mcq-container">
+	<div id="question" class="question"></div>
+	<ul class="option-container">
+		<li id="Q1" class="radio" >
+			<span  class="icon">A</span><span id="q1-option" class="option-text"></span>
+		</li>
+		<li id="Q2" class="radio" >
+			<span  class="icon">B</span><span id="q2-option" class="option-text"></span>
+		</li>
+		<li id="Q3" class="radio correct" >
+			<span  class="icon">C</span><span id="q3-option" class="option-text"></span>
+		</li>
+		<li id="Q4" class="radio" >
+			<span  class="icon">D</span><span id="q4-option" class="option-text"></span>
+		</li>
+	</ul>
+</div>
+-->
 <!-- The ID below for the root div tag wil be replaced dynamically by the Pages GUID -->
 <div id="content" class="page-content swiffy-page">
     <div id="page_wrapper">
-    	<div id="swiffy_holder">
-    	    <div id="swiffycontainer">
+    	<div id="content_wrapper"></div>
+    	<div id="swiffy_holder" class="hide">
+    	    <div id="swiffycontainer" class="hide" >
 
     	    </div>
     	</div>
-    	<div id="audiopanelcontainer">
+    	<div id="audiopanelcontainer" class="hide">
 
     	</div>
-    	<div id="quizpanel">
-
+    	<div id="quizpanel" class="hide">
+    		<button id="btnShowSolution">Show Solution</button>
     	</div>
     </div>
 </div>
@@ -19,10 +38,13 @@
     'use strict';
     //var page = function(){}();
         var nRequireLoadedInterval,
-            sPageName = 'ME_MP_DEF_U6_B1',
+           //sPageName = 'ME_MP_DEF_U6_B1',
+           // sPageName = 'ME_AE_DIA_U6_B10_MCQ2',
+           sPageName = 'ME_AE_DIA_U6_B10_MCQ1',
             oResources = {
                 xml: 'page.xml',
-                css: 'page.css'
+                css: 'page.css',
+                html: 'page.html'
             };
         if(window.require){
             console.log("Require is defined");
@@ -42,10 +64,10 @@
             console.log("** Standalone **");
             // Define require config
             var oScope = this,
-                sCssPath = "../../css/globals.css",
-                sAudioPanelCssPath = "../../css/themes/default/skin.css",
-                sUISliderCssPath = "../../css/themes/default/uislider.css",
-                sRequireJSPath = '../../js/libs/require.min.js',
+                sCssPath = "../css/globals.css",
+                sAudioPanelCssPath = "../css/themes/default/skin.css",
+                sUISliderCssPath = "../css/themes/default/uislider.css",
+                sRequireJSPath = '../js/libs/require.min.js',
                 style = document.createElement('link'),
                 audioPanelStyle = document.createElement('link'),
                 UISliderStyle = document.createElement('link'),
@@ -74,7 +96,10 @@
             document.head.appendChild(UISliderStyle);
 
             nRequireLoadedInterval = setInterval(function(){
+            	console.log('Check For require!');
+                 clearInterval(nRequireLoadedInterval);
                 if(window.require){
+                
                     declareRequireConfig.call(oScope);
                 }
             }, 100);
@@ -101,19 +126,19 @@
                     jqueryui            : 'libs/jquery-ui-1.11.3.min',
                     jqueryuitouch       : 'libs/jqueryui_touch',
                 },
-                baseUrl: "../../js",
+                baseUrl: "../js",
                 callback : setEnvironment()
             });
-        }
+        };
         function setEnvironment(){
             var oScope = this;
             require([
                 'model/Constants'
-            ], function($, Page, Constants){
+            ], function(Constants){
                 Constants.setEnvironment(true);
                 init.call(this);
             });
-        }
+        };
         function init(p_fnCallback){
             console.log('init() ');
             var oScope = this;
@@ -125,10 +150,10 @@
                 oPage.init($('#content'), oResources, sPageName);
                 //p_fnCallback.call(oScope);
             });
-        }
+        };
         if(DFEPages === undefined || DFEPages === null){
             var DFEPages = new Object();
-        }
+        };
         DFEPages.page = {
             init : function(p_fnCallback){
                 console.log('init() ');
@@ -143,7 +168,7 @@
                     //p_fnCallback.call(oScope);
                 });
             }
-        }
+        };
 
 
 </script>

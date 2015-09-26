@@ -38,7 +38,8 @@ define([
     function loadPage(){
         console.log('CourseController.loadPage() | ');
         var oScope = this;
-        LoaderUtil.loadResource('content/ME_MP_DEF_U6_B1/page.html', function(data){
+        LoaderUtil.loadResource('content/wrapper.html', function(data){
+       // LoaderUtil.loadResource('content/ME_MP_DEF_U6_B1/page.html', function(data){
             onPageLoaded.call(oScope, data);
         });
     }
