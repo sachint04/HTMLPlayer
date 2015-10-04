@@ -1,7 +1,7 @@
 define([
     'jquery',
     'x2js',
-    'model/Constants',
+    /*'model/Constants',*/
     'core/AudioManager',
     'controller/SwiffyController',
     'controller/QuizController',
@@ -9,7 +9,7 @@ define([
     'util/EventDispatcher',
     'validators/ErrorApi',
     'util/MessageLogger'
-], function($, X2JS, Constants, AudioManager, SwiffyController, QuizController, LoaderUtil, EventDispatcher, Logger){
+], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, QuizController, LoaderUtil, EventDispatcher, Logger){
     'use strict';
     function AbstractPage(){;
         EventDispatcher.call(this);
@@ -37,40 +37,44 @@ define([
 
         this.onComponentLoaded = onComponentLoaded.bind(this);
     };
-    
+
     AbstractPage.prototype = Object.create(EventDispatcher.prototype);
     AbstractPage.prototype.constructor = AbstractPage;
 
-    AbstractPage.prototype.init = function(p_$domPageContainer, p_oResources, p_sPageName){
+    AbstractPage.prototype.init = function(p_$domPageHolder, p_oResources, p_sPageName){
        console.log('AbstractPage.init() | '+p_sPageName);
-        this.$domView = p_$domPageContainer;
+        this.$domView = p_$domPageHolder;
         this.sGUID = p_sPageName;
-        Constants.setCurrentPageName(p_sPageName);
+        //Constants.setCurrentPageName(p_sPageName);
         loadResources.call(this, p_oResources);
     };
-    
+
     function loadResources(p_oResources){
-        console.log('AbstractPage.loadResources() | p_oResources = '+JSON.stringify(p_oResources)+'\nXml Location = '+Constants.getLocation('xml'));
+        console.log('AbstractPage.loadResources() | p_oResources = '+JSON.stringify(p_oResources));
         var oScope = this;
-        p_oResources.xml = Constants.getLocation('xml') +this.sGUID+'/'+ p_oResources.xml;
+        /*p_oResources.xml = Constants.getLocation('xml') +this.sGUID+'/'+ p_oResources.xml;
         p_oResources.css = Constants.getLocation('css') + this.sGUID+'/'+p_oResources.css;
         if(this.$domView){
 	        p_oResources.html = Constants.getLocation('css') + this.sGUID+'/'+p_oResources.html;
-        }
+        }*/
         LoaderUtil.loadResource(p_oResources, function(data){
             onResourceLoaded.call(oScope, data);
         });
     }
     function onResourceLoaded(data){
-        var sXmlData = data.xml,
-            sCssData = (data.css || ''),
-            sHtml 	= (data.html || ''),
+        var sXmlData    = data.xml,
+            sCssData    = (data.css || ''),
+            $htmlView   = $(data.html),
             oX2JS = new X2JS();
-        this.$domView.find('#content_wrapper').append('<style>'+sCssData+'</style>');   
-        this.$domView.find('#content_wrapper').append($(sHtml));   
+
+        this.$domView.append($htmlView);
+        this.$domView.find('#content').attr('id', this.sGUID);
+        this.$domView = this.$domView.find('#'+this.sGUID);
+        //this.$domView.find('#content_wrapper').append('<style>'+sCssData+'</style>');
+        //this.$domView.find('#content_wrapper').append($(sHtml));
         this.jsonXMLData = oX2JS.xml2json(sXmlData);
 
-        //console.log('AbstractPage.onResourceLoaded() | sXmlData = '+sXmlData+' : '+this);
+        console.log('AbstractPage.onResourceLoaded() | sXmlData = '+sXmlData+' : '+this);
         this.dispatchEvent('PAGE_RESOURCES_LOADED', {type : 'PAGE_RESOURCES_LOADED', target : this});
         parsePageJson.call(this);
     }
@@ -86,8 +90,9 @@ define([
     function parseSoundsNode(){
         console.log('AbstractPage.parseSoundsNode() | ');
         //AudioManager.init();
-        if(this.jsonXMLData.data.sounds)
-        AudioManager.parseSoundsNode(this.jsonXMLData.data.sounds);
+        if(this.jsonXMLData.data.sounds){
+            AudioManager.parseSoundsNode(this.jsonXMLData.data.sounds);
+        }
     }
     function parseComponentNode(){
         console.log('AbstractPage.parseComponentNode() | ');
@@ -140,7 +145,7 @@ define([
                 oCompConfig[sProp] = p_oComponent[sProp];
             }
         }
-        console.log('AbstractPage.initComponent() | Config = '+JSON.stringify(oCompConfig));
+        console.log('\tComponent Config = '+JSON.stringify(oCompConfig));
 
         var oScope = this,
             Component = p_oComponentClass,
@@ -167,12 +172,12 @@ define([
         if(oComponent.getConfig()._type === 'audiopanel'){
             this.oSwiffyController.registerAudioPanel(oComponent);
         }
-        
+
         if(oComponent.getConfig()._type === 'quizpanel'){
         	this.oQuizController = new QuizController();
             this.oQuizController.registerQuizPanel(oComponent);
         }
-        
+
         console.log('AbstractPage.onComponentLoaded() | haveAllComponentsLoaded = '+haveAllComponentsLoaded.call(this));
         if (haveAllComponentsLoaded.call(this)) {
             this.bComponentsLoaded = true;
@@ -191,7 +196,7 @@ define([
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded && this.bAudiosLoaded){
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded){
         if(this.bComponentsLoaded){
-            this.setContent();
+            //this.setContent();
             this.$domView.fadeIn().removeClass('hide').focus();
             // ** Call a Concrete class method to do its stuff and dispatch the 'PAGE_LOADED' event
             this.initialize();

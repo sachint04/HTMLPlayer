@@ -20,7 +20,7 @@
     position: relative;
     width: 100%;
     /*height: 605px;*/
-    padding-top: 30px;
+    /*padding-top: 30px;*/
     background-color: #ffffff;
 }
 
@@ -48,9 +48,9 @@
     background: url('../../../images/spritesheet.png') no-repeat scroll 0px 0px transparent;
 }
 
-#swiffycontainer{
+/*#swiffycontainer{
     height: 615px;
-}
+}*/
 /* ------------- AUDIO PANEL -----------------*/
 #audio {
     display: inline-block !important;
@@ -69,20 +69,20 @@
     width: 30px;
     height: 30px;
     background-position-x: -13px;
-    background-position-y: -15px;
+    background-position-y: -13px;
     position: absolute;
 }
 .ui-play-btn:hover {
-    background-position-y: -40px;
+    background-position-y: -38px;
 }
 .ui-pause-btn {
     width: 30px;
     height: 30px;
     background-position-x: -47px;
-    background-position-y: -15px;
+    background-position-y: -13px;
 }
 .ui-pause-btn:hover {
-    background-position-y: -40px;
+    background-position-y: -38px;
 }
 #slider_playhead_seek.ui-slider {
 	position: absolute;
@@ -114,9 +114,9 @@
 }
 
 .MCQ.row .question{
-	margin-bottom:15px;	
+	margin-bottom:15px;
 }
-#quizpanel {
+#quizpanel, #audio_panel {
     width: 746px;
     height: 35px;
     background-color: #504E4C;

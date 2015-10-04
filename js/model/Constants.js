@@ -7,10 +7,11 @@ define([
     'use strict';
 
     function Constants(){
+        this.sAudioLanguage = null;
         this.oLocationPointer = null;
         this.oLocations = {
             // Set Local Paths for the Files and Folders
-            local:{
+            /*local:{
                 rootURL : '../../',
                 pageURL : '',
                 locations : {
@@ -22,7 +23,7 @@ define([
                 }
             },
             // Global paths based on index.html file location
-            global:{
+            global:{*/
                 rootURL : '',
                 pageURL : 'content/@@pageName@@/',
                 locations : {
@@ -30,19 +31,25 @@ define([
                     xml             : {url:'pageURL', path:''},
                     css             : {url:'pageURL', path:''},
                     images          : {url:'pageURL', path:'images/'},
-                    audio_en        : {url:'pageURL', path:'audio/en/'}
+                    audio        : {url:'pageURL', path:'audio/@@language@@/'}
                 }
-            }
+            //}
         };
         this.sCurrentPageName = null;
 
-        this.setEnvironment(false);
+        //this.setEnvironment(false);
     }
     Constants.prototype = {
         constructor: Constants,
-        setEnvironment : function(p_bLocal){
-            this.oLocationPointer = (p_bLocal) ? this.oLocations.local : this.oLocations.global;
+        setLanguage: function(p_sLanguage){
+            if(p_sLanguage !== 'en' || p_sLanguage !== 'hi'){
+                // ERROR
+            }
+            this.sAudioLanguage = p_sLanguage;
         },
+        /*setEnvironment : function(p_bLocal){
+            this.oLocationPointer = (p_bLocal) ? this.oLocations.local : this.oLocations.global;
+        },*/
         setCurrentPageName : function(p_sPageName){
             this.sCurrentPageName = p_sPageName;
         },
@@ -50,20 +57,16 @@ define([
             return this.sCurrentPageName;
         },
         getLocation : function(p_sValue){
-            if(!this.oLocationPointer.locations.hasOwnProperty(p_sValue)){
+            if(!this.oLocations.locations.hasOwnProperty(p_sValue)){
+                // Error
+            }
+            var o = this.oLocations.locations[p_sValue];
+            return this.oLocations[o.url].replace('@@pageName@@', this.sCurrentPageName) + o.path.replace('@@language@@', this.sAudioLanguage);
+            /*if(!this.oLocationPointer.locations.hasOwnProperty(p_sValue)){
                 // Error
             }
             var o = this.oLocationPointer.locations[p_sValue];
-            return this.oLocationPointer[o.url].replace('@@pageName@@', this.sCurrentPageName) + o.path;
-        },
-        getDefaultConnectEDBaseURL : function(){
-            return 'http://connected-dev.cdiapps.com/';
-        },
-        getJQueryPath : function(){
-            return 'libs/js/jquery/2.1.3/jquery-2.1.3.min';
-        },
-        getLocalJQueryPath : function(){
-            return 'libs/jquery-2.1.3.min';
+            return this.oLocationPointer[o.url].replace('@@pageName@@', this.sCurrentPageName) + o.path.replace('@@language@@', this.sAudioLanguage);*/
         },
         getErrorList : function(){
             return {

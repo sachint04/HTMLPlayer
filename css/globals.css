@@ -13,7 +13,7 @@ html {
 	-moz-box-sizing			: border-box;
 	box-sizing				: border-box;
 }
-
+tbody
 * {
 	margin				: 0em;
 	padding                : 0em;
@@ -26,6 +26,7 @@ body {
     font-size: 15px;
     line-height: 1.5em;
     color:#585858;
+    margin: 0;
 }
 /* Global BUTTONs */
 button:focus, a:focus, input[type="button"]:focus {
@@ -341,9 +342,11 @@ p.debug {
 /* Application */
 /* 998 x 568 */
 #application_wrapper {
+	/*
 	width: 1014px;
-    margin: auto auto 0.5rem auto;
-    height: 645px;
+		height: 645px;
+		margin: auto auto 0.5rem auto;*/
+
     overflow:hidden;
 }
 #application {
