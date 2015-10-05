@@ -172,7 +172,7 @@ define([
 		AbstractComponent.prototype.init.call(this, p_sID, p_oConfig, p_$xmlComponent);
     };
     AudioPanel.prototype.createComponent					= function(){
-		//console.log('AudioPanel.createComponent() | ');
+		console.log('AudioPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
 	    var oScope = this;
 	    LoaderUtil.loadResource([this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view], function(data){
 	        onViewLoaded.call(oScope, data);

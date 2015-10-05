@@ -226,6 +226,7 @@ define([
          * 1            20
          * ?            500
          */
+        // ** If its the last frame of flash animation
         if(nSwiffyGoToFrame === this.oSwiffy.api.totalFrames){
             removePositionUpdateInterval.call(this);
             this.bAnimationComplete = true;
@@ -237,12 +238,15 @@ define([
         }else{
             this.bAnimationComplete = false;
         }
+        // ** If the
         if(nSwiffyGoToFrame !== nEndFrame){
             this.oSwiffy.api.bStopped = false;
+            this.oSwiffy.api.gotoAndPlay(nSwiffyGoToFrame);
         }
         if(this.bPlaying){
-            this.oSwiffy.api.gotoAndPlay(nSwiffyGoToFrame);
+            addPositionUpdateInterval.call(this);
         }else{
+            this.oSwiffy.api.bStopped = true;
             this.oSwiffy.api.gotoAndStop(nSwiffyGoToFrame);
         }
         console.log('\tnSoundDuration = '+nSoundDuration+' : nAnimationDuration = '+nAnimationDuration);
