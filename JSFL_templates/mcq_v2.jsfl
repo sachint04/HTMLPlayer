@@ -178,7 +178,8 @@ function createOptionData(){
 		node = node +createOptionNode(aOptions[i], i) ;
 	}
 	node = node + '</ul>';
-	node = node + '</div>';
+	node = node + '<div id="quizpanel"><div id="btnShowSolution">Show Solution</div></div>'
+	node = node + '</div>';	
 	return node;
 	//fl.trace("creatOptionNode "+ node);
 }
@@ -195,7 +196,7 @@ function createXMLData(){
 	for(var i = 1;i<aOptions.length;i++){
 		node = node +createXMLNode(aOptions[i], i) ;
 	}
-	node = node + '</data>'
+	node = node + '<component type="quizpanel" componentID="quizpanel"></component></data>'
 	return node;
 	//fl.trace("creatOptionNode "+ node);
 }
@@ -370,10 +371,10 @@ htmlData = createOptionData();
 cssData = createStyles();
 jsData = getScript();
 xmlData = createXMLData();
-//dataToWrite  =  createOptionData()  ;
+//dataToWrite  =  createOptionData();
 writeFile(htmlData, 'page.html');
-writeFile(cssData, 'page.css');
-writeFile(jsData, 'page.js');
+//writeFile(cssData, 'page.css');
+//writeFile(jsData, 'page.js');
 writeFile(xmlData, 'page.xml');
 exportBG();
 alert('folder created successfully!');

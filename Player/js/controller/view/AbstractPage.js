@@ -80,13 +80,32 @@ define([
     }
     function parsePageJson(){
         console.log('AbstractPage.parsePageJson() | ');
+        // ** render page text
+        setContent.call(this);
         // ** Parse Sounds node
         parseSoundsNode.call(this);
         // ** Parse Component node
         parseComponentNode.call(this);
         // ** Parse Activity node
         parseActivityNode.call(this);
+        
     }
+    
+    function setContent(){
+    	if(this.jsonXMLData.data.text != undefined){
+			var data = (this.jsonXMLData.data.text.length != undefined)? this.jsonXMLData.data.text : [this.jsonXMLData.data.text]; 
+			for(var i = 0; i<data.length;i++){ 
+				var oText = data[i]; 
+				if(oText._id && oText._id != undefined)
+				{ 
+					this.$domView.find("#"+ oText._id).html(oText.__cdata) 
+				}else if(this.jsonXMLoText._class && this.jsonXMLoText._class != undefined){
+					 this.$domView.find("."+ oText._id).html(oText.__cdata)
+			 	} 
+			 } 
+    	} 
+	};
+    
     function parseSoundsNode(){
         console.log('AbstractPage.parseSoundsNode() | ');
         //AudioManager.init();

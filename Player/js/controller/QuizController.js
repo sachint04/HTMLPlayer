@@ -20,7 +20,7 @@ define([
 	};
 	
 	QuizController.prototype.showSolution = function() {
-		$('#content_wrapper').addClass("show-result");
+		$('.mcq-container').addClass("show-result");
 	};
 	
 	QuizController.prototype.destroy = function(){

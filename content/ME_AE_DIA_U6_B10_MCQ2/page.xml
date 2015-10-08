@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-	<text id="question" class="question"><![CDATA[<font style="font-size:22;font-family:Verdana;color:#00002f;">Which of the following is the earliest type of Layout used in Automobiles?</font>]]></text>
-	<text id="q1-option"><![CDATA[<font style="font-size:20;font-family:Verdana;color:#00002f;">RR Layout</font>]]></text>
-	<text id="q2-option"><![CDATA[<font style="font-size:20;font-family:Verdana;color:#00002f;">FF Layout</font>]]></text>
-	<text id="q3-option"><![CDATA[<font style="font-size:20;font-family:Verdana;color:#00002f;">FR Layout</font>]]></text>
-	<text id="q4-option"><![CDATA[<font style="font-size:20;font-family:Verdana;color:#00002f;">None of Above</font>]]></text>
-	<component type="quizpanel" componentID="quizpanel"></component>
-</data>

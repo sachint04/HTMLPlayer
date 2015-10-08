@@ -124,6 +124,9 @@
     clear:both;
     float:left;
 }
+#quizpanel{
+	width:100%;
+}
 #quizpanel #btnShowSolution {
     cursor: pointer;
     background-color: #364159;
@@ -133,4 +136,5 @@
     width: 150px;
     margin: 0 auto;
     position: relative;
+    text-align:center;
 }
