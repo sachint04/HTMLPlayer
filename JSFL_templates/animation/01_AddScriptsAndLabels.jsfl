@@ -304,7 +304,7 @@ function saveXML(){
 	if(!URIExists(sSaveDir + sDocumentName)){
 		createFolder(sSaveDir + sDocumentName);
 	}
-	FLfile.write(sSaveDir + sDocumentName + "/data.xml", sXMLData);
+	FLfile.write(sSaveDir + sDocumentName + "/page.xml", sXMLData);
 }
 function exportSoundItem(p_sSoundName, p_sExportSoundName){
 	var nSoundIndex = oLibrary.findItemIndex(p_sSoundName),
@@ -337,7 +337,7 @@ function isValidAudio(p_sSoundName){
 function init(){
 	fl.outputPanel.clear();
 	sComponentXML = '<component type="swiffy" componentID="swiffycontainer"  audioController="AudioPanel" soundID="';
-	sSoundsXML += '<sounds location="audio_en">';
+	sSoundsXML += '<sounds location="audio">';
 	var aAudioKeyframes = addScript(),
 		aBGAudioKeyFrames = getAudioKeyframes(sBGAudioLayerName);
 	
