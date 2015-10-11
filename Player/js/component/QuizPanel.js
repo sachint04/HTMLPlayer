@@ -1,7 +1,7 @@
 define([
 	'jquery',
 	'component/AbstractComponent',
-	'framework/EventDispatcher'
+	'util/EventDispatcher'
 	],function($,AbstractComponent, EventDispatcher){
 		
 		var QuizPanel = function(){
@@ -32,7 +32,7 @@ define([
 				return;
 			};
 			this.$btnShowSolution.click(function(){
-				oScope.dispatchEvent('SHOW_SOLUTION_CLICKED', {type: 'SHOW_SOLUTION_CLICKED' ,target:$(this)});
+					oScope.dispatchEvent('SHOW_SOLUTION_CLICKED', {type: 'SHOW_SOLUTION_CLICKED' ,target:$(this)});
 			});	
 			this.$component.removeClass('hide');
 			AbstractComponent.prototype.dispatchComponentLoadedEvent.call(this);
