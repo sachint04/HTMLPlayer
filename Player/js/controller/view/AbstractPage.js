@@ -5,11 +5,12 @@ define([
     'core/AudioManager',
     'controller/SwiffyController',
     'controller/QuizController',
+    'controller/TutorialNumeralController',
     'util/LoaderUtil',
     'util/EventDispatcher',
     'validators/ErrorApi',
     'util/MessageLogger'
-], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, QuizController, LoaderUtil, EventDispatcher, Logger){
+], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, QuizController, TutorialNumeralController, LoaderUtil, EventDispatcher, Logger){
     'use strict';
     function AbstractPage(){;
         EventDispatcher.call(this);
@@ -24,7 +25,8 @@ define([
         this.oComponentClassPath    = {
             audiopanel      : 'component/AudioPanel',
             swiffy          : 'component/SwiffyWidget',
-            quizpanel		: 'component/QuizPanel'
+            quizpanel		: 'component/QuizPanel',
+            tutnumpanel		: 'component/TutNumPanel'
         };
 
         this.bActivityLoaded = null;
@@ -34,6 +36,7 @@ define([
 
         this.oSwiffyController = null;
         this.oQuizController = null;
+        this.oTutNumController = null;
 
         this.onComponentLoaded = onComponentLoaded.bind(this);
     };
@@ -98,9 +101,11 @@ define([
 				var oText = data[i]; 
 				if(oText._id && oText._id != undefined)
 				{ 
-					this.$domView.find("#"+ oText._id).html(oText.__cdata) 
-				}else if(this.jsonXMLoText._class && this.jsonXMLoText._class != undefined){
-					 this.$domView.find("."+ oText._id).html(oText.__cdata)
+					var id 		= oText._id;
+					var $elem 	= this.$domView.find("#"+id);
+					$elem.html(oText.__cdata) ;
+				}else if(oText._class && oText._class != undefined){
+					 this.$domView.find("."+ oText._class).html(oText.__cdata);
 			 	} 
 			 } 
     	} 
@@ -139,10 +144,13 @@ define([
                  if (sComponentType === 'QUIZPANEL') {
                     createComponent.call(this, this.oComponentClassPath.quizpanel, oComponent);
                 }
+                 if (sComponentType === 'TUTNUMPANEL') {
+                    createComponent.call(this, this.oComponentClassPath.tutnumpanel, oComponent);
+                }
             }
         } else {
             this.bComponentsLoaded = true;
-            this.checkLoadComplete();
+            checkLoadComplete.call(this);
         }
     }
     function createComponent(p_jsFilePath, p_oComponent) {
@@ -196,7 +204,10 @@ define([
         	this.oQuizController = new QuizController();
             this.oQuizController.registerQuizPanel(oComponent);
         }
-
+		if(oComponent.getConfig()._type === 'tutnumpanel'){
+        	this.oTutNumController = new TutorialNumeralController();
+            this.oTutNumController.registerPanel(oComponent);
+        }
         console.log('AbstractPage.onComponentLoaded() | haveAllComponentsLoaded = '+haveAllComponentsLoaded.call(this));
         if (haveAllComponentsLoaded.call(this)) {
             this.bComponentsLoaded = true;
@@ -222,17 +233,6 @@ define([
         }
     };
 
-	AbstractPage.prototype.setContent = function() {
-		var data = this.jsonXMLData.data.text;
-		for (var i = 0; i < data.length; i++) {
-			var oText = data[i];
-			if (oText._id && oText._id != undefined) {
-				this.$domView.find("#" + oText._id).html(oText.__cdata);
-			} else if (this.oText._class && this.oText._class != undefined) {
-				this.$domView.find("." + oText._id).html(oText.__cdata);
-			};
-		};
-	};
 
     // ** Stub Method to be implemented in the Final Page Class
     AbstractPage.prototype.initialize                       = function(){
