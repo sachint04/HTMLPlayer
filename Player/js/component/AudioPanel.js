@@ -57,7 +57,7 @@ define([
     AudioPanel.prototype.constructor						= AudioPanel;
 
     AudioPanel.prototype.listenTo                           = function(p_oSwiffyWidget){
-        console.log("AudioPanel.listenTo() | "/*+(p_oSwiffyWidget instanceof SwiffyWidget)*/);
+        //console.log("AudioPanel.listenTo() | "/*+(p_oSwiffyWidget instanceof SwiffyWidget)*/);
         if(p_oSwiffyWidget.toString().indexOf('SwiffyWidget') > -1){
             removeAudioManagerListeners.call(this);
             this.oSwiffyAnimRef = p_oSwiffyWidget;
@@ -104,9 +104,10 @@ define([
     };
 
     function addSwiffyListeners(){
-        console.log("AudioPanel.addSwiffyListeners() | ");
+        //console.log("AudioPanel.addSwiffyListeners() | ");
         if(this.oSwiffyAnimRef){
             this.oSwiffyAnimRef.addEventListener('ANIMATION_PLAY', this.updateStates);
+            this.oSwiffyAnimRef.addEventListener('ANIMATION_REPLAY', this.updateStates);
             this.oSwiffyAnimRef.addEventListener('ANIMATION_PAUSE', this.updateStates);
             this.oSwiffyAnimRef.addEventListener('ANIMATION_RESUME', this.updateStates);
             this.oSwiffyAnimRef.addEventListener("ANIMATION_POSITION_UPDATE", this.updateStates);
@@ -118,6 +119,7 @@ define([
         //console.log("AudioPanel.removeSwiffyListeners() | ");
         if(this.oSwiffyAnimRef){
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_PLAY', this.updateStates);
+            this.oSwiffyAnimRef.removeEventListener('ANIMATION_REPLAY', this.updateStates);
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_PAUSE', this.updateStates);
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_RESUME', this.updateStates);
             this.oSwiffyAnimRef.removeEventListener("ANIMATION_POSITION_UPDATE", this.updateStates);
@@ -172,7 +174,7 @@ define([
 		AbstractComponent.prototype.init.call(this, p_sID, p_oConfig, p_$xmlComponent);
     };
     AudioPanel.prototype.createComponent					= function(){
-		console.log('AudioPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
+		//console.log('AudioPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
 	    var oScope = this;
 	    LoaderUtil.loadResource([this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view], function(data){
 	        onViewLoaded.call(oScope, data);
@@ -307,7 +309,7 @@ define([
 	};
 
 	AudioPanel.prototype.handleUIEvents						= function(p_oEvent, p_domBtn, p_sEventToDispatch) {
-		console.log('AudioPanel.handleUIEvents() | p_sEventToDispatch = '+p_sEventToDispatch/*+' : '+p_oEvent.type+' : Target = '+p_oEvent.target+' : Curr Target = '+p_oEvent.currentTarget*/);
+		//console.log('AudioPanel.handleUIEvents() | \n\tp_sEventToDispatch = '+p_sEventToDispatch/*+' : '+p_oEvent.type+' : Target = '+p_oEvent.target+' : Curr Target = '+p_oEvent.currentTarget*/);
 		if(p_oEvent.type !== 'slidechange' && p_oEvent.type !== 'slidestart' && p_oEvent.type !== 'slideend'){
 	        p_oEvent.preventDefault();
 	        p_domBtn.blur();
@@ -389,7 +391,6 @@ define([
         }
         return false;
     };
-
 	AudioPanel.prototype.updateStates						= function(e) {
 		var sEventType = e.type;
 		/*if(this.oSwiffyAnimRef !== undefined && this.oSwiffyAnimRef !== null && (sEventType === 'AUDIO_FINISH' || sEventType === 'AUDIO_POSITION_UPDATE')){
@@ -399,13 +400,14 @@ define([
 		if(sEventType !== 'AUDIO_POSITION_UPDATE'){
 			//console.log('AudioPanel.updateStates() | Event Type = '+sEventType+' AM Playing = '+AudioManager.isPlaying()+' : AM Complete = '+AudioManager.isCompleted());
 		}
-        console.log('AudioPanel.updateStates() | Event Type = '+sEventType);
+        //console.log('AudioPanel.updateStates() | \n\tEvent Type = '+sEventType);
 		switch(sEventType){
 			case 'AUDIO_PLAY':
 			case 'AUDIO_PAUSE':
 			case 'AUDIO_RESUME':
 
 			case 'ANIMATION_PLAY':
+			case 'ANIMATION_REPLAY':
 			case 'ANIMATION_PAUSE':
 			case 'ANIMATION_RESUME':
                 this.enable(this.$stopBtn, true);
@@ -481,7 +483,7 @@ define([
     };
 
     function playClick(){
-        console.log('AudioPanel.playClick() | \n\tAM Playing = '+AudioManager.isPlaying());
+        //console.log('AudioPanel.playClick() | \n\tAM Playing = '+AudioManager.isPlaying());
         this.enable(this.$stopBtn, true);
         //if (AudioManager.isPlaying() && (this.oSwiffyAnimRef && !this.oSwiffyAnimRef.isPlaying() && !this.oSwiffyAnimRef.isComplete())) {
             this.$playBtn.addClass('hide');
@@ -489,14 +491,14 @@ define([
         //}
     }
     function pauseClick(){
-        console.log('AudioPanel.pauseClick() | ');
+        //console.log('AudioPanel.pauseClick() | ');
         /* We just dispatch an Event Here as The UI Component doesn't know which audio to play*/
         this.enable(this.$stopBtn, true);
         this.$playBtn.removeClass('hide');
         this.$pauseBtn.addClass('hide');
     }
     function stopClick(){
-        console.log('AudioPanel.stopClick() | ');
+        //console.log('AudioPanel.stopClick() | ');
         AudioManager.stop();
         if(this.oSwiffyAnimRef){this.oSwiffyAnimRef.stop();}
 
@@ -506,7 +508,7 @@ define([
         this.$playheadSlider.slider( "value", 0 );
     }
     function muteClick(p_bMute){
-        console.log('AudioPanel.muteClick() | ');
+        //console.log('AudioPanel.muteClick() | ');
         if(p_bMute){
             // ** Internally store the volume in a variable
             this.nVolumeLevel = AudioManager.getVolume();
@@ -535,7 +537,7 @@ define([
     }
 
     function audioPositionUpdate(e){
-        console.log('AudioPanel.audioPositionUpdate() | ');
+        //console.log('AudioPanel.audioPositionUpdate() | ');
         /*
          * jQueryUI slider  = ?             - 100
          * Audio Position   = e.position    - AudioManager.getDuration()
@@ -545,7 +547,7 @@ define([
         this.$playheadSlider.slider("value", val);
     }
     function audioVolumeUpdate(e){
-        console.log('AudioPanel.audioVolumeUpdate() | ');
+        //console.log('AudioPanel.audioVolumeUpdate() | ');
         /* TODO: This implementation will only be required if the volume is updated by some other element from some other page through code */
         /*
          * jQueryUI slider  = ?                         - 100
@@ -627,7 +629,7 @@ define([
 	};
 
     AudioPanel.prototype.openPopup						= function(p_sPopupID, p_sTitle, p_sContent, p_$returnFocusTo, p_sClassesToAdd, p_fCallback, p_aArgs) {
-        console.log('AudioPanel.openPopup() | '+p_sPopupID, p_sTitle, p_sContent, p_$returnFocusTo, p_sClassesToAdd);
+        //console.log('AudioPanel.openPopup() | '+p_sPopupID, p_sTitle, p_sContent, p_$returnFocusTo, p_sClassesToAdd);
         oPopup = PopupManager.openPopup(p_sPopupID, {txt_title: p_sTitle, txt_content: p_sContent}, p_$returnFocusTo, p_sClassesToAdd);
         oPopup.addEventListener('POPUP_CLOSE', this.popupEventHandler);
         oPopup.addEventListener('POPUP_EVENT', this.popupEventHandler);
