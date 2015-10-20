@@ -112,7 +112,7 @@ define([
 								        }
 									},
 									/*whileloading	: function() {
-										console.log('whileloading '+this.id+' loading, '+this.bytesLoaded+' of '+this.bytesTotal+' : '+this.duration);
+										//console.log('whileloading '+this.id+' loading, '+this.bytesLoaded+' of '+this.bytesTotal+' : '+this.duration);
 									},*/
 									whileplaying: function(){
 									    //console.log('whileplaying '+this.id+' loading, '+this.bytesLoaded+' of '+this.bytesTotal);
@@ -197,7 +197,7 @@ define([
 		var oSound					= this.getSoundByID(p_sSoundID),
             nPosition               = p_nPosition || 0,
 			oScope					= this;
-		//console.log('AudioManager.playAudio() | p_sSoundID = '+p_sSoundID+' : sPlayingSoundID = '+this.sPlayingSoundID+' :  sLastPlayedSoundID = '+this.sLastPlayedSoundID+' : bPlaying = '+this.bPlaying+' : bComplete = '+this.bComplete+' : oSound = '+oSound);
+		//console.log('AudioManager.playAudio() | \n\tp_sSoundID = '+p_sSoundID+'\n\tsPlayingSoundID = '+this.sPlayingSoundID+'\n\tsLastPlayedSoundID = '+this.sLastPlayedSoundID+'\n\tbPlaying = '+this.bPlaying+'\n\tbComplete = '+this.bComplete+'\n\toSound = '+oSound);
         if (oSound) {
             if (this.sPlayingSoundID === p_sSoundID) {
                 // ** (RESUME) Resume the currently playing sound when Audio ID is supplied
@@ -209,6 +209,7 @@ define([
                     this.playAudio(p_sSoundID);
                 }
             } else if(p_sSoundID !== undefined){
+                //console.log('## HERE ## nPosition = '+nPosition);
             	// ** (PLAY) Play Fresh Audio where Audio ID is supplied
                 if (!oScope.bComplete) {soundManager.stop(this.sPlayingSoundID);}
                 this.sPlayingSoundID = p_sSoundID;
@@ -354,7 +355,7 @@ define([
 			var sSoundID		= p_sSoundID || this.sPlayingSoundID || this.sLastPlayedSoundID,
 				sTranscript		= (sSoundID) ? this.oAudioData[sSoundID].transcript : null;
 		}
-		console.log('AudioManager.getTranscript() | Transcript = '+sTranscript+' for Sound ID "'+sSoundID+'"'+' | this.sLastPlayedSoundID = '+this.sLastPlayedSoundID);
+		//console.log('AudioManager.getTranscript() | Transcript = '+sTranscript+' for Sound ID "'+sSoundID+'"'+' | this.sLastPlayedSoundID = '+this.sLastPlayedSoundID);
 		return sTranscript;
 	};
 
@@ -367,7 +368,7 @@ define([
 	 * file location - "sco_content/en/audio/cw01/blank.mp3""
 	 */
 	AudioManager.prototype.playBlankAudio 								= function(){
-		console.log('AudioManager.playBlankAudio() ')
+		//console.log('AudioManager.playBlankAudio() ')
 		var sNode 		='<data><sounds><sound id="blank" filename="sco_content/en/audio/cw01/blank" preload="true" playOnLoad="false"><cuepoints></cuepoints><transcript><![CDATA[]]></transcript></sound></sounds></data>',
 		$xmlData  		= $(StringUtil.getXMLfromString(sNode)),
 		$xmlSounds		= $xmlData.find('sounds');
