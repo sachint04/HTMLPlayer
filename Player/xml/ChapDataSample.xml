@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+<Subject sortName="ME_AE">Test Engine</Subject>
+
+<showAll> 
+
+
+<!-- AE XML For GGI University -->
+
+<!--Lecture 1-->
+ 	<Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile"  
+	ID="1" sort="1" ChapName="Sample Boards">
+			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 1" Type="Normal">
+					<Target Type="DEF" TotalFrame="1747" FileName="ME_MP_DEF_U6_B1"/>
+					<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DIA_U9_B8"/>
+						
+					
+			</Board>
+			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 2" Type="Normal">
+					<Target Type="DEF" TotalFrame="1747" FileName="SC1_CHEM_DEF_U1_B4"/>
+					<Target Type="DIA" TotalFrame="3224" FileName="SC1_CHEM_DIA_U4_B4_1"/>
+						
+			</Board>
+			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 3" Type="Normal">
+					<Target Type="DEF" TotalFrame="1747" FileName="ME_IC_DIA_U7_B11"/>
+					<Target Type="DIA" TotalFrame="3224" FileName="ME_IC_DIA_U12_B7"/>
+					
+			</Board>
+			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 4" Type="Normal">
+					<Target Type="DEF" TotalFrame="1747" FileName="ME_AE_DEF_U8_B1"/>
+					<Target Type="DIA" TotalFrame="3224" FileName="ME_IC_DIA_U6_B8"/>
+					<Target Type="DER" TotalFrame="9681" FileName="ME_SOM_DER_U1_B20"/>
+					<Target Type="APP" TotalFrame="10332" FileName="ME_HMT_APP_U3_B3"/>
+			</Board>
+			
+			
+				 <Board SubHeading="" BoardName="Quiz" Type="QUIZ"  FileName="QUIZ">
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q1/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_AE_DIA_U6_B10_MCQ1"/>
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q2/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_AE_DIA_U6_B10_MCQ2"/> 
+						
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q3/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="SC1_CHEM_DIA_U4_B4_1_MCQ1"/>
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q4/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="SC1_CHEM_DIA_U4_B4_1_MCQ2"/> 
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q5/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="SC1_CHEM_DIA_U4_B4_1_MCQ3"/> 
+						
+				 
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q6/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_MP_DEF_U6_B1_MCQ1"/>
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q7/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_MP_DEF_U6_B1_MCQ2"/> 
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q8/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_MP_DIA_U9_B8_MCQ1"/>
+						<Target SubHeading="" ID="1" sort="1" BoardName="Q9/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_MP_DIA_U9_B8_MCQ2"/>
+												
+						
+				</Board> 			
+	</Chap>		
+	  	
+	
+<!--Tutorial  1-->
+					<Tutorials TutName="Week 1:L1-L3" Type="TUT">		
+							<TUT SubHeading="" ID="2" sort="2" BoardName="Otto Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U2_B17_NUM1"/>
+							<TUT SubHeading="" ID="2" sort="2" BoardName="Otto Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U5_B2_NUM1"/>
+							<TUT SubHeading="" ID="3" sort="3" BoardName="Diesel Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U6_B2_NUM1"/>
+							
+					</Tutorials>
+
+										
+	</showAll>					
+</Data>
