@@ -189,6 +189,7 @@ position:relative;
    margin:0px !important;
    padding:5px;
    border-radius: 0px !important;
+   float:left;
    
 }
 #tutnumpanel #btnShowSolution.selected,
