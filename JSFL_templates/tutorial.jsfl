@@ -205,14 +205,18 @@ function createQuestionData(){
 	return node;
 }
 function createAnswerData(){
+	var sSide = "width";
+	if(oAnswer.height < oAnswer.width){
+		sSide = "height";
+	}
 	//var node = '<div id="answer"><img src="'+rootPath+folderName+'/answer.png" width="'+oAnswer.width+'" height="'+oAnswer.height+'"/></div>';
-	var node = '<div id="answer"><img src="'+rootPath+folderName+'/answer.png" width="100%"/></div>';
+	var node = '<div id="answer"><img src="'+rootPath+folderName+'/answer.png" '+sSide+'="100%"/></div>';
 	return node;
 }
 
 function createStepsData(){
 	//var node = '<div id="steps"><img src="'+rootPath+folderName+'/steps.png" width="'+oSteps.width+'" height="'+oSteps.height+'"/></div>';
-	var node = '<div id="steps"><img src="'+rootPath+folderName+'/steps.png" width="100%" /></div>';
+	var node = '<div id="steps"><img src="'+rootPath+folderName+'/steps.png" width="80%" /></div>';
 	return node;
 }
 function createOptionData(){

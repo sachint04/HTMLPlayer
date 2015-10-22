@@ -156,18 +156,29 @@ background: linear-gradient(to bottom, #e1ffff 0%,#fdffff 6%,#e6f8fd 30%,#c8eefb
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1ffff', endColorstr='#b1d8f5',GradientType=0 ); /* IE6-9 */
 position:relative;
 }
-.tut-num-container #answer{
-	display:none;	
-}
-.tut-num-container #steps{
-	display:none;	
-}
 .tut-num-container #answer,
 .tut-num-container #steps {
     height: 470px;
     width: 100%;
-    overflow-y: auto;
 }
+.tut-num-container #answer{
+	display:none;
+	height:100%;	
+}
+
+.tut-num-container #steps{
+	display:none;	
+    overflow-y: auto;	
+}
+
+.tut-num-container #answer img{
+/*	margin-left: 7.5%;*/
+}
+.tut-num-container #steps img{
+	margin-left: 5%;
+}
+
+
 #tutnumpanel {
 	    position: absolute;
     bottom: -32px;
@@ -182,7 +193,7 @@ position:relative;
     color: #fff;
     height: 100%;
     border: none;
-    width: 33%;
+    width: 33.3%;
     position: relative;
     text-align:center;
    display:inline-block;
