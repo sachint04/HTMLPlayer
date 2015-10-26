@@ -89,7 +89,10 @@ define([
                 1 : "fileNotFound",
                 2 : "queryStringParameterNotFound"
             };
-        }
+        },
+        getTOCXML 			: function(){
+        		return "xml/ChapDataSample.xml";
+        	}
     };
 
     return new Constants();

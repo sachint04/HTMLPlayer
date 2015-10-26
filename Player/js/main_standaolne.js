@@ -126,8 +126,11 @@ require.config({
 var oCourseController;
 function init(){
     require([
-        'controller/CourseController'
-    ], function(CourseController){
+    	'jquery',
+        'controller/CourseController',
+        'controller/NavController'
+    ], function($, CourseController, NavController){
+        NavController.intialize($('nav#menu'));
         oCourseController = CourseController;
         oCourseController.init();
         var sPageName = getParameterByName('page');
