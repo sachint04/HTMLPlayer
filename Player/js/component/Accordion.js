@@ -74,6 +74,43 @@ define([
 //			AbstractComponent.prototype.init.call(this, "menu", p_oConfig, p_$xmlComponent);
 		}; 
 		
+		Accordion.prototype.getBoardByID								= function(p_sID) {
+			for (var i=0; i < this.aChap.Boardlength; i++) {
+				var oSection 	= this.aChap[i],
+				aBoard			= (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] :[oSection[this.sSectionTitle]];
+				for (var s=0; s < aBoard.length; s++) {
+				  	if(aBoard[s]._ID === p_sID){
+				  		return aBoard[s]; 
+				  	}
+			  }
+			};
+			return null;
+		};
+		
+		Accordion.prototype.getBoardByName								= function(p_sName) {
+			for (var i=0; i < this.aChap.length; i++) {
+				var oSection 	= this.aChap[i],
+				aBoard			= (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] :[oSection[this.sSectionTitle]];
+				for (var s=0; s < aBoard.length; s++) {
+				  	if(aBoard[s]._BoardName === p_sName){
+				  		return aBoard[s]; 
+				  	}
+			  }
+			};
+			return null;
+		};
+		
+		Accordion.prototype.getBoardAtSection								= function(p_nIndex) {
+			for (var i=0; i < this.aChap.Boardlength; i++) {
+				var oSection 	= this.aChap[i],
+				aBoard			= (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] :[oSection[this.sSectionTitle]];
+				if(p_nIndex < (aBoard.length -1) ){
+					return aBoard[p_nIndex];
+				}
+			};
+			return null;
+		};
+		
 		Accordion.prototype.getTargetListByBoard								= function(p_sID) {
 			for(var i = 0;i < this.aBoard.length;i++){
 				if(this.aBoard[i]._ID ==  p_sID){
@@ -158,7 +195,9 @@ define([
 			}
 			
 			$elem.click(function(e){
-			//	e.prevetDefault();
+				if(e.preventDefault){
+					e.preventDefault();
+				};
 				oScope.onBoardClicked(e)	
 			});
 			return $elem;
@@ -198,12 +237,23 @@ define([
 			$target.addClass('open');
 			$Board.slideDown();
 			
+			
 		}
 		Accordion.prototype.onBoardClicked								= function(e) {
+			var $target 	= $(e.currentTarget),
+			sID 			= $target.attr('id'),
+			sName 			= $target.find('.acc-board-title').text(),
+			oBoard 			= this.getBoardByName(sName);
 			
+			this.dispatchEvent('BOARD_SELECTED', {target:this, type:'BOARD_SELECTED', board:oBoard});
 		}
 		Accordion.prototype.onTutorialClicked								= function(e) {
+			var $target 	= $(e.currentTarget),
+			sID 			= $target.attr('id'),
+			sName 			= $target.find('.acc-board-title').text(),
+			oBoard 			= this.getBoardByName(sName);
 			
+			this.dispatchEvent('BOARD_SELECTED', {target:this, type:'BOARD_SELECTED', board:oBoard});
 		}
 		Accordion.prototype.bindHandlers								= function() {
 			//JSON.stringify('\n \t oCompConfig = '+p_oConfig);	

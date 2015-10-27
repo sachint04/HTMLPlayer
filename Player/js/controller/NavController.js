@@ -16,6 +16,7 @@ define([
 		this.oTutorials;
 		this.oSearch;
 		this.jsonXMLData = null;
+		this.handleAccEvents  = this.handleAccEvents.bind(this);
 	};
 
 	NavController.prototype = Object.create(EventDispatcher.prototype);
@@ -40,21 +41,41 @@ define([
     
 	NavController.prototype.createUI = function(){
         this.oLecturePlan		= new Accordion();
+        this.oLecturePlan.addEventListener('BOARD_SELECTED', this.handleAccEvents)
 		var aData 				= this.jsonXMLData.Data.showAll.Chap;
         this.oLecturePlan.init(this.panel.find('.lecture-container'), {}, aData, 'Board');
         
         this.oTutorials			= new Accordion();
+        this.oTutorials.addEventListener('BOARD_SELECTED', this.handleAccEvents)
 		aData 				= this.jsonXMLData.Data.showAll.Tutorials;
         this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT');
 		
 		this.addEventHandlers();
 		this.panel.find('tab.lecture-container').trigger('click');
 	}
+	
+	NavController.prototype.handleAccEvents = function(e){
+		var oAcc = e.target,
+		oBoard 	= e.board;
+		alert('oBoard._BoardName - '+ oBoard._BoardName);
+	};
+	
 	NavController.prototype.addEventHandlers = function(){
 		var oScope = this;
 		this.panel.find('.tab').click(function(e){
 			oScope.onTabClicked(e);
 		})
+		
+		this.panel.find('.cat-btn').click(function(e){
+			if($(e.target).hasClass('disabled') || $(e.target).hasClass('selected')){
+				return;
+			}
+			oScope.onCatSelected(e);
+		})
+	};
+	NavController.prototype.onCatSelected = function(e){
+		
+		
 	};
 	NavController.prototype.onTabClicked = function(e){
 		var $target = $(e.currentTarget),
