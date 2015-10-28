@@ -244,13 +244,25 @@ define([
     };
 
 	AbstractPage.prototype.destroy = function(){
+		
         var nComponentsLength = this.aComponents.length,
             i;
         for (i=0; i < nComponentsLength; i++) {
             this.aComponents[i].destroy();
         };
-
-        if(!this.oSwiffyController){this.oSwiffyController.destroy();}
+        this.aComponents = null;
+        if(this.oQuizController){
+        	this.oQuizController.destroy();
+        	this.oQuizController = null;
+        }
+        if(this.oTutNumController){
+        	this.oTutNumController.destroy();
+        	this.oTutNumController = null;
+        }
+        if(this.oSwiffyController){
+        	this.oSwiffyController.destroy();
+        	this.oSwiffyController = null;
+        }
     }
     AbstractPage.prototype.toString = function(){
         return 'controller/view/AbstractPage';

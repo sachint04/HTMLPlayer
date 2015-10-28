@@ -130,9 +130,10 @@ function init(){
         'controller/CourseController',
         'controller/NavController'
     ], function($, CourseController, NavController){
-       	NavController.intialize($('nav#nav_panel'));
+       	//NavController.intialize($('nav#nav_panel'));// uncomment to see Navigation panel
         oCourseController = CourseController;
         oCourseController.init();
+        //comment below code when Navigation panel is active
         var sPageName = getParameterByName('page');
         HTMLPlayerAPI.loadPage(sPageName);
     });

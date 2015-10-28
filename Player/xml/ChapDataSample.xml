@@ -11,13 +11,13 @@
  	<Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile"  
 	ID="1" sort="1" ChapName="Sample Boards">
 			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 1" Type="Normal">
-					<Target Type="DEF" TotalFrame="1747" FileName="ME_MP_DEF_U6_B1"/>
-					<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DIA_U9_B8"/>
+					<Target Type="DEF" TotalFrame="1747" FileName="ME_AE_DIA_U6_B10_MCQ1"/>
+					<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>
 						
 					
 			</Board>
 			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 2" Type="Normal">
-					<Target Type="DEF" TotalFrame="1747" FileName="SC1_CHEM_DEF_U1_B4"/>
+					<Target Type="DEF" TotalFrame="1747" FileName="ME_MP_DEF_U6_B1"/>
 					<Target Type="DIA" TotalFrame="3224" FileName="SC1_CHEM_DIA_U4_B4_1"/>
 						
 			</Board>
@@ -26,7 +26,7 @@
 					<Target Type="DIA" TotalFrame="3224" FileName="ME_IC_DIA_U12_B7"/>
 					
 			</Board>
-			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 4" Type="Normal">
+			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 4 with text wrap Topic of Learning 4 with text wrap" Type="Normal">
 					<Target Type="DEF" TotalFrame="1747" FileName="ME_AE_DEF_U8_B1"/>
 					<Target Type="DIA" TotalFrame="3224" FileName="ME_IC_DIA_U6_B8"/>
 					<Target Type="DER" TotalFrame="9681" FileName="ME_SOM_DER_U1_B20"/>
@@ -52,7 +52,7 @@
 					
 	</Chap>		
 <Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile"  
-	ID="2" sort="1" ChapName="Sample Boards 2">
+	ID="2" sort="1" ChapName="Sample Boards with multiple line text and word wrap">
 			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 1" Type="Normal">
 					<Target Type="DEF" TotalFrame="500" FileName="ME_MP_DEF_U6_B1"/>
 					<Target Type="DIA" TotalFrame="500" FileName="ME_MP_DIA_U9_B8"/>

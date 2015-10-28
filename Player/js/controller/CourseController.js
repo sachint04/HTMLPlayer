@@ -50,6 +50,11 @@ define([
         };
         console.log(JSON.stringify(oResources))
         Constants.setCurrentPageName(p_sFolderName);
+        if(this.oCurrentPage){
+        	this.oCurrentPage.destroy();
+        	this.oCurrentPage = null;
+        	$('#content').empty();
+        }
         this.oCurrentPage = new AbstractPage();
         this.oCurrentPage.addEventListener('PAGE_LOADED', this.onPageLoaded);
         this.oCurrentPage.init($('#content'), oResources, p_sFolderName);

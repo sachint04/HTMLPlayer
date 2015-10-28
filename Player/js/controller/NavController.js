@@ -75,8 +75,10 @@ define([
 				this.enableCatButtons(true, aType[i].toLowerCase());
 			};
 		}
-		if(this.panel.find('.cat-btn.active').length > 0){
-			this.panel.find('.cat-btn.active').eq(0).trigger('click');
+		var $activeCat  = this.panel.find('.cat-btn.active');
+		if($activeCat.length > 0){
+			var $fistElem = $activeCat.eq(0);
+			$fistElem.trigger('click');
 			return;
 		}
 		var aPage = this.selectedComponent.getPageList()
@@ -93,12 +95,12 @@ define([
 		}else{
 			
 			if(p_sType && p_sType != undefined){
-				this.panel.find('.cat-btn.'+ p_sType).addClass('disabled').removeClass('active');
+				this.panel.find('.cat-btn.'+ p_sType).addClass('disabled').removeClass('active selected');
 			}else{
-				this.panel.find('.cat-btn').addClass('disabled').removeClass('active');
+				this.panel.find('.cat-btn').addClass('disabled').removeClass('active selected');
 			}
 		}
-	}
+	};
 		
 	NavController.prototype.getCurrentPageList = function(){
 		return this.selectedComponent.getPageList();
@@ -118,11 +120,13 @@ define([
 		})
 	};
 	NavController.prototype.onCatSelected = function(e){
-		var sID 	= $(e.target).attr('id'),
+		var $target = $(e.target), 
+		sID 		= $target.attr('id'),
 		sType		= sID.split('btn')[1],
 		sCat 		= sID.split('btn')[1],
 		oTarget 	= this.selectedComponent.getPageByType(sCat);
-		
+		this.panel.find('.cat-btn').removeClass('selected');
+		$target.addClass('selected');
 		this.loadPage(oTarget)		
 	};
 	NavController.prototype.onTabClicked = function(e){
@@ -136,14 +140,17 @@ define([
 		if(sID == 'lec'){	
 			this.selectedComponent = this.oLecturePlan;
 			sType 		= 'Lectures';
-		}else if(sID == 'lec'){
+		}else if(sID == 'tut'){
 			this.selectedComponent = this.oTutorials;
-			sType 		= 'Turials';			
+			sType 		= 'Tutorials';			
 		}else{
 			
 		}
 		var nBoard = this.selectedComponent.getChapCount();
 		var nPage = this.selectedComponent.getTotalPageCount()
+
+		this.panel.find('.total-time').html(this.selectedComponent.getTotalClockTime())
+
 		
 		var str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
 		this.panel.find('.comp-details').html(str);
@@ -154,9 +161,13 @@ define([
 		var sFile 		= p_oData._FileName,
 		nTotalFrames	= p_oData._TotalFrame,
 		sType			= p_oData._Type;
+		
+		if(HTMLPlayerAPI){
+			//var sPageName = getParameterByName('page');
+        	HTMLPlayerAPI.loadPage(sFile);
+		}
 	
-	
-	alert('board click sFile = '+ sFile+ ' | nTotalFrames = '+ nTotalFrames+' | sType = ' +sType);	
+		//alert('board click sFile = '+ sFile+ ' | nTotalFrames = '+ nTotalFrames+' | sType = ' +sType);	
 			
 		
 	}

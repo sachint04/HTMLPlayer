@@ -44,8 +44,11 @@ define([
 	};
 	
 	TutorialNumeralController.prototype.destroy = function(){
+		this.panel.removeEventListener("SHOW_FINAL_ANSWER_CLICKED", this.showFinalAnswer);
+		this.panel.removeEventListener("SHOW_STEPS_CLICKED", this.showSteps);
+		this.panel.removeEventListener("SHOW_SOLUTION_CLICKED", this.hideAll);
+
 		this.panel = null;
-		this.showSolution = null;
     };
 	
 	return TutorialNumeralController;

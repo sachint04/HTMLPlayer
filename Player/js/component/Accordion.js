@@ -44,7 +44,7 @@ define([
 					sBoardName	= oBoard._BoardName,
 					sBoardType	= oBoard._Type,
 					nTime		= 0,
-					sBoardNum	= (s < 9)? "0"+ (s+1) : (s + 1),
+					sBoardNum	= (aBoard.length > 9 && s < 9)? "0"+ (s+1) : (s + 1),
 					aType		= [];
 					this.aBoards.push(oBoard);		
 					if(this.sSectionTitle != "TUT"){
@@ -62,16 +62,20 @@ define([
 						}
 						aBoard.totalTime += nTime;
 						var bShowType = (oBoard._Type == "Normal");	
-						$Board.push(this.createBoard(sID, (s+1), sBoardNum+":", sBoardName, aType, this.getTotalTime(nTime, {hr:false, min:true,sec:true}), bShowType));
+						$Board.push(this.createBoard(sID, (s+1), sBoardNum+".", sBoardName, aType, this.getTotalTime(nTime), bShowType));
 					}else{
+						aBoard.totalTime += Number(oBoard._TotalFrame);
 						$Board.push(this.createTut('tut', (s+1), sBoardNum+":", sBoardName, aType));
 					}
 				}
+				
 				if(this.sSectionTitle != "TUT"){
-					var $section 		= this.createSection(sID, sNum + ":" , sTitle, this.getTotalTime(aBoard.totalTime, {hr:true, min:true,sec:true}, false));
+					var $section 		= this.createSection(sID, sNum + ":" , sTitle, this.getTotalTime(aBoard.totalTime));
 				}else{
 					var $section 		= this.createTutorials(sID, sNum + ":" , sTitle);					
 				}
+				oSection.totalTime  = aBoard.totalTime;
+				
 				aSection.push($section);
 				var $boardHolder = $('<div class="board-container" style="display:none;"></div>');//$section.append($Board)
 				$boardHolder.attr('id', 'board_container_'+$section.attr('id'))
@@ -123,33 +127,29 @@ define([
 		};
 		
 		
-		Accordion.prototype.getTotalTime								= function(frames, format) {
-		
+		Accordion.prototype.getTotalTime								= function(frames) {
+			var sec = 0 ,min = 0,hr = 0, txt_hr='',txt_min='', txt_sec='';
 			var sec = (frames / this.fps);
-			var min		= Math.floor(sec /60);
-			var hr 		= Math.floor(min /60);
+			if(sec>59){
+				min	= Math.floor(sec /60);
+				sec = Math.floor(sec % 60);
+			}
+			if(min > 59){
+				hr 	= Math.floor(min /60);				
+				min = Math.floor(min % 60);
+			}
 			
-			sec = (frames > 60) ? Math.floor((frames / this.fps) %  60) : 0; 
+//			sec = (frames > 60) ? Math.floor((frames / this.fps) %  60) : 0; 
 			
-			var txt_hr = (hr < 10 ) ? "0"+ hr : hr;
-			var txt_min = (min < 10 ) ? "0"+ min : min;
+			if(hr > 0)
+			txt_hr = (hr < 10 ) ? "0"+ hr+':' : hr+':';				
+			
+			//if(hr > 0 || min > 0)
+			txt_min = (min < 10 ) ? "0"+ min+':' : min+':';
+			
 			var txt_sec = (sec < 10 ) ? "0"+ sec : sec;
-				
-			var aformat = []
-			if (format.hr)aformat.push(txt_hr );
 			
-			if (format.min)aformat.push(txt_min );
-			
-			if (format.sec)aformat.push(txt_sec );
-			
-			var str= ''
-			for (var i=0; i < aformat.length; i++) {
-			  	str += aformat[i];
-			  if(i < aformat.length - 1){
-			  	str += ":";
-			  }
-			};
-			return str;
+			return txt_hr+txt_min+txt_sec;
 				
 		};
 		
@@ -227,9 +227,11 @@ define([
 			var $elem = $(str);	
 
 			$elem.click(function(e){
-			//	e.prevetDefault();
-				oScope.onTutorialClicked(e)	
+				if(e.preventDefault){
+					e.preventDefault();				}
+				oScope.onBoardClicked(e);	
 			});
+			
 			return $elem;
 		};
 		
@@ -327,6 +329,13 @@ define([
 			
 		};
 		
+		Accordion.prototype.getTotalClockTime						= function() {
+			var result  = 0;
+			for (var i=0; i < this.aChap.length; i++) {
+			  result += this.aChap[i].totalTime;
+			};
+			return this.getTotalTime(result);
+		}
 		Accordion.prototype.initialize						= function() {
 			var oScope = this;
 		
