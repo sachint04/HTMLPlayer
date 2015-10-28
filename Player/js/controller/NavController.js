@@ -16,6 +16,7 @@ define([
 		this.oTutorials;
 		this.oSearch;
 		this.jsonXMLData = null;
+		this.selectedComponent = null;
 		this.handleAccEvents  = this.handleAccEvents.bind(this);
 	};
 
@@ -37,6 +38,7 @@ define([
         this.jsonXMLData = oX2JS.xml2json(sXmlData);
 		oLoader.destroy();
 		this.createUI();
+		this.panel.removeClass('hide');
     }
     
 	NavController.prototype.createUI = function(){
@@ -51,13 +53,55 @@ define([
         this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT');
 		
 		this.addEventHandlers();
-		this.panel.find('tab.lecture-container').trigger('click');
+		this.panel.find('.tab.tab-lecture-plan').trigger('click');
 	}
 	
 	NavController.prototype.handleAccEvents = function(e){
 		var oAcc = e.target,
 		oBoard 	= e.board;
-		alert('oBoard._BoardName - '+ oBoard._BoardName);
+		switch(e.type ){
+			case 'BOARD_SELECTED' :
+			this.selectedComponent 	= e.target,
+			this.showBoardContent();
+			break;
+		}
+	};
+	
+	NavController.prototype.showBoardContent = function(){
+		var aType = this.selectedComponent.getPageTypeList();
+		if(aType && aType.length != undefined ){
+			this.enableCatButtons(false);
+			for (var i=0; i < aType.length; i++) {
+				this.enableCatButtons(true, aType[i].toLowerCase());
+			};
+		}
+		if(this.panel.find('.cat-btn.active').length > 0){
+			this.panel.find('.cat-btn.active').eq(0).trigger('click');
+			return;
+		}
+		var aPage = this.selectedComponent.getPageList()
+		this.loadPage(aPage[0]);
+	};
+	
+	NavController.prototype.enableCatButtons = function(p_bFlag, p_sType){
+		if(p_bFlag){
+			if(p_sType && p_sType != undefined){
+				this.panel.find('.cat-btn.'+ p_sType).removeClass('disabled').addClass('active');
+			}else{
+				this.panel.find('.cat-btn').removeClass('disabled').addClass('active');
+			}
+		}else{
+			
+			if(p_sType && p_sType != undefined){
+				this.panel.find('.cat-btn.'+ p_sType).addClass('disabled').removeClass('active');
+			}else{
+				this.panel.find('.cat-btn').addClass('disabled').removeClass('active');
+			}
+		}
+	}
+		
+	NavController.prototype.getCurrentPageList = function(){
+		return this.selectedComponent.getPageList();
 	};
 	
 	NavController.prototype.addEventHandlers = function(){
@@ -74,19 +118,49 @@ define([
 		})
 	};
 	NavController.prototype.onCatSelected = function(e){
+		var sID 	= $(e.target).attr('id'),
+		sType		= sID.split('btn')[1],
+		sCat 		= sID.split('btn')[1],
+		oTarget 	= this.selectedComponent.getPageByType(sCat);
 		
-		
+		this.loadPage(oTarget)		
 	};
 	NavController.prototype.onTabClicked = function(e){
 		var $target = $(e.currentTarget),
 		sID 		= $target.attr('id');
 		if($target.hasClass('selected'))return;
-		
-		this.panel.find('.acc-container').removeClass('selected').addClass('hide')
+		this.panel.find('.tabs .tab').removeClass('selected');
+		this.panel.find('.acc-container').addClass('hide')
 		this.panel.find('#'+ sID+'_acc_container').removeClass('hide');
+		var sType = '';
+		if(sID == 'lec'){	
+			this.selectedComponent = this.oLecturePlan;
+			sType 		= 'Lectures';
+		}else if(sID == 'lec'){
+			this.selectedComponent = this.oTutorials;
+			sType 		= 'Turials';			
+		}else{
+			
+		}
+		var nBoard = this.selectedComponent.getChapCount();
+		var nPage = this.selectedComponent.getTotalPageCount()
+		
+		var str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
+		this.panel.find('.comp-details').html(str);
+		$target.addClass('selected');
 	}
 	
+	NavController.prototype.loadPage = function(p_oData){
+		var sFile 		= p_oData._FileName,
+		nTotalFrames	= p_oData._TotalFrame,
+		sType			= p_oData._Type;
 	
+	
+	alert('board click sFile = '+ sFile+ ' | nTotalFrames = '+ nTotalFrames+' | sType = ' +sType);	
+			
+		
+	}
+
 	
 	NavController.prototype.destroy = function(){
 		this.panel = null;

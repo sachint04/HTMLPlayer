@@ -130,7 +130,7 @@ function init(){
         'controller/CourseController',
         'controller/NavController'
     ], function($, CourseController, NavController){
-        NavController.intialize($('nav#menu'));
+       	NavController.intialize($('nav#nav_panel'));
         oCourseController = CourseController;
         oCourseController.init();
         var sPageName = getParameterByName('page');

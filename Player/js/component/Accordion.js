@@ -9,9 +9,13 @@ define([
 			this.$panel 	= null;
 			this.oConfig 	=	 null;
 			this.aChap 		= null;
-			this.aBoard 	= null;
+			this.oBoard 	= null;
+			this.aBoards	= [];
+			this.aPages	= [];
 			this.fps 		= 20;
 			this.sSectionTitle;
+			
+			this.onBoardClicked = this.onBoardClicked.bind(this);
 			return this;
 		};
 		
@@ -42,25 +46,29 @@ define([
 					nTime		= 0,
 					sBoardNum	= (s < 9)? "0"+ (s+1) : (s + 1),
 					aType		= [];
-					
+					this.aBoards.push(oBoard);		
 					if(this.sSectionTitle != "TUT"){
 						var aTarget		= (oBoard.Target.length != undefined)? oBoard.Target : [oBoard.Target];
 						for(var n = 0; n<aTarget.length;n++){
 							var oTarget 	= aTarget[n];
+							if(oTarget._Type.toUpperCase() != "QUIZ"){
+								this.aPages.push(oTarget);
+							}
 							nTime 			+= Number(oTarget._TotalFrame);
 							
 							if(aType.indexOf(oTarget._Type) < 0){
 								aType.push(oTarget._Type);
 							}
 						}
-						aBoard.totalTime += nTime;	
-						$Board.push(this.createBoard(sID, (s+1), sBoardNum+":", sBoardName, aType, this.getTotalTime(nTime, {hr:false, min:true,sec:true})));
+						aBoard.totalTime += nTime;
+						var bShowType = (oBoard._Type == "Normal");	
+						$Board.push(this.createBoard(sID, (s+1), sBoardNum+":", sBoardName, aType, this.getTotalTime(nTime, {hr:false, min:true,sec:true}), bShowType));
 					}else{
 						$Board.push(this.createTut('tut', (s+1), sBoardNum+":", sBoardName, aType));
 					}
 				}
 				if(this.sSectionTitle != "TUT"){
-					var $section 		= this.createSection(sID, sNum + ":" , sTitle, this.getTotalTime(aBoard.totalTime, {hr:true, min:true,sec:true}));
+					var $section 		= this.createSection(sID, sNum + ":" , sTitle, this.getTotalTime(aBoard.totalTime, {hr:true, min:true,sec:true}, false));
 				}else{
 					var $section 		= this.createTutorials(sID, sNum + ":" , sTitle);					
 				}
@@ -100,6 +108,9 @@ define([
 			return null;
 		};
 		
+		Accordion.prototype.getSectionTitle								= function() {
+			return this.sSectionTitle;
+		};
 		Accordion.prototype.getBoardAtSection								= function(p_nIndex) {
 			for (var i=0; i < this.aChap.Boardlength; i++) {
 				var oSection 	= this.aChap[i],
@@ -111,14 +122,7 @@ define([
 			return null;
 		};
 		
-		Accordion.prototype.getTargetListByBoard								= function(p_sID) {
-			for(var i = 0;i < this.aBoard.length;i++){
-				if(this.aBoard[i]._ID ==  p_sID){
-					return this.aBoard[i].Target;
-				}
-			}
-			return [];
-		};
+		
 		Accordion.prototype.getTotalTime								= function(frames, format) {
 		
 			var sec = (frames / this.fps);
@@ -152,7 +156,7 @@ define([
 		Accordion.prototype.createSection								= function(p_sID, p_sNum, p_sName, p_sTime) {
 			var oScope = this,
 			$elem = $("<div></div>"),
-			sText =	 '<span class="acc-chap-num">'+p_sNum+' </span><span class="acc-chap-title">'+p_sName+'</span><span class="acc-chap-time">'+p_sTime+'</span>';
+			sText =	 '<span class="acc-board-icon"></span><span class="acc-chap-num">'+p_sNum+' </span><span class="acc-chap-title">'+p_sName+'</span><span class="acc-chap-time">'+p_sTime+'</span>';
 			
 			$elem.attr({
 				"id":p_sID,
@@ -177,21 +181,28 @@ define([
 			return $elem;
 		};
 		
-		Accordion.prototype.createBoard								= function(p_sSectionID, p_sBoardID, p_sNum, p_sBoardName, p_aType, p_sTime) {
+		Accordion.prototype.createBoard								= function(p_sSectionID, p_sBoardID, p_sNum, p_sBoardName, p_aType, p_sTime, b_showType) {
 			var oScope = this,
 			str = 	'<div id="board_'+p_sSectionID+'_'+p_sBoardID+'" class="acc-board">'+
 						'<span class="acc-board-num">'+p_sNum+' </span>'+
 						'<span class="acc-board-title">'+p_sBoardName+'</span>'+
-						'<span class="acc-board-time">'+p_sTime+'</span>'+
-						'<span class="DEF"><span>'+
-						'<span class="DIA"><span>'+
-						'<span class="DER"><span>'+
-						'<span class="APP"><span>'+
+						'<span class="acc-board-time-container">'+
+							'<div class="acc-board-time">'+p_sTime+'</div>'+
+							'<div class="type-container hide">'+
+								'<span class="DEF board-type"></span>'+
+								'<span class="DIA board-type"></span>'+
+								'<span class="DER board-type"></span>'+
+								'<span class="APP board-type"></span>'+
+							'</div>'+
+						'</span>'+
 						'</div>';
 		
 			var $elem = $(str);	
-			for(var i = 0; i< p_aType.length;i++){
-				$elem.find('.'+p_aType[i]).addClass('active')
+			if(b_showType){
+				$elem.find('.type-container').removeClass('hide');
+				for(var i = 0; i< p_aType.length;i++){
+					$elem.find('.'+p_aType[i]).addClass('active')
+				}
 			}
 			
 			$elem.click(function(e){
@@ -227,25 +238,81 @@ define([
 			var sID 		= $target.attr('id');
 			var $Board		= this.$panel.find('#'+'board_container_'+sID);
 			
+			this.$panel.find('.acc-chap.btn').removeClass('selected');
 			if($target.hasClass('open')){
 				$Board.slideUp();
+				$target.removeClass('open').addClass('selected');
 				return;
 			}
-						
 			//this.$panel.find('.board-container').slideUp().slideUp('fast');//.addClass('hide');
-			this.$panel.find('.open').removeClass('open');
-			$target.addClass('open');
+			$target.addClass('open selected');
 			$Board.slideDown();
 			
 			
+		};
+		Accordion.prototype.getPageList								= function() {
+			if(!this.oBoard )return null;		
+			var aPages = [];
+			if(this.sSectionTitle == "Board"){
+				aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
+			}else if(this.sSectionTitle == "TUT"){
+				aPages = [this.oBoard];
+			}
+					
+			return aPages;
+		};
+		Accordion.prototype.getPageByType								= function(p_sType) {
+			if(!this.oBoard )return null;
+			if(this.sSectionTitle == "Board"){
+				aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
+				for (var i=0; i < aPages.length; i++) {
+				  if( aPages[i]._Type == p_sType){
+				  	return aPages[i];
+				  }
+				};
+			}
+			
+			return null;
+		};
+		Accordion.prototype.getPageTypeList								= function(p_sType) {
+			if(!this.oBoard )return null;
+			var aPages = [],
+			result = [];
+			if(this.sSectionTitle == "Board"){
+				aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
+				for (var i=0; i < aPages.length; i++) {
+					result.push(aPages[i]._Type)
+				};
+			}
+			
+			return result;
 		}
+		Accordion.prototype.getChapCount								= function(p_sType) {
+			return this.aChap.length	
+		}
+		Accordion.prototype.getBoardCount								= function(p_sType) {
+			return	this.aBoards.length;
+		};
+		Accordion.prototype.getTotalPageCount								= function(p_sType) {
+			if(this.sSectionTitle == "Board"){
+				return	this.aPages.length;
+			}else if(this.sSectionTitle == "TUT"){
+				return	this.aBoards.length;
+			}
+			
+			return 0;	
+		};
 		Accordion.prototype.onBoardClicked								= function(e) {
 			var $target 	= $(e.currentTarget),
 			sID 			= $target.attr('id'),
-			sName 			= $target.find('.acc-board-title').text(),
-			oBoard 			= this.getBoardByName(sName);
+			sName 			= $target.find('.acc-board-title').text();
+			if($target.hasClass('selected'))return;
+			this.$panel.find('.acc-board').removeClass('selected');
 			
-			this.dispatchEvent('BOARD_SELECTED', {target:this, type:'BOARD_SELECTED', board:oBoard});
+			$target.addClass('selected');
+			this.oBoard 	= this.getBoardByName(sName);
+			
+			this.dispatchEvent('BOARD_SELECTED', {target:this, type:'BOARD_SELECTED', board:this.oBoard});
 		}
 		Accordion.prototype.onTutorialClicked								= function(e) {
 			var $target 	= $(e.currentTarget),
