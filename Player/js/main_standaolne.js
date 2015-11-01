@@ -127,13 +127,10 @@ var oCourseController;
 function init(){
     require([
     	'jquery',
-        'controller/CourseController',
-        'controller/NavController'
+        'controller/CourseController'
     ], function($, CourseController, NavController){
-       	//NavController.intialize($('nav#nav_panel'));// uncomment to see Navigation panel
         oCourseController = CourseController;
         oCourseController.init();
-        //comment below code when Navigation panel is active
         var sPageName = getParameterByName('page');
         HTMLPlayerAPI.loadPage(sPageName);
     });

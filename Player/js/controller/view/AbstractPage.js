@@ -245,12 +245,14 @@ define([
 
 	AbstractPage.prototype.destroy = function(){
 		
-        var nComponentsLength = this.aComponents.length,
-            i;
-        for (i=0; i < nComponentsLength; i++) {
-            this.aComponents[i].destroy();
-        };
-        this.aComponents = null;
+            var i;
+            
+        if(this.aComponents){
+	        for (i=0; i < this.aComponents.length; i++) {
+	            this.aComponents[i].destroy();
+	        };
+    	    this.aComponents = null;
+        }
         if(this.oQuizController){
         	this.oQuizController.destroy();
         	this.oQuizController = null;

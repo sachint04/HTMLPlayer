@@ -14,7 +14,9 @@
         <!-- CSS Includes -->
         <link rel="stylesheet" type="text/css" href="css/globals.css"/>
         <link rel="stylesheet" type="text/css" href="css/themes/default/skin.css"/>
+        <link rel="stylesheet" type="text/css" href="css/themes/default/navpanel.css"/>
         <link rel="stylesheet" type="text/css" href="css/themes/default/uislider.css"/>
+        <link rel="stylesheet" type="text/css" href="css/themes/default/mcq.css"/>
 
 
 
@@ -25,6 +27,13 @@
         <![endif]-->
     </head>
     <body>
+   	  	<!--[if gte IE 9]>
+		  <style type="text/css">
+		    .gradient {
+		       filter: none;
+		    }
+		  </style>
+		<![endif]-->
         <!--[if lt IE 9]>
             <img src="images/Bg_Img_01a.jpg" id="bg-img" />
         <![endif]-->
@@ -51,14 +60,38 @@
             <!-- Popup Container -->
             <div id="popup_container" class="reveal-modal small" >
             </div>
+			<!-- Navigation panel -->
+			<nav id="nav_panel" class="hide">
+			<div class="logo">Logo</div>
+			
+			<div class="tabs">
+				<span id="lec" class="tab tab-lecture-plan">Lecture Plan</span>
+				<span id="tut" class="tab tab-tutorials">Tutorials</span>
+				<span id="sec" class="tab tab-search">Search</span>
+			</div>
+			<div class="comp-title">For Dragonfly Education</div>
+			<div class="comp-details"></div>
+			<div id="lec_acc_container" class="acc-container lecture-container hide"></div>
+			<div id="tut_acc_container" class="acc-container tutorials-container hide"></div>
+			<div id="sec_acc_container" class="acc-container search-container hide"></div>
+			<div id="cat">
+				<a href="#" id="btnDEF" class="cat-btn def disabled">DEF</a>
+				<a href="#" id="btnDIA" class="cat-btn dia disabled">DIA</a>
+				<a href="#" id="btnDER" class="cat-btn der disabled">DER</a>
+				<a href="#" id="btnAPP" class="cat-btn app disabled">DEF</a>
+			</div>
+			<div class="total-duration"><span class="left">Total Duration:</span><span class="right total-time"></span></div>
+			</nav>
 
             <!-- AJAX Page Wrapper -->
             <div id="content_wrapper">
                 <!-- The UI Top Band gets appended here -->
+				<div id="content_header">Header</div>
                 <section id="content" role="main" aria-live="polite" tabindex="-1">
                     <!-- The Page Content gets loaded here -->
                 </section>
                 <!-- The UI Bottom Band gets appended here -->
+                			<div id="nav_bar">Navigation Bar</div>
                 </div>
             </div>
         </div>

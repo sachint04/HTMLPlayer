@@ -1,12 +1,13 @@
 define([
 		"jquery", 
 		"x2js", 
+		'controller/CourseController',
 		"model/Constants",
 		"util/ResourceLoader",
 		'util/EventDispatcher',
 		'component/Accordion',
 		],
-	function($, X2JS, Constants, ResourceLoader, EventDispatcher,Accordion) {
+	function($, X2JS, CourseController, Constants, ResourceLoader, EventDispatcher,Accordion) {
 	'use strict';
 	var  __instance; 
 	var NavController = function() {
@@ -162,9 +163,9 @@ define([
 		nTotalFrames	= p_oData._TotalFrame,
 		sType			= p_oData._Type;
 		
-		if(HTMLPlayerAPI){
+		if(CourseController){
 			//var sPageName = getParameterByName('page');
-        	HTMLPlayerAPI.loadPage(sFile);
+        	CourseController.loadPage(sFile);
 		}
 	
 		//alert('board click sFile = '+ sFile+ ' | nTotalFrames = '+ nTotalFrames+' | sType = ' +sType);	
