@@ -128,7 +128,7 @@ function init(){
     require([
     	'jquery',
         'controller/CourseController'
-    ], function($, CourseController, NavController){
+    ], function($, CourseController){
         oCourseController = CourseController;
         oCourseController.init();
         var sPageName = getParameterByName('page');
