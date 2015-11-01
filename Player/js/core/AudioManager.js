@@ -48,6 +48,7 @@ define([
 		//console.log('AudioManager.initPlugin() | '+soundManager);
 		soundManager.setup({
 			url: 'js/libs/swf/',
+			useHighPerformance: true,
 		    preferFlash: false,
 		    useConsole: true,
 		    /*ignoreFlash: true,
@@ -200,6 +201,7 @@ define([
 		//console.log('AudioManager.playAudio() | \n\tp_sSoundID = '+p_sSoundID+'\n\tsPlayingSoundID = '+this.sPlayingSoundID+'\n\tsLastPlayedSoundID = '+this.sLastPlayedSoundID+'\n\tbPlaying = '+this.bPlaying+'\n\tbComplete = '+this.bComplete+'\n\toSound = '+oSound);
         if (oSound) {
             if (this.sPlayingSoundID === p_sSoundID) {
+                //console.log('## HERE ## (RESUME) Resume the currently playing sound when Audio ID is supplied');
                 // ** (RESUME) Resume the currently playing sound when Audio ID is supplied
                 if (!this.bPlaying && !this.bComplete) {
                     soundManager.resume(p_sSoundID);

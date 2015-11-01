@@ -11,7 +11,7 @@ function getXML(){
 	fl.trace("getXML() | "+sSaveDir + sDocumentName);
 	if(!URIExists(sSaveDir + sDocumentName)){
 		alert('Please run the "AddScriptsAndLabels.jsfl" first');
-		return;
+		return null;
 	}
 	var sXMLData = FLfile.read(sSaveDir + sDocumentName + "/page.xml");
 	return sXMLData;
@@ -19,8 +19,8 @@ function getXML(){
 function getHTML(){
 	fl.trace("getHTML()");
 	if(!URIExists(sSaveDir + sDocumentName + "_swiffy.swf.html")){
-		alert('Please run the "AddScriptsAndLabels.jsfl" first');
-		return;
+		alert('Please run the "Export as HTML5 (Swiffy)" command first');
+		return null;
 	}
 	var sHTMLData = FLfile.read(sSaveDir + sDocumentName + "_swiffy.swf.html");
 	return sHTMLData;
@@ -65,8 +65,9 @@ function saveHTML(sHTMLData){
 function init(){
 	fl.outputPanel.clear();
 	var sXMLData = getXML(),
-		sHTMLData = getHTML(),
-		sSwiffyData = getSwiffyData(sHTMLData);
+		sHTMLData = getHTML();
+	if(sXMLData === null || sHTMLData === null){return;}
+	var	sSwiffyData = getSwiffyData(sHTMLData);
 		sFinalXML = appendSwiffyDataToXml(sXMLData, sSwiffyData);
 	
 	//fl.trace(sFinalXML);
@@ -85,6 +86,7 @@ function init(){
 	sHTMLData += '</div>';
 	sHTMLData += '</div>';
 	saveHTML(sHTMLData);
+	fl.trace("All DONE...!");
 }
 
 init();
