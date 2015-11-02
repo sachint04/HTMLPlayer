@@ -78,7 +78,7 @@
 			
 			
 			 <Board SubHeading="" ID="5" BoardName="Quiz" Type="QUIZ"  FileName="QUIZ">
-					<Target SubHeading="" ID="1" sort="1" BoardName="Q1/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_AE_DIA_U6_B10_MCQ1"/>
+					<Target SubHeading="" ID="1" sort="1" BoardName="Q1/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_EG_APP_U6_B2_NUM1"/>
 					<Target SubHeading="" ID="1" sort="1" BoardName="Q2/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="ME_AE_DIA_U6_B10_MCQ2"/> 
 					
 					<Target SubHeading="" ID="1" sort="1" BoardName="Q3/9 Introduction and History of Automobile" Type="QUIZ" TotalFrame="1200" FileName="SC1_CHEM_DIA_U4_B4_1_MCQ1"/>
@@ -97,8 +97,8 @@
 	  	
 	
 <!--Tutorial  1-->
-					<Tutorials TutName="Week 1:L1-L3" Type="TUT">		
-							<TUT SubHeading="" ID="2" sort="2" BoardName="Otto Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U2_B17_NUM1"/>
+					<Tutorials ID="1" TutName="Week 1:L1-L3" Type="TUT">		
+							<TUT SubHeading="" ID="1" sort="2" BoardName="Otto Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U2_B17_NUM1"/>
 							<TUT SubHeading="" ID="2" sort="2" BoardName="Otto Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U5_B2_NUM1"/>
 							<TUT SubHeading="" ID="3" sort="3" BoardName="Diesel Cycle" Type="TUT" TotalFrame="6000" FileName="ME_EG_APP_U6_B2_NUM1"/>
 							

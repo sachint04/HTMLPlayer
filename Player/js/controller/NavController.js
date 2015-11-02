@@ -45,11 +45,13 @@ define([
 	NavController.prototype.createUI = function(){
         this.oLecturePlan		= new Accordion();
         this.oLecturePlan.addEventListener('BOARD_SELECTED', this.handleAccEvents)
+        this.oLecturePlan.addEventListener('SECTION_SELECTED', this.handleAccEvents)
 		var aData 				= this.jsonXMLData.Data.showAll.Chap;
         this.oLecturePlan.init(this.panel.find('.lecture-container'), {}, aData, 'Board');
         
         this.oTutorials			= new Accordion();
         this.oTutorials.addEventListener('BOARD_SELECTED', this.handleAccEvents)
+        this.oTutorials.addEventListener('SECTION_SELECTED', this.handleAccEvents)
 		aData 				= this.jsonXMLData.Data.showAll.Tutorials;
         this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT');
 		
@@ -58,12 +60,14 @@ define([
 	}
 	
 	NavController.prototype.handleAccEvents = function(e){
-		var oAcc = e.target,
-		oBoard 	= e.board;
+		var oAcc = e.target;
 		switch(e.type ){
 			case 'BOARD_SELECTED' :
 			this.selectedComponent 	= e.target,
 			this.showBoardContent();
+			break;
+			case 'SECTION_SELECTED' :
+				//alert(e.sectionid);
 			break;
 		}
 	};
@@ -164,15 +168,75 @@ define([
 		sType			= p_oData._Type;
 		
 		if(CourseController){
-			//var sPageName = getParameterByName('page');
+        	 this.selectedComponent.setSelectedPage(p_oData);
         	CourseController.loadPage(sFile);
+			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
-	
-		//alert('board click sFile = '+ sFile+ ' | nTotalFrames = '+ nTotalFrames+' | sType = ' +sType);	
-			
 		
-	}
+	}		
 
+	NavController.prototype.getPageList = function(p_oData){
+		var result = null;
+		if(this.selectedComponent){
+			result  = this.selectedComponent.getPageList();	
+		}
+		return result;
+	};
+
+	NavController.prototype.hasPreviousPage = function(p_oData){
+		var result = null;
+		if(this.selectedComponent){
+			result = (this.selectedComponent.getSelectedPageIndex() > 0 )
+		}
+		return result;
+	}
+	NavController.prototype.hasNextPage = function(p_oData){
+		var result = null;
+		if(this.selectedComponent){
+			result = (this.selectedComponent.getSelectedPageIndex() < this.selectedComponent.getTotalPageCount() - 1 )
+		}
+		return result;
+	}
+	NavController.prototype.getPreviousPage = function(){
+		var result = null;
+		if(this.hasPreviousPage()){
+			result = this.selectedComponent.getPageList()[this.selectedComponent.getSelectedPageIndex() - 1];
+		}
+		return result;
+	}
+	NavController.prototype.getNextPage = function(){
+		var result = null;
+		if(this.hasNextPage()){
+			result = this.selectedComponent.getPageList()[this.selectedComponent.getSelectedPageIndex() +1];
+		}
+		return result;
+	}
+	NavController.prototype.loadNext = function(){
+		var oTarget  = this.getNextPage();
+		if(oTarget ){
+			this.loadPage(oTarget);	
+		}
+	}
+	NavController.prototype.loadPrevious = function(){
+		var oTarget  = this.getPreviousPage();
+		if(oTarget ){
+			this.loadPage(oTarget);	
+		}
+	}
+	NavController.prototype.getBoardName = function(){
+		var result = null;
+		if(this.selectedComponent){
+			result = this.selectedComponent.getBoardName();
+		}
+		return	result;
+	}
+	NavController.prototype.getPageType = function(){
+		var result = null;
+		if(this.selectedComponent){
+			result = this.selectedComponent.getCurrentPage()._Type;
+		}
+		return	result;
+	}
 	
 	NavController.prototype.destroy = function(){
 		this.panel = null;
