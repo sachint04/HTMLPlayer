@@ -171,6 +171,7 @@ body{
 	background: linear-gradient(to bottom, #e1ffff 0%,#fdffff 6%,#e6f8fd 30%,#c8eefb 54%,#bee4f8 75%,#b1d8f5 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1ffff', endColorstr='#b1d8f5',GradientType=0 ); /* IE6-9 */
 	position: relative;
+	overflow:hidden;
 }
 .tut-num-container #answer, .tut-num-container #steps {
 	height: 470px;
@@ -195,7 +196,7 @@ body{
 
 #tutnumpanel {
 	position: absolute;
-	bottom: -32px;
+	bottom: 0px;
 	left: 0px;
 	width: 100%;
 }
