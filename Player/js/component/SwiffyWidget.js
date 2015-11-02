@@ -22,8 +22,8 @@ define([
 		//** NOT_STARTED | IN_PROGRESS | PAUSED | COMPLETED
 		this.bPlaying;
 
-		this.bCueAudioComplete;
-		this.bCueAnimComplete;
+		this.bCueAudioComplete = true;
+		this.bCueAnimComplete = true;
 		this.bAnimationComplete;
 		// Stores the info of the seeked position when in pause state; for playing the next time
 		this.oSeekInfo;
@@ -220,9 +220,12 @@ define([
 
             nTotalFrames = nEndFrame - nStartFrame,
             nCurrentFrame = (nActualFramePosition < nStartFrame) ? 0 : (nActualFramePosition - nStartFrame),
-            nAnimationDuration = (nCurrentFrame / 20) * 1000,
+            /*nAnimationDuration = (nCurrentFrame / 20) * 1000,*/
+            nAnimationDuration = ((nEndFrame - nStartFrame) / 20) * 1000,
             oSound = AudioManager.getSoundByID(sCurrentLabel),
             nSoundDuration = (nSwiffyGoToFrame < nStartFrame) ? 0 : oSound.duration,
+            nPercentPlayed = (nSwiffyGoToFrame - nStartFrame) * 100 / (nEndFrame - nStartFrame),
+            nSoundPosition = nSoundDuration * nPercentPlayed / 100,
             oScope = this;
         /*
          * 1 Sec      nTotalFrames
@@ -237,29 +240,73 @@ define([
         if(this.bPlaying){
             // Check and play the audio from a specific position
             //console.log('\tnSoundDuration = '+nSoundDuration+' : nAnimationDuration = '+nAnimationDuration);
-            if(nSoundDuration > nAnimationDuration){
-                AudioManager.playAudio(sCurrentLabel, nAnimationDuration);
+            if(nPercentPlayed < 100){
+                AudioManager.playAudio(sCurrentLabel, nSoundPosition);
+                this.bCueAnimComplete = false;
+                this.bCueAudioComplete = false;
             }else{
-                AudioManager.clearLastPlayedAudio();
+                this.bCueAnimComplete = true;
                 this.bCueAudioComplete = true;
             }
+            /*
+            if(nSoundDuration > nAnimationDuration){
+                            AudioManager.playAudio(sCurrentLabel, nAnimationDuration);
+                            this.bCueAnimComplete = true;
+                            this.bCueAudioComplete = false;
+                        }else if(nSoundDuration < nAnimationDuration){
+                            //AudioManager.clearLastPlayedAudio();
+                            this.bCueAnimComplete = false;
+                            this.bCueAudioComplete = true;
+                        }else{
+                            //AudioManager.clearLastPlayedAudio();
+                            this.bCueAnimComplete = true;
+                            this.bCueAudioComplete = true;
+                        }*/
+
             // Play the swiffy animation from the specific frame
             var bStoppedFlag = (nSwiffyGoToFrame === nEndFrame) ? true : false;
             this.oSwiffy.api.bStopped = bStoppedFlag;
-            this.oSwiffy.api.gotoAndPlay(nSwiffyGoToFrame);
+            // Handle Edge Case: If Both Audio & Animation have finished playing PLUS its the End Frame of the Cue Animation
+            if(this.bCueAnimComplete && this.bCueAudioComplete && bStoppedFlag){
+                this.oSwiffy.api.gotoAndPlay(nSwiffyGoToFrame + 1);
+            }else{
+            // Play the swiffy animation from the specific frame
+                this.oSwiffy.api.gotoAndPlay(nSwiffyGoToFrame);
+            }
             // Add the interval for updating the seek bar
             addPositionUpdateInterval.call(this);
         }else{
-            if(nSoundDuration > nAnimationDuration){
+            if(nPercentPlayed < 100){
                 // Store the audio info, to play when the play button is clicked
                 this.oSeekInfo = {
-                    audio:sCurrentLabel,
+                    audio: sCurrentLabel,
                     position: nAnimationDuration
                 };
+                this.bCueAnimComplete = false;
+                this.bCueAudioComplete = false;
             }else{
-                AudioManager.clearLastPlayedAudio();
+                this.bCueAnimComplete = true;
                 this.bCueAudioComplete = true;
             }
+            /*
+            if(nSoundDuration > nAnimationDuration){
+                            // Store the audio info, to play when the play button is clicked
+                            this.oSeekInfo = {
+                                audio: sCurrentLabel,
+                                position: nAnimationDuration
+                            };
+                            this.bCueAnimComplete = true;
+                            this.bCueAudioComplete = false;
+                        }else if(nSoundDuration < nAnimationDuration){
+                            //AudioManager.clearLastPlayedAudio();
+                            this.bCueAnimComplete = false;
+                            this.bCueAudioComplete = true;
+                        }else{
+                            //AudioManager.clearLastPlayedAudio();
+                            this.bCueAnimComplete = true;
+                            this.bCueAudioComplete = true;
+                        }*/
+
             // Move the swiffy animation to the specific frame
             this.oSwiffy.api.gotoAndStop(nSwiffyGoToFrame);
         }
@@ -286,7 +333,6 @@ define([
                                                             '\n\tnSoundDuration = '+nSoundDuration+
                                                             '\n\tnAnimationDuration = '+nAnimationDuration);
         */
-
     }
     function findMapIndex(aMap, nSwiffyGoToFrame){
         var aSwiffyFrameMap = this.aSwiffyFrameMap.slice(0);
@@ -363,7 +409,7 @@ define([
                 break;
             case 'ANIMATION_CUE_END':
                 this.bCueAnimComplete = true;
-                this.oCueCompleteEventInfo = e;
+                //this.oCueCompleteEventInfo = e;
                 if(this.bPlaying){
                     checkAndPlayNextCue.call(this, e);
                 }
@@ -379,19 +425,22 @@ define([
     };
 
     function checkAndPlayNextCue(e){
-        //console.log('Swiffy.checkAndPlayNextCue() | \n\tbCueAnimComplete = '+this.bCueAnimComplete+'\n\tbCueAudioComplete = '+this.bCueAudioComplete);
+        //console.log('Swiffy.checkAndPlayNextCue() | \n\tbCueAnimComplete = '+this.bCueAnimComplete+'\n\tbCueAudioComplete = '+this.bCueAudioComplete/*+' : Playing Sound ID = '+(e.target.currentLabel || e.soundID)*/);
         if(this.bCueAnimComplete && this.bCueAudioComplete){
+            this.oSwiffy.api.play();
             //var sCurrentPlayingSoundID = e.data.label;
-            var sCurrentPlayingSoundID = e.target.currentLabel,
-                bIsLastAudio = isLastAudio.call(this, sCurrentPlayingSoundID);
+            /*
+            var sCurrentPlayingSoundID = e.target.currentLabel || e.soundID,
+                            bIsLastAudio = isLastAudio.call(this, sCurrentPlayingSoundID);
 
-            if(!bIsLastAudio){
-                this.oSwiffy.api.play();
-                AudioManager.playAudio(getNextAudio.call(this, sCurrentPlayingSoundID));
-                return true;
-            }
+                        if(!bIsLastAudio){
+                            this.oSwiffy.api.play();
+                            AudioManager.playAudio(getNextAudio.call(this, sCurrentPlayingSoundID));
+                            return true;
+                        }*/
+            return true;
         }
-        this.oCueCompleteEventInfo = null;
+        //this.oCueCompleteEventInfo = null;
         return false;
    }
 
@@ -437,35 +486,54 @@ define([
     // Swiffy Widget API
     SwiffyWidget.prototype.play                         = function(e){
         //console.log('Swiffy.play() | \n\tbStopped = '+this.oSwiffy.api.bStopped+'\n\tbAnimationComplete = '+this.bAnimationComplete+'\n\toCueCompleteEventInfo = '+this.oCueCompleteEventInfo+'\n\tEQUALS = '+(!this.oSwiffy.api.bStopped || this.bAnimationComplete || this.oCueCompleteEventInfo));
-        if(!this.oSwiffy.api.bStopped || this.bAnimationComplete || this.oCueCompleteEventInfo){
-            if(this.bAnimationComplete){
-                this.replay();
-                return;
-            }
+        if(this.bAnimationComplete){
+            this.replay();
+            return;
+        }
+        //console.log('Swiffy.play() | bPlaying = '+this.bPlaying);
+        if(!this.bPlaying/*!this.oSwiffy.api.bStopped || this.bAnimationComplete || this.oCueCompleteEventInfo*/){
+            /*
             if(this.oCueCompleteEventInfo){
-                checkAndPlayNextCue.call(this, this.oCueCompleteEventInfo);
-            }
-            this.bPlaying = true;
-            this.bAnimationComplete = false;
-            this.oSwiffy.api.play();
-            //console.log('Swiffy.play() | AM Completed = '+AudioManager.isCompleted()+' : SeekInfo = '+JSON.stringify(this.oSeekInfo));
-            if(!AudioManager.isCompleted() || this.oSeekInfo){
-                if(this.oSeekInfo && this.oSeekInfo.audio && this.oSeekInfo.position){
-                    // Handle seeking while animation paused. Play the audio that's evaluated while seeking
+                            checkAndPlayNextCue.call(this, this.oCueCompleteEventInfo);
+                        }*/
+            var bPlayed = checkAndPlayNextCue.call(this, this.oCueCompleteEventInfo);
+            if(!bPlayed){
+                if(!this.bCueAnimComplete){
+                    // ** Play the animation if its not complete
+                    this.oSwiffy.api.play();
+                }
+                if(!this.bCueAudioComplete && this.oSeekInfo && this.oSeekInfo.audio && this.oSeekInfo.position){
+                    // ** Handle seeking while animation paused. Play the audio that's evaluated while seeking
                     AudioManager.playAudio(this.oSeekInfo.audio, this.oSeekInfo.position);
                     this.oSeekInfo = null;
-                }else{
+                }else if(!this.bCueAudioComplete){
                     // ** Play any audio that was paused
                     AudioManager.playAudio();
                 }
             }
+            this.bPlaying = true;
+            this.bAnimationComplete = false;
+            //console.log('Swiffy.play() | AM Completed = '+AudioManager.isCompleted()+' : SeekInfo = '+JSON.stringify(this.oSeekInfo));
+            /*
+            if(!AudioManager.isCompleted() || this.oSeekInfo){
+                            if(this.oSeekInfo && this.oSeekInfo.audio && this.oSeekInfo.position){
+                                // Handle seeking while animation paused. Play the audio that's evaluated while seeking
+                                AudioManager.playAudio(this.oSeekInfo.audio, this.oSeekInfo.position);
+                                this.oSeekInfo = null;
+                            }else{
+                                // ** Play any audio that was paused
+                                AudioManager.playAudio();
+                            }
+                        }*/
+
             addPositionUpdateInterval.call(this);
 
             dispatchCustomEvent.call(this, "ANIMATION_PLAY");
         }
     };
     SwiffyWidget.prototype.pause                        = function(){
-        if(!this.oSwiffy.api.bStopped){
+        //console.log('Swiffy.pause() | bPlaying = '+this.bPlaying);
+        if(this.bPlaying/*!this.oSwiffy.api.bStopped*/){
             this.bPlaying = false;
             this.oSwiffy.api.stop();
             AudioManager.pauseAudio();
@@ -475,6 +543,7 @@ define([
     };
 
     SwiffyWidget.prototype.replay                       = function(){
+        //console.log('Swiffy.replay() | bPlaying = '+this.bPlaying);
         this.bPlaying = true;
         this.bAnimationComplete = false;
         this.oSwiffy.api.gotoAndPlay('start');
