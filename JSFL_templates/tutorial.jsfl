@@ -3,7 +3,7 @@ oTimeline = oDocument.getTimeline(),
 aLayers 	= oTimeline.layers;
 var alphabets = "ABCDEFG";
 var docName = oDocument.name;	
-var folderName = docName.slice(0, docName.indexOf('.'));
+var folderName = (docName.indexOf('.') > 0 ) ? docName.slice(0, docName.indexOf('.')) : docName;
 var docPath = oDocument.pathURI;
 var docWidth = oDocument.width;
 var docHeight = oDocument.height;
@@ -61,13 +61,13 @@ function getKeyFramesOfLayer(layer){
 		  if(aElem == undefined)continue;
 		  //	//fl.trace('key frame found at  index : '+ i+ ' with startFrame ' +oFrame.startFrame);
 		  ////fl.trace('oFrame : '+ oFrame +' | aElem : ' +aElem);
-			 
+			 fl.trace('aElem length -  '+  aElem.length);
 			 for(var j = 0; j < aElem.length;j++){
 				 var elem = aElem[j];
 				 var sType = elem.elementType;
 				 var oLibraryItem = elem.libraryItem;
 				 var index = -1;
-				  fl.trace('sType  = '+sType +' l  | ibraryItem = '+ elem.libraryItem);
+				  fl.trace('sType  = '+sType +' | ibraryItem = '+ elem.libraryItem);
 				  if(sType == "instance"){
 					var symbolElems = oLibraryItem.timeline.layers[0].frames[0].elements;
 					if(symbolElems == undefined)continue;
@@ -84,6 +84,20 @@ function getKeyFramesOfLayer(layer){
 							break;
 						}
 					}
+				  }else if(sType == "shape"){
+					  if(elem.isGroup){
+						  i -= 1;
+						  elem.selected = true;
+						  oDocument.unGroup();
+						  fl.trace('after ungroup aElem length -  '+  aElem.length);
+					  }
+				  }else if(sType == "text"){
+					  if(strQuestion == ""){
+						strQuestion = tfToHTML(elem);					
+					//fl.trace('element type '+ sSymbolType +' has Text '+strQuestion );
+						}else{
+							alert("Error: More than one text field found in Question MovieClip.")
+						}
 				  }
 				 
 			}
@@ -94,10 +108,10 @@ function getKeyFramesOfLayer(layer){
 function checkLayers(){
 	
 	for(var i = 0 ;i <oTimeline.layers.length;i++){
-		fl.trace('checkLayers |  name = '+ oTimeline.layers[i].name);
+		//fl.trace('checkLayers |  name = '+ oTimeline.layers[i].name);
 		oTimeline.layers[i].locked = true;
 		if(oTimeline.layers[i].name === "Question"){
-			
+			oTimeline.layers[i].locked = false;
 			getKeyFramesOfLayer(oTimeline.layers[i]);
 		}
 		
@@ -263,7 +277,9 @@ function ExportSteps(){
 			fl.getDocumentDOM().selectAll();
 			var mc = fl.getDocumentDOM().selection[0];
 			dom = fl.getDocumentDOM();
+			removeGuidedLayer(dom.getTimeline());
 			dom.selectAll();
+			dom.convertToSymbol('movie clip', 'all_data_mc', 'top left');
 			dom.group();
 			sel = dom.selection[0]; // select pasted item
 			
@@ -356,17 +372,32 @@ function tfToHTML(p_tf)
 
 
 
+function showAllLayers(p_flag){
+	for(var i = 0;i<oTimeline.layers.length;i++){
+		oTimeline.layers[i].visible = p_flag;
+	}	
+}
 
+function lockAllLayers(p_flag){
+	for(var i = 0;i<oTimeline.layers.length;i++){
+		oTimeline.layers[i].locked = p_flag;		
+	}	
+}
+showAllLayers(true);
+lockAllLayers(false);
 removeGuidedLayer(oTimeline);
 removeLayerWithLabel(oTimeline, "BG");
+removeLayerWithLabel(oTimeline, "swfHolder_mc");
 removeLayerWithLabel(oTimeline, "swf Holder");
 
 checkLayers();
+
 exportAnswer();
 ExportSteps();
 writeFile(createXMLNode(), 'page.xml');;
-//findCorrectOption();
-//dataToWrite  = createStyles() + createOptionData() + getScript();
 dataToWrite  = createQuestionData();
 writeFile(dataToWrite, "page.html");
+
 alert('folder created successfully!');
+//findCorrectOption();
+//dataToWrite  = createStyles() + createOptionData() + getScript();

@@ -11,10 +11,11 @@ background: -o-radial-gradient(center, ellipse cover,  #dee0e2 0%,#b8c9d6 100%,#
 background: -ms-radial-gradient(center, ellipse cover,  #dee0e2 0%,#b8c9d6 100%,#b8c9d6 101%); /* IE10+ */
 background: radial-gradient(ellipse at center,  #dee0e2 0%,#b8c9d6 100%,#b8c9d6 101%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dee0e2', endColorstr='#b8c9d6',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
-
+width:100%;
 position:relative;
 height:100%;
 display: table;
+padding-bottom:40px;
 }
 ul.option-container {
 	padding-left: 0px;
@@ -25,7 +26,6 @@ ul.option-container {
 	display: block;
 	padding-left: 50px;
 	padding-top: 10px;
-	width: 300px;
 }
 .show-result .radio.correct {
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f1da36+5,f1da36+91,f1da36+100&amp;1+0,1+91,0.01+100 */

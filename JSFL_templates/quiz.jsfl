@@ -163,7 +163,14 @@ function findCorrectOption(){
 }
 
 function createOptionData(){
-	var id = docName.slice(0,docName.lastIndexOf('.'));
+	
+	var id = '';
+	if(docName.indexOf('.') != -1){
+		id = docName.slice(0,docName.lastIndexOf('.'));
+	}else{
+		id = docName;
+	}
+	
 	var node = '<div id="'+id+'" class="mcq-container">';
 	//	//fl.trace("options length = "+ aOptions.length);
 	aOptions.sort(function(a, b) {
@@ -358,7 +365,19 @@ function exportBG(){
 	}
 }
 
+function showAllLayers(p_flag){
+	for(var i = 0;i<oTimeline.layers.length;i++){
+		oTimeline.layers[i].visible = p_flag;
+	}	
+}
 
+function unlockAllLayers(p_flag){
+	for(var i = 0;i<oTimeline.layers.length;i++){
+		oTimeline.layers[i].locked = !p_flag;		
+	}	
+}
+showAllLayers(true);
+unlockAllLayers(true);
 removeGuidedLayer(oTimeline);
 //removeLayerWithLabel(oTimeline, "BG");
 
@@ -376,5 +395,5 @@ writeFile(htmlData, 'page.html');
 //writeFile(cssData, 'page.css');
 //writeFile(jsData, 'page.js');
 writeFile(xmlData, 'page.xml');
-exportBG();
+//exportBG();
 alert('folder created successfully!');
