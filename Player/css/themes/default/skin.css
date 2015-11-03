@@ -176,6 +176,7 @@ body{
 }
 .tut-num-container .question{
 	height:25%;
+	overflow:hidden;
 }
 .tut-num-container #answer, .tut-num-container #steps {
 	height: 470px;
