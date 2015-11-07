@@ -83,32 +83,64 @@ body{
 	cursor: default;
 }
 .ui-play-btn {
-	width: 30px;
-	height: 30px;
-	background-position-x: -13px;
-	background-position-y: -13px;
-	position: absolute;
+    width: 46px;
+    height: 30px;
+    background-position-x: 0px;
+    background-position-y: 0px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
 }
 .ui-play-btn:hover {
-	background-position-y: -38px;
+    background-position-y: -37px;
 }
 .ui-pause-btn {
-	width: 30px;
-	height: 30px;
-	background-position-x: -47px;
-	background-position-y: -13px;
+    width: 46px;
+    height: 30px;
+    background-position-x: -56px;
+    background-position-y: 0px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
 }
 .ui-pause-btn:hover {
-	background-position-y: -38px;
+    background-position-y: -37px;
 }
+.ui-replay-btn {
+    width: 29px;
+    height: 28px;
+    background-position-x: -112px;
+    background-position-y: 0px;
+    left: 55px;
+    top: 4px;
+    position: absolute;
+}
+.ui-replay-btn:hover {
+    background-position-y: -38px;
+}
+
 #slider_playhead_seek.ui-slider {
-	position: absolute;
-	float: left;
-	height: 2px;
-	left: 40px;
-	top: 14px;
-	width: 70%;
-	max-width: 650px;
+    position: absolute;
+    float: left;
+    height: 4px;
+    left: 150px;
+    top: 15px;
+    width: 55%;
+    max-width: 650px;
+    background-color: #7B797A;
+    border-top: 2px solid #1C1A1A;
+    border-bottom: 1px solid #7B797A;
+}
+
+#slider_volume_seek.ui-slider {
+    height: 4px;
+    left: 612px;
+    top: 15px;
+    width: 12%;
+    max-width: 650px;
+    background-color: #7B797A;
+    border-top: 2px solid #1C1A1A;
+    border-bottom: 1px solid #7B797A;
 }
 /* ----- Audio Panel End -----------*/
 
