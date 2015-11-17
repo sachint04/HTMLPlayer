@@ -1,13 +1,13 @@
 define([
-		"jquery", 
-		"x2js", 
-		'controller/CourseController',
-		"model/Constants",
-		"util/ResourceLoader",
-		'util/EventDispatcher',
-		'component/Accordion',
-		],
-	function($, X2JS, CourseController, Constants, ResourceLoader, EventDispatcher,Accordion) {
+	"jquery", 
+	"x2js", 
+	'controller/CourseController',
+	"model/Constants",
+	"util/ResourceLoader",
+	'util/EventDispatcher',
+	'component/Accordion',
+	'component/Search'
+], function($, X2JS, CourseController, Constants, ResourceLoader, EventDispatcher, Accordion, Search) {
 	'use strict';
 	var  __instance; 
 	var NavController = function() {
@@ -54,6 +54,11 @@ define([
         this.oTutorials.addEventListener('SECTION_SELECTED', this.handleAccEvents)
 		aData 				= this.jsonXMLData.Data.showAll.Tutorials;
         this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT');
+		
+		this.oSearch		= new Search();
+        this.oSearch.addEventListener('BOARD_SELECTED', this.handleAccEvents)
+		var aData 				= this.jsonXMLData.Data.showAll.Chap;
+        this.oSearch.init(this.panel.find('.search-container'), {}, aData, 'Board');
 		
 		this.addEventHandlers();
 		this.panel.find('.tab.tab-lecture-plan').trigger('click');
@@ -136,29 +141,36 @@ define([
 	};
 	NavController.prototype.onTabClicked = function(e){
 		var $target = $(e.currentTarget),
-		sID 		= $target.attr('id');
+			sID 	= $target.attr('id'),
+			sType	= '',
+			str;
 		if($target.hasClass('selected'))return;
 		this.panel.find('.tabs .tab').removeClass('selected');
 		this.panel.find('.acc-container').addClass('hide')
 		this.panel.find('#'+ sID+'_acc_container').removeClass('hide');
-		var sType = '';
 		if(sID == 'lec'){	
 			this.selectedComponent = this.oLecturePlan;
 			sType 		= 'Lectures';
+			str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
 		}else if(sID == 'tut'){
 			this.selectedComponent = this.oTutorials;
-			sType 		= 'Tutorials';			
-		}else{
+			sType 		= 'Tutorials';
 			
+		}else{
+			//this.selectedComponent = this.oSearch;
 		}
-		var nBoard = this.selectedComponent.getChapCount();
-		var nPage = this.selectedComponent.getTotalPageCount()
+		if(sID == 'lec' || sID == 'tut'){
+			var nBoard = this.selectedComponent.getChapCount();
+			var nPage = this.selectedComponent.getTotalPageCount();
+			str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
+			this.panel.find('.comp-details').removeClass('hide').html(str);
+		}else{
+			//str = '<span class="left search-panel-container"><input id="input_search"/></span><span class="left"><button id="btn_search"></button></span>';
+			this.panel.find('.comp-details').addClass('hide');
+		}
 
 		this.panel.find('.total-time').html(this.selectedComponent.getTotalClockTime())
-
 		
-		var str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
-		this.panel.find('.comp-details').html(str);
 		$target.addClass('selected');
 	}
 	
