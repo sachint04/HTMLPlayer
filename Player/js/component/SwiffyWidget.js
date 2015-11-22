@@ -544,8 +544,8 @@ define([
 
     SwiffyWidget.prototype.replay                       = function(){
         //console.log('Swiffy.replay() | bPlaying = '+this.bPlaying);
+        this.stop();
         this.bPlaying = true;
-        this.bAnimationComplete = false;
         this.oSwiffy.api.gotoAndPlay('start');
         addPositionUpdateInterval.call(this);
         dispatchCustomEvent.call(this, "ANIMATION_REPLAY");
@@ -553,6 +553,9 @@ define([
     SwiffyWidget.prototype.stop                         = function(){
         this.bPlaying = false;
         this.bAnimationComplete = true;
+        this.bCueAudioComplete = true;
+        this.bCueAnimComplete = true;
+        this.oSeekInfo = null;
         removePositionUpdateInterval.call(this);
 
         this.oSwiffy.api.stop();

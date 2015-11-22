@@ -69,13 +69,15 @@
 }
 .ui-slider .ui-slider-handle {
     position: absolute;
-z-index: 2;
-width: 6px;
-height: 1.2em;
-cursor: default;
-margin-left: -1px;
-margin-top: -4px;
-background-color: #b4cd0d;
+    z-index: 2;
+    width: 0.9em;
+    height: 0.9em;
+    cursor: default;
+    margin-left: -1px;
+    margin-top: -3px;
+    background-color: #b4cd0d;
+    border-radius: 10px;
+    background: url('../../../images/spritesheet.png') no-repeat scroll -151px -7px transparent;
 }
 .ui-widget-content a {
     color: #333333;

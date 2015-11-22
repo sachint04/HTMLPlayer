@@ -40,7 +40,10 @@ define([
 				    start	: 'PLAYHEAD_SEEK_START',
 				    end     : 'PLAYHEAD_SEEK_END'
 				},
-				volumeSeek	: 'SEEK_VOLUME',
+				volumeSeek	: {
+                    start   : 'VOLUME_SEEK_START',
+                    end     : 'VOLUME_SEEK_END'
+                },
         };
 
         this.showAudioControls = this.showAudioControls.bind(this),
@@ -280,7 +283,14 @@ define([
 			}
 
 			// init the jQuery UI slider
-			$elem.slider(sliderOptions);
+			$elem.slider(sliderOptions).bind({
+                start: function(e, ui){
+                    oScope.handleUIEvents(e, this, sEventToDispatch.start);
+                },
+                stop: function(e, ui){
+                    oScope.handleUIEvents(e, this, sEventToDispatch.end);
+                }
+            });
 
 			if(!bSeekingAvailable){
 				$elem.css('cursor', 'default');
@@ -305,6 +315,7 @@ define([
 	AudioPanel.prototype.initialize							= function(p_sType, p_sID, p_$elem, xmlNode){
 		//console.log('AudioPanel.initialize() | ');
 		this.$pauseBtn.addClass('hide');
+		this.$volumeSlider.trigger('stop');
 		//this.$unmuteBtn.addClass('hide');
 	};
 
@@ -372,7 +383,8 @@ define([
 				        e.playheadPosition = nPlayheadPosition;
 				        break;
 					}
-					case 'SEEK_VOLUME':{
+					/*case 'VOLUME_SEEK_START':*/
+					case 'VOLUME_SEEK_END':{
 						var nVolume = this.$volumeSlider.slider('value');
                         //console.log('Volume Val = '+nVolume);
                         AudioManager.setVolume(nVolume);//Valid Range between 0 - 100
