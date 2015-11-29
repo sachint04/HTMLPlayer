@@ -247,9 +247,11 @@ function findCorrectOption(){
 }
 function createQuestionData(){
 	var node = '<div id="'+folderName+'" class="tut-num-container row">';
+	node = node + '<div class="scroll-y">';
 	node = node + createQuestionNode();
 	node = node + createAnswerData();
 	node = node + createStepsData();
+	node = node + '</div>';
 	node = node + '<div id="tutnumpanel">'+
 					'<div id="btnShowSolution" >See QUESTION</div>'+
 					'<div id="btnShowAnswer">Final ANSWER</div>'+					
@@ -433,7 +435,7 @@ removeLayerWithLabel(oTimeline, "BG");
 removeLayerWithLabel(oTimeline, "swfHolder_mc");
 removeLayerWithLabel(oTimeline, "swf Holder");
 
-checkLayers();
+//checkLayers();
 
 ExportSteps();
 exportAnswer();
@@ -443,6 +445,7 @@ exportQuestion();
 writeFile(createXMLNode(), 'page.xml');;
 dataToWrite  = createQuestionData();
 writeFile(dataToWrite, "page.html");
+
 fl.revertDocument(fl.getDocumentDOM());
 alert('folder created successfully!');
 
