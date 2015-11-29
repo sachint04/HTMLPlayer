@@ -21,6 +21,7 @@ define([
 	
 	QuizController.prototype.showSolution = function() {
 		$('.mcq-container').addClass("show-result");
+		$('.mcq-container .answer-img').removeClass('hide');
 	};
 	
 	QuizController.prototype.destroy = function(){

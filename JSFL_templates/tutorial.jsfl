@@ -15,6 +15,7 @@ var maxOptionWidth = 0;
 var oAnswer = {};
 var oSteps = {};
 
+oDocument.selectNone();
 var folderURI	= docPath.slice(0, docPath.lastIndexOf('.'));
 FLfile.createFolder(folderURI);	
 
@@ -265,47 +266,42 @@ function writeFile(str, filename){
 }
 
 function ExportSteps(){
-	
-	
 	var aItems = oDocument.library.items;
 	for(var i = 0;i<aItems.length;i++){
 		var item = aItems[i];
 		//var className = item.linkageExportForAs;
 		if(item.name == "allData"){
 			oDocument.library.editItem(item.name);
-						
-			fl.getDocumentDOM().selectAll();
-			var mc = fl.getDocumentDOM().selection[0];
+			
+			//var mc = fl.getDocumentDOM().selection[0];
 			dom = fl.getDocumentDOM();
 			removeGuidedLayer(dom.getTimeline());
 			dom.selectAll();
-			dom.convertToSymbol('movie clip', 'all_data_mc', 'top left');
-			dom.group();
-			sel = dom.selection[0]; // select pasted item
 			
-		
-			var selWidth = sel.width;
-			var selHeight = sel.height;
-			fl.trace("selWidth = "+ selWidth+ " | selHeight = "+ selHeight);
-			fl.getDocumentDOM().clipCopy();
+			dom.group()
+			sel = dom.selection[0]; // select pasted item
+			var selWidth = Math.ceil(sel.width);
+			var selHeight = Math.ceil(sel.height);
+			//alert("selWidth = "+ selWidth+ " | selHeight = "+ selHeight);
+			dom.clipCopy();
 			var newDom = fl.createDocument();
-			newDom.width = Math.round(selWidth);
-			newDom.height = Math.round(selHeight);
+			newDom.width = selWidth;
+			newDom.height = selHeight;
 			newDom.clipPaste(true)
 			
 			var imagePath	= getTempFlaURI('steps.png');
 			oSteps.path = imagePath;
-			oSteps.width = Math.round(selWidth);
-			oSteps.height = Math.round(selHeight);
+			oSteps.width = selWidth;
+			oSteps.height = selHeight;
 			//fl.trace("imagePath = "+ imagePath);
 			newDom.exportPNG(imagePath, true, true);
-			newDom.close(false);
-			
-			
+			newDom.close(false);		
+			oDocument.exitEditMode();
 		}
 		
 	}
 }
+
 
 
 function getTempFlaURI(p_sFileName){
@@ -394,10 +390,12 @@ checkLayers();
 
 exportAnswer();
 ExportSteps();
+
 writeFile(createXMLNode(), 'page.xml');;
 dataToWrite  = createQuestionData();
 writeFile(dataToWrite, "page.html");
 
 alert('folder created successfully!');
+
 //findCorrectOption();
 //dataToWrite  = createStyles() + createOptionData() + getScript();
