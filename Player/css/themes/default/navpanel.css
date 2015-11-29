@@ -30,7 +30,7 @@
 }
 
 #nav_panel {
-	width: 23%;
+	width: 20%;
 	display: inline-block;
 	background-color: #4E4B49;
 	color: #FFFFFF;
@@ -124,7 +124,7 @@
 	float: right;
 }
 #nav_panel .acc-container {
-	height: 390px;
+	height: 324px;
 	overflow-y: auto;
 	border: 2px solid #333333;
 }
@@ -187,7 +187,7 @@
 	width: 100%;
 	display: block;
 	margin: 0 auto;
-	padding: 10px 0px;
+	padding: 5px 0px;
 	border: 1px solid #333333;
 }
 #nav_panel .cat-btn {

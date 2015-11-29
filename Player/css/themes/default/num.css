@@ -14,7 +14,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1ffff', endColorstr='#b1d8f5',GradientType=0 ); /* IE6-9 */
 	position: relative;
 	padding-bottom:40px;
-	overflow:hidden;
+	overflow-y:hidden;
 }
 .tut-num-container .question{
 	height:25%;
@@ -30,15 +30,16 @@
 
 .tut-num-container #steps {
 	display: none;
-	overflow-y: auto;
-	height:75%;
+/*	overflow-y: auto;*/
+	height:auto;
 }
 
 .tut-num-container #answer img {
 	/*	margin-left: 7.5%;*/
 }
 .tut-num-container #steps img {
-	margin-left: 5%;
+	margin-left: 20px;
+	padding-top: 30px;
 }
 
 #tutnumpanel {
@@ -66,4 +67,10 @@
 
 	background-color: rgba(252,227,0,1);
 	color: #000000;
+}
+.scroll-y {
+    overflow-y: auto;
+    height: 561px;
+    display: inline-block;
+    width: 100%;
 }
