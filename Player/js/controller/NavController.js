@@ -189,8 +189,9 @@ define([
         	CourseController.loadPage(sFile);
 			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
+		
 		this.updateFooterState();
-
+		
 	}		
 	
 	
@@ -210,8 +211,11 @@ define([
 			if(e.preventDefult){
 				e.preventDefult();
 			}
-			if($(this).hasClass("disabled"))return;
-			var oData =	oScope.loadNext();
+			//if($(this).hasClass("disabled"))return;
+//			var oData =	oScope.loadNext();
+			if(oScope.selectedComponent){
+				oScope.selectedComponent.selectBoard("next");				
+			}
 			
 //			if(oData)oScope.updatePanelState(oData);			
 		});
@@ -219,9 +223,11 @@ define([
 			if(e.preventDefult){
 				e.preventDefult();
 			}
-			if($(this).hasClass("disabled"))return;
-			var oData = oScope.loadPrevious();
-	
+			//if($(this).hasClass("disabled"))return;
+			//var oData = oScope.loadPrevious();
+			if(oScope.selectedComponent){
+				oScope.selectedComponent.selectBoard("prev");
+			}
 //			if(oData)oScope.updatePanelState(oData);			
 		});
 	};

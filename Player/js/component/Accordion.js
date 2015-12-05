@@ -178,7 +178,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 				e.preventDefault();
 			};
 			oScope.onBoardClicked(e)
-			//oScope.$selectedElem = $(this);
+			oScope.$selectedElem = $(this);
 		});
 		return $elem;
 	};
@@ -190,8 +190,9 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 
 		$elem.click(function(e) {
 			if (e.preventDefault) {
-				e.preventDefault();			}
-			oScope.onBoardClicked(e);
+				e.preventDefault();
+			}			oScope.onBoardClicked(e);
+			oScope.$selectedElem = $(this);
 		});
 
 		return $elem;
@@ -347,6 +348,20 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 			type : 'BOARD_SELECTED',
 			board : oBoard
 		});
+	}
+	
+	Accordion.prototype.selectBoard = function(p_dir) {
+			var $elem;
+		if(p_dir.toLowerCase() === "next"){
+			$elem = this.$selectedElem.next();
+		}
+		if(p_dir.toLowerCase() === "prev"){
+			$elem = this.$selectedElem.prev();
+		}
+		if($elem.length > 0){
+			$elem.trigger("click");		
+		}
+//		this.$selectedElem.next().trigger("click");
 	}
 
 	Accordion.prototype.bindHandlers = function() {
