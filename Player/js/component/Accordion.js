@@ -9,7 +9,8 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 		this.aBoards = [];
 		this.aPages = [];
 		this.fps = 20;
-		this.sSectionTitle
+		this.sSectionTitle;
+		this.$selectedElem;
 		this._selectedPageIndex
 
 		this.onBoardClicked = this.onBoardClicked.bind(this);
@@ -177,6 +178,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 				e.preventDefault();
 			};
 			oScope.onBoardClicked(e)
+			//oScope.$selectedElem = $(this);
 		});
 		return $elem;
 	};

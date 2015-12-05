@@ -5,8 +5,8 @@
  */
 define([
     'controller/CourseController',
-    'controller/NavController'
-], function(CourseController, NavController){
+    'controller/NavController',
+], function(CourseController, NavController,SubNavController){
     'use strict';
 
     function DFEApplication(){
@@ -15,7 +15,8 @@ define([
 
     DFEApplication.prototype.init = function(){
 //        console.log('DFEAppliation.init() | ');
-        NavController.intialize($('nav#nav_panel'));
+        NavController.intialize($('nav#nav_panel'), $('#nav_header'), $('#nav_footer'));
+        
         CourseController.init();
         CourseController.loadPage('splash');
     };

@@ -94,17 +94,22 @@
 			</div>
 			<div class="total-duration"><span class="left">Total Duration:</span><span class="right total-time"></span></div>
 			</nav>
-
+			<!-- The UI Top Band gets appended here -->
+				<div id="nav_header">
+					<span class="title">Title</span>
+					<span class="type">Type</span>
+				</div>
             <!-- AJAX Page Wrapper -->
             <div id="content_wrapper">
-                <!-- The UI Top Band gets appended here -->
-				<div id="content_header">Header</div>
                 <section id="content" role="main" aria-live="polite" tabindex="-1">
                     <!-- The Page Content gets loaded here -->
                 </section>
-                <!-- The UI Bottom Band gets appended here -->
-                			<div id="nav_bar">Navigation Bar</div>
-                </div>
+               </div>
+             <!-- The UI Bottom Band gets appended here -->
+				<div id="nav_footer">
+					<button id="btnPrev">Back</button>
+					<button id="btnNext">Next</button>
+				</div> 
             </div>
         </div>
 
