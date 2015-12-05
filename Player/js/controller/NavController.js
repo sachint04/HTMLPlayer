@@ -190,7 +190,8 @@ define([
 			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
 		
-		this.updateFooterState();
+		this.updateFooterState(p_oData);
+		this.updateHeaderState(p_oData);
 		
 	}		
 	
@@ -232,8 +233,12 @@ define([
 		});
 	};
 	
-	NavController.prototype.updatePanelState = function(oData){
-		this.selectedComponent.setSelectedPage(oData)
+	NavController.prototype.updatePanelState = function(p_oData){
+		this.selectedComponent.setSelectedPage(p_oData)
+	}
+	NavController.prototype.updateHeaderState = function(p_oData){
+		this.header.find('.title').html(this.getBoardName());
+		this.header.find('.type').html(p_oData._Type);
 	}
 	NavController.prototype.updateFooterState = function(){
 		if(this.hasPreviousPage()){
