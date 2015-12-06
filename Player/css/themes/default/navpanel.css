@@ -277,5 +277,33 @@
     z-index: 0;
     left:273px;
 }
+#nav_footer #btnNext {
+	background-position: 0 0;
+	width: 46px;
+	height: 27px;
+	border:none;
+	cursor:pointer;
+}
+#nav_footer #btnNext.hover {
+	background-position: 0 -37px;
+}
+#nav_footer #btnNext.disabled {
+	cursor:default;
+	background-position:  0 -74px;
+}
+#nav_footer #btnPrev {
+	background-position:  0 -112px;
+	width: 46px;
+	height: 27px;
+	border:none;
+	cursor:pointer;
+}
+#nav_footer #btnPrev.hover {
+	background-position:  0 -149px;
+}
+#nav_footer #btnPrev.disabled {
+	cursor:default;
+	background-position:  0 -186px;
+}
 
 /* End */
