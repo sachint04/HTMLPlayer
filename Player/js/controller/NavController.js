@@ -13,6 +13,7 @@ define([
 	var NavController = function() {
 		EventDispatcher.call(this);
 		this.panel = null;
+		this.footer = null;
 		this.oLecturePlan;
 		this.oTutorials;
 		this.oSearch;
@@ -25,8 +26,11 @@ define([
 	NavController.prototype.constructor = NavController;
 	
 	
-	NavController.prototype.intialize = function(p_$elem) {
+	NavController.prototype.intialize = function(p_$elem, p_$header, p_$footer) {
 		this.panel 		= p_$elem;
+		this.header		= p_$header;
+		this.footer		= p_$footer;
+		
 		var sXml 		= 	Constants.getTOCXML();
 		var oLoader 	= new ResourceLoader();
 		oLoader.loadResource({"xml": sXml}, this, this.onResourceLoaded)
@@ -60,6 +64,7 @@ define([
 		var aData 				= this.jsonXMLData.Data.showAll.Chap;
         this.oSearch.init(this.panel.find('.search-container'), {}, aData, 'Board');
 		
+        this.initFooter();
 		this.addEventHandlers();
 		this.panel.find('.tab.tab-lecture-plan').trigger('click');
 	}
@@ -181,12 +186,74 @@ define([
 		
 		if(CourseController){
         	 this.selectedComponent.setSelectedPage(p_oData);
-        	CourseController.loadPage(sFile);
+        	CourseController.loadPage(sFile, sType);
 			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
 		
+		this.updateFooterState(p_oData);
+		this.updateHeaderState(p_oData);
+		
 	}		
-
+	
+	
+	NavController.prototype.initFooter = function() {
+		var oScope 		= this;
+		if(this.footer.find("#btnPrev").length == 0){
+			console.error('ERROR! "btnPrev" not found in Sub Nav panel')
+		}
+		if(this.footer.find("#btnNext").length == 0){
+			console.error('ERROR! "btnNext" not found in Sub Nav panel')
+		}
+		
+		this.$next = this.footer.find("#btnNext");
+		this.$prev = this.footer.find("#btnPrev");
+		
+		this.$next.click(function(e){
+			if(e.preventDefult){
+				e.preventDefult();
+			}
+			//if($(this).hasClass("disabled"))return;
+//			var oData =	oScope.loadNext();
+			if(oScope.selectedComponent){
+				oScope.selectedComponent.selectBoard("next");				
+			}
+			
+//			if(oData)oScope.updatePanelState(oData);			
+		});
+		this.$prev.click(function(e){
+			if(e.preventDefult){
+				e.preventDefult();
+			}
+			//if($(this).hasClass("disabled"))return;
+			//var oData = oScope.loadPrevious();
+			if(oScope.selectedComponent){
+				oScope.selectedComponent.selectBoard("prev");
+			}
+//			if(oData)oScope.updatePanelState(oData);			
+		});
+	};
+	
+	NavController.prototype.updatePanelState = function(p_oData){
+		this.selectedComponent.setSelectedPage(p_oData)
+	}
+	NavController.prototype.updateHeaderState = function(p_oData){
+		this.header.find('.title').html(this.getBoardName());
+		this.header.find('.type').html(p_oData._Type);
+	}
+	NavController.prototype.updateFooterState = function(){
+		if(this.hasPreviousPage()){
+			this.footer.find("#btnPrev").removeClass('disabled');	
+		}else{
+			this.footer.find("#btnPrev").addClass('disabled');				
+		};
+			
+		if(this.hasNextPage()){
+			this.footer.find("#btnNext").removeClass('disabled');				
+		}else{
+			this.footer.find("#btnNext").removeClass('disabled');							
+		};	
+	}
+	
 	NavController.prototype.getPageList = function(p_oData){
 		var result = null;
 		if(this.selectedComponent){
@@ -228,12 +295,14 @@ define([
 		if(oTarget ){
 			this.loadPage(oTarget);	
 		}
+		return oTarget; 
 	}
 	NavController.prototype.loadPrevious = function(){
 		var oTarget  = this.getPreviousPage();
 		if(oTarget ){
 			this.loadPage(oTarget);	
 		}
+		return oTarget; 
 	}
 	NavController.prototype.getBoardName = function(){
 		var result = null;
@@ -252,6 +321,8 @@ define([
 	
 	NavController.prototype.destroy = function(){
 		this.panel = null;
+		this.header = null;
+		this.footer = null;
     };
 	
 	if(__instance == null){

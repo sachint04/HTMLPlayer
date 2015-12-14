@@ -16,7 +16,7 @@ define([
     LoaderUtil.prototype.constructor = LoaderUtil;
 
     LoaderUtil.prototype.loadResource = function(p_aFiles, p_fnCallback){
-        console.log('LoaderUtil.loadResources() | p_aFiles = '+p_aFiles)
+        //console.log('LoaderUtil.loadResources() | p_aFiles = '+JSON.stringify(p_aFiles)+' : callback = '+p_fnCallback)
         var oScope = this,
             oResourceLoader = new ResourceLoader();
         this.fnCallback = p_fnCallback;
@@ -25,7 +25,7 @@ define([
         oResourceLoader.loadResource(p_aFiles);
     }
     function onResourceLoaded(e){
-        console.log('LoaderUtil.onResourceLoaded() | Resource Length = '+e.data.length);
+        //console.log('LoaderUtil.onResourceLoaded() | Resource Length = '+e.data.length);
         //this.dispatchEvent(e.type, e);
         this.fnCallback.call(this, e.data);
         destroyResourceLoader.call(this, e.target);
@@ -45,5 +45,5 @@ define([
         this.fnCallback = null;
     }
 
-    return new LoaderUtil();
+    return LoaderUtil;
 })

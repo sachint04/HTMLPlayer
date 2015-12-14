@@ -87,7 +87,7 @@ define([
 
 	//AbstractComponent.prototype.init							= function(p_sID, p_oConfig, p_$xmlComponent) {
 	AbstractComponent.prototype.init							= function(p_$component, p_oConfig, p_$xmlComponent) {
-		console.log('AbstractComponent.init() | Comp ID = '+p_oConfig._componentID);
+		//console.log('AbstractComponent.init() | Comp ID = '+p_oConfig._componentID);
 		// store the id of the containing div
 		this.sComponentID	= p_oConfig._componentID;
 		// store the jQuery object for the component

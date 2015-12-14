@@ -36,7 +36,7 @@ define([
 	AudioManager.prototype.init										= function(p_xmlSoundsNode){
 	    this.bPlaying = false;
         this.bComplete = true;
-		this.nCurrentVolume				= 80;
+		this.nCurrentVolume				= 10;
 		this.aBackgroundLoadingAudios	= [];
 		this.aPreloadingAudios			= [];
 		//this.bAccumulatedTranscript		= StringUtil.sanitizeValue(CourseConfig.getConfig('audio_transcript').accumulateTranscript, false);
@@ -57,7 +57,7 @@ define([
 		}).beginDelayedInit();
 	};
 
-	AudioManager.prototype.parseSoundsNode							= function(p_xmlSoundsNode) {
+	AudioManager.prototype.parseSoundsNode							= function(p_xmlSoundsNode, p_sPageName) {
 		this.nCurrentAudioIndex = 0;
 		this.oAudioData = {};
 		this.sAccumulatedTranscript = '';
@@ -65,12 +65,15 @@ define([
 		    var oX2JS			= new X2JS(),
 	            /*oAudioData		= oX2JS.xml2json(p_xmlSoundsNode),*/
 	            oAudioData		= p_xmlSoundsNode,
-	            sSoundLocation	= Constants.getLocation(oAudioData._location),
+	            sSoundLocation	= Constants.getLocation(oAudioData._location, p_sPageName),
 	            sEndChar		= '',
 	            nSoundLength,
 	            i;
 	            //console.log('######## '+JSON.stringify(oAudioData))
-
+			if(oAudioData === undefined || oAudioData.sound === undefined){
+				this.dispatchEvent('AUDIO_ADDED', {type: 'AUDIO_ADDED', target: this, audioAvailable:false});
+				return;
+			}
 			oAudioData.sound	= (oAudioData.sound.length) ? oAudioData.sound : [oAudioData.sound];
 			nSoundLength		= oAudioData.sound.length;
 		    /*nSoundLength		= oAudioData.length,*/
@@ -81,7 +84,7 @@ define([
 			    this._addAudioData(sSoundLocation, oAudioData.sound[i], sEndChar);
 			    /*this._addAudioData(oAudioData[i], sEndChar);*/
 	        }
-		    this.dispatchEvent('AUDIO_ADDED', {type: 'AUDIO_ADDED', target: this});
+		    this.dispatchEvent('AUDIO_ADDED', {type: 'AUDIO_ADDED', target: this, audioAvailable:true});
 		    //console.log('AudioManager.parseSoundsNode() | '+JSON.stringify(this.oAudioData));
 		/*
 		} else {

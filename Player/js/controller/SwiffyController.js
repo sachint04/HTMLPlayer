@@ -6,6 +6,8 @@ define([
     function SwiffyController(){
         this.oAudioPanel = null;
         this.oSwiffyComponent = null;
+		
+		return this;
     }
 
     SwiffyController.prototype.registerSwiffy = function(p_oSwiffyComponent){

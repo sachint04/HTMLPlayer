@@ -4,13 +4,14 @@ define([
     /*'model/Constants',*/
     'core/AudioManager',
     'controller/SwiffyController',
+    'controller/DerivationController',
     'controller/QuizController',
     'controller/TutorialNumeralController',
     'util/LoaderUtil',
     'util/EventDispatcher',
     'validators/ErrorApi',
     'util/MessageLogger'
-], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, QuizController, TutorialNumeralController, LoaderUtil, EventDispatcher, Logger){
+], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, DerivationController, QuizController, TutorialNumeralController, LoaderUtil, EventDispatcher, Logger){
     'use strict';
     function AbstractPage(){;
         EventDispatcher.call(this);
@@ -25,6 +26,7 @@ define([
         this.oComponentClassPath    = {
             audiopanel      : 'component/AudioPanel',
             swiffy          : 'component/SwiffyWidget',
+            derivationpanel : 'component/DerivationPanel',
             quizpanel		: 'component/QuizPanel',
             tutnumpanel		: 'component/TutNumPanel'
         };
@@ -45,22 +47,27 @@ define([
     AbstractPage.prototype.constructor = AbstractPage;
 
     AbstractPage.prototype.init = function(p_$domPageHolder, p_oResources, p_sPageName){
-       console.log('AbstractPage.init() | '+p_sPageName);
+       //console.log('AbstractPage.init() | '+p_sPageName);
         this.$domView = p_$domPageHolder;
         this.sGUID = p_sPageName;
         //Constants.setCurrentPageName(p_sPageName);
         loadResources.call(this, p_oResources);
     };
+	/*AbstractPage.prototype.refreshAudioData = function(){
+		AudioManager.destroyPlayList();
+		parseSoundsNode.call(this);
+    };*/
 
     function loadResources(p_oResources){
-        console.log('AbstractPage.loadResources() | p_oResources = '+JSON.stringify(p_oResources));
-        var oScope = this;
+        //console.log('AbstractPage.loadResources() | p_oResources = '+JSON.stringify(p_oResources));
+        var oScope = this,
+			oLoaderUtil = new LoaderUtil();
         /*p_oResources.xml = Constants.getLocation('xml') +this.sGUID+'/'+ p_oResources.xml;
         p_oResources.css = Constants.getLocation('css') + this.sGUID+'/'+p_oResources.css;
         if(this.$domView){
 	        p_oResources.html = Constants.getLocation('css') + this.sGUID+'/'+p_oResources.html;
         }*/
-        LoaderUtil.loadResource(p_oResources, function(data){
+        oLoaderUtil.loadResource(p_oResources, function(data){
             onResourceLoaded.call(oScope, data);
         });
     }
@@ -70,6 +77,14 @@ define([
             $htmlView   = $(data.html),
             oX2JS = new X2JS();
 
+        //this.$domPageView = $htmlView;
+        /*var $tempContentWrapper = $('<div id="temp_content"></div>');
+        $tempContentWrapper.append($htmlView);
+        $tempContentWrapper.find('#content').attr('id', this.sGUID);
+        this.$domView.append($tempContentWrapper);
+        this.$domView = this.$domView.find('#'+this.sGUID);
+        console.log('DOM ID = '+this.$domView.attr('id'));*/
+
         this.$domView.append($htmlView);
         this.$domView.find('#content').attr('id', this.sGUID);
         this.$domView = this.$domView.find('#'+this.sGUID);
@@ -77,12 +92,12 @@ define([
         //this.$domView.find('#content_wrapper').append($(sHtml));
         this.jsonXMLData = oX2JS.xml2json(sXmlData);
 
-        console.log('AbstractPage.onResourceLoaded() | sXmlData = '+sXmlData+' : '+this);
+        //console.log('AbstractPage.onResourceLoaded() | sXmlData = '+sXmlData+' : '+this);
         this.dispatchEvent('PAGE_RESOURCES_LOADED', {type : 'PAGE_RESOURCES_LOADED', target : this});
         parsePageJson.call(this);
     }
     function parsePageJson(){
-        console.log('AbstractPage.parsePageJson() | ');
+        //console.log('AbstractPage.parsePageJson() | ');
         // ** render page text
         setContent.call(this);
         // ** Parse Sounds node
@@ -91,7 +106,6 @@ define([
         parseComponentNode.call(this);
         // ** Parse Activity node
         parseActivityNode.call(this);
-        
     }
     
     function setContent(){
@@ -112,14 +126,14 @@ define([
 	};
     
     function parseSoundsNode(){
-        console.log('AbstractPage.parseSoundsNode() | ');
+        //console.log('AbstractPage.parseSoundsNode() | ');
         //AudioManager.init();
         if(this.jsonXMLData.data.sounds){
-            AudioManager.parseSoundsNode(this.jsonXMLData.data.sounds);
+            AudioManager.parseSoundsNode(this.jsonXMLData.data.sounds, this.sGUID);
         }
     }
     function parseComponentNode(){
-        console.log('AbstractPage.parseComponentNode() | ');
+        //console.log('AbstractPage.parseComponentNode() | ');
         if(this.jsonXMLData.data.component){
             if(this.jsonXMLData.data.component.length === undefined){
                 this.jsonXMLData.data.component = [this.jsonXMLData.data.component];
@@ -132,7 +146,7 @@ define([
             for(i=0; i<aComponents.length; i++){
                 oComponent   = aComponents[i];
                 sComponentType      = oComponent._type.toUpperCase();
-                console.log('\tComponent Type = '+sComponentType+' : DOM View = '+this.$domView[0]);
+                //console.log('\tComponent Type = '+sComponentType+' : DOM View = '+this.$domView[0]);
 
                 // ** Add sections for each Component type
                 if (sComponentType === 'SWIFFY') {
@@ -141,10 +155,13 @@ define([
                 if (sComponentType === 'AUDIOPANEL') {
                     createComponent.call(this, this.oComponentClassPath.audiopanel, oComponent);
                 }
-                 if (sComponentType === 'QUIZPANEL') {
+				if (sComponentType === 'DERIVATIONPANEL') {
+                    createComponent.call(this, this.oComponentClassPath.derivationpanel, oComponent);
+                }
+                if (sComponentType === 'QUIZPANEL') {
                     createComponent.call(this, this.oComponentClassPath.quizpanel, oComponent);
                 }
-                 if (sComponentType === 'TUTNUMPANEL') {
+                if (sComponentType === 'TUTNUMPANEL') {
                     createComponent.call(this, this.oComponentClassPath.tutnumpanel, oComponent);
                 }
             }
@@ -154,7 +171,7 @@ define([
         }
     }
     function createComponent(p_jsFilePath, p_oComponent) {
-        console.log('AbstractPage.parseComponentNode() | GUID = '+this.sGUID);
+        //console.log('AbstractPage.parseComponentNode() | GUID = '+this.sGUID);
         var oScope = this;
 
         require([
@@ -164,7 +181,7 @@ define([
         });
     };
     function initComponent(p_oComponentClass, p_oComponent, p_oCompConfig) {
-        console.log('AbstractPage.initComponent() | GUID = '+this.sGUID);
+        //console.log('AbstractPage.initComponent() | GUID = '+this.sGUID);
         var oCompConfig = (p_oCompConfig) ? p_oCompConfig : {},
             sProp;
         for(sProp in p_oComponent){
@@ -172,7 +189,7 @@ define([
                 oCompConfig[sProp] = p_oComponent[sProp];
             }
         }
-        console.log('\tComponent Config = '+JSON.stringify(oCompConfig));
+        //console.log('\tComponent Config = '+JSON.stringify(oCompConfig));
 
         var oScope = this,
             Component = p_oComponentClass,
@@ -192,13 +209,30 @@ define([
         // ** Storing a reference of the component in the array
         if(this.aComponents === null){this.aComponents = [];}
         this.aComponents.push(oComponent);
-        if(!this.oSwiffyController){this.oSwiffyController = new SwiffyController();}
-        if(oComponent.getConfig()._type === 'swiffy'){
-            this.oSwiffyController.registerSwiffy(oComponent);
-        }
-        if(oComponent.getConfig()._type === 'audiopanel'){
-            this.oSwiffyController.registerAudioPanel(oComponent);
-        }
+		
+		if(this.jsonXMLData.data._pageType === "DER"){
+			// ** Create a Derivation Controller
+			if(!this.oSwiffyController){
+				this.oSwiffyController = null;
+				this.oSwiffyController = new DerivationController(this);
+			}
+		}else{
+			// ** Create a Swiffy Controller
+			if(!this.oSwiffyController){
+				this.oSwiffyController = null;
+				this.oSwiffyController = new SwiffyController();
+			}
+		}
+		// ** Register the Audio Panel & Swiffy object with the Swiffy Controller
+		if(oComponent.getConfig()._type === 'swiffy'){
+			this.oSwiffyController.registerSwiffy(oComponent);
+		}
+		if(oComponent.getConfig()._type === 'audiopanel'){
+			this.oSwiffyController.registerAudioPanel(oComponent);
+		}
+		if(oComponent.getConfig()._type === 'derivationpanel'){
+			this.oSwiffyController.registerDerivationPanel(oComponent);
+		}
 
         if(oComponent.getConfig()._type === 'quizpanel'){
         	this.oQuizController = new QuizController();
@@ -208,21 +242,21 @@ define([
         	this.oTutNumController = new TutorialNumeralController();
             this.oTutNumController.registerPanel(oComponent);
         }
-        console.log('AbstractPage.onComponentLoaded() | haveAllComponentsLoaded = '+haveAllComponentsLoaded.call(this));
+        //console.log('AbstractPage.onComponentLoaded() | haveAllComponentsLoaded = '+haveAllComponentsLoaded.call(this));
         if (haveAllComponentsLoaded.call(this)) {
             this.bComponentsLoaded = true;
         }
         checkLoadComplete.call(this);
     };
     function haveAllComponentsLoaded() {
-        console.log('AbstractPage.haveAllComponentsLoaded() | To Load = '+this.jsonXMLData.data.component.length+' : Loaded = '+this.aComponents.length);
+        //console.log('AbstractPage.haveAllComponentsLoaded() | To Load = '+this.jsonXMLData.data.component.length+' : Loaded = '+this.aComponents.length);
         if (this.jsonXMLData.data.component.length === this.aComponents.length) {
             return true;
         }
         return false;
     };
     function checkLoadComplete(){
-        console.log('AbstractPage.checkLoadComplete() | bPageAssetsLoaded = '+this.bPageAssetsLoaded+' : bActivityLoaded = '+this.bActivityLoaded+' : bComponentsLoaded = '+this.bComponentsLoaded+ ' | page ID = '+ this.sGUID);
+        //console.log('AbstractPage.checkLoadComplete() | bPageAssetsLoaded = '+this.bPageAssetsLoaded+' : bActivityLoaded = '+this.bActivityLoaded+' : bComponentsLoaded = '+this.bComponentsLoaded+ ' | page ID = '+ this.sGUID);
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded && this.bAudiosLoaded){
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded){
         if(this.bComponentsLoaded){
@@ -232,7 +266,6 @@ define([
             this.initialize();
         }
     };
-
 
     // ** Stub Method to be implemented in the Final Page Class
     AbstractPage.prototype.initialize                       = function(){
@@ -244,8 +277,7 @@ define([
     };
 
 	AbstractPage.prototype.destroy = function(){
-		
-            var i;
+		var i;
             
         if(this.aComponents){
 	        for (i=0; i < this.aComponents.length; i++) {
@@ -265,14 +297,15 @@ define([
         	this.oSwiffyController.destroy();
         	this.oSwiffyController = null;
         }
-    }
+		AudioManager.destroyPlayList();
+	}
     AbstractPage.prototype.toString = function(){
         return 'controller/view/AbstractPage';
     }
 
 
     function parseActivityNode(){
-        console.log('AbstractPage.parseActivityNode() | ');
+        //console.log('AbstractPage.parseActivityNode() | ');
     }
     // Load the player panel
     function loadSwiffyUI(){

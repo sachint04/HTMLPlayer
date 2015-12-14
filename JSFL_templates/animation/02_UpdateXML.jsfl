@@ -77,7 +77,7 @@ function init(){
 	sHTMLData += '<div id="content" class="page-content swiffy-page">';
 	sHTMLData += '<div id="page_wrapper">';
 	sHTMLData += '<div id="swiffy_holder">';
-	sHTMLData += '<div id="swiffycontainer" style="width: 745px; height: 533px">';
+	sHTMLData += '<div id="swiffycontainer">';
 	sHTMLData += '</div>';
 	sHTMLData += '</div>';
 	sHTMLData += '<div id="audiopanelcontainer">';

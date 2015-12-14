@@ -15,7 +15,8 @@ define([
 
     DFEApplication.prototype.init = function(){
 //        console.log('DFEAppliation.init() | ');
-        NavController.intialize($('nav#nav_panel'));
+        NavController.intialize($('nav#nav_panel'), $('#nav_header'), $('#nav_footer'));
+        
         CourseController.init();
         CourseController.loadPage('splash');
     };
