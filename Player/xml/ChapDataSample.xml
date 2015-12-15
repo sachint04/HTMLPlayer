@@ -10,6 +10,11 @@
 <!--Lecture 1-->
  	<Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile"  
 	ID="1" sort="1" ChapName="Sample Boards">
+			<Board SubHeading="" ID="2" sort="2" BoardName="Otto Cycle" Type="Normal">
+					 <Target Type="DIA" TotalFrame="5989" FileName="ME_TD_DIA_U9_B8"/>
+					<Target Type="DER" TotalFrame="9932" FileName="ME_TD_DER_U9_B8"/>
+					<Target Type="APP" TotalFrame="12972" FileName="ME_TD_APP_U9_B8"/>
+			</Board>
 			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 1" Type="Normal">
 					<Target Type="DEF" TotalFrame="1747" FileName="ME_AE_DIA_U6_B10_MCQ1"/>
 					<Target Type="APP" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>

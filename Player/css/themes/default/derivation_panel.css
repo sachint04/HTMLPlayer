@@ -1,0 +1,31 @@
+#derivationpanelcontainer {
+    position: absolute;
+    top: 503px;
+    height: 30px;
+    overflow: hidden;
+    width: 746px;
+    background-color: #504E4C;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+	z-index: 2;
+}
+div#derivation_panel {
+    height: 100%;
+    display: inline-block;
+}
+
+button.ui-der-panel-btn {
+    background-image: none;
+    background-color: #3B455E;
+    height: 30px;
+    color: #ffffff;
+    width: 158px;
+    float: left;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid #E9EAEA;
+}
+button#btn_at_a_glance {
+    border-right: 1px solid #E9EAEA;
+}

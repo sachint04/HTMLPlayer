@@ -1,4 +1,9 @@
 /* Default Font Face, Color & Size */
+div#temp_content {
+    position: absolute;
+	top:0;
+	left:0;
+}
 body{
 	font-family:"arial" sans-serif;
 	font-size:0.82em;
@@ -65,9 +70,16 @@ body{
 	background: url('../../../images/spritesheet.png') no-repeat scroll 0px 0px transparent;
 }
 
-/*#swiffycontainer{
- height: 615px;
- }*/
+#swiffycontainer{
+	width: 745px;
+    height: 533px;
+}
+#image_container{
+	width: 745px; 
+	height: 504px; 
+	overflow-x: hidden; 
+	overflow-y: scroll;
+}
 /* ------------- AUDIO PANEL -----------------*/
 #audio {
 	display: inline-block !important;
@@ -171,6 +183,9 @@ body{
 	position: relative;
 	clear: both;
 	float: left;
+}
+#audio_panel {
+	border-top: 1px solid #5B5C5D;
 }
 #quizpanel {
 	width: 100%;

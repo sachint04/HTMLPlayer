@@ -92,8 +92,8 @@ function getParameterByName(name) {
 
 // ** Exposed API to the PHP Player
 var HTMLPlayerAPI = {
-    loadPage: function(p_sPageName){
-        oCourseController.loadPage(p_sPageName);
+    loadPage: function(p_sPageName, sPageType){
+        oCourseController.loadPage(p_sPageName, sPageType);
     }
 };
 
@@ -130,7 +130,8 @@ function init(){
     ], function(CourseController){
         oCourseController = CourseController;
         oCourseController.init();
-        var sPageName = getParameterByName('page');
-        HTMLPlayerAPI.loadPage(sPageName);
+        var sPageName = getParameterByName('page'),
+			sPageType = getParameterByName('type');
+        HTMLPlayerAPI.loadPage(sPageName, sPageType);
     });
 }

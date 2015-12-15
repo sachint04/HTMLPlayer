@@ -5,7 +5,7 @@
 	sLabelLayerName = "Labels",
 	sBGAudioLabelLayerName = "BGAudioLabels",
 	sBGAudioScriptLayerName = "BGAudioScript",
-	aInvalidSounds = ["Mute.wav", "mute.mp3", "Mute.mp3", "mute.wav"],
+	aInvalidSounds = ["Mute.wav", "mute.mp3", "Mute.mp3", "mute.wav", "a-Mute.wav", "a-mute.wav", "a-Mute.mp3", "a-mute.mp3","MUTE AUDIO.wav"],
 	sSoundsXML = "",
 	sComponentXML = "",
 	sXMLData = "",
@@ -365,6 +365,8 @@ function exportSoundItem(p_sSoundName, p_sExportSoundName){
 	}
 }
 function isValidAudio(p_sSoundName){
+	//fl.trace("isValidAudio() | Audio Name = "+p_sSoundName+' : Audio index = '+aInvalidSounds.indexOf(p_sSoundName));
+	return (aInvalidSounds.indexOf(p_sSoundName) === -1);
 	var nLength = aInvalidSounds.length,
 		i;
 	for (i=0; i<nLength; i++) {

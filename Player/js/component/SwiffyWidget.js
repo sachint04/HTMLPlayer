@@ -44,9 +44,18 @@ define([
     SwiffyWidget.prototype.init							= function (p_sID, p_oConfig, p_$xmlComponent) {
         //console.log('SwiffyWidget.init() | '+p_sID+' : '+JSON.stringify(p_oConfig)+' : '/*+p_$xmlComponent.text()*/);
         // Initialize any class properties / variables as required
-        var oScope = this;
-        p_oConfig.soundID = p_oConfig._soundID.split(' ').join('').split(',');
-        //console.log('SwiffyWidget.init() | p_oConfig.soundID = '+p_oConfig.soundID);
+        var oScope = this,
+			sSounds = p_oConfig._soundID.split(' ').join('');
+		if(sSounds === ''){
+			p_oConfig.soundID = [];
+			p_oConfig.audioAvailable = false;
+			this.dispatchEvent('AUDIO_ADDED', {type: 'AUDIO_ADDED', target: this, audioAvailable:false});
+		}else{
+			p_oConfig.soundID = sSounds.split(',');
+			p_oConfig.audioAvailable = true;
+			this.dispatchEvent('AUDIO_ADDED', {type: 'AUDIO_ADDED', target: this, audioAvailable:true});
+		}
+        //console.log('SwiffyWidget.init() | p_oConfig.soundID = '+p_oConfig.soundID.length);
         require([
             'libs/runtime_formatted_7.0.3'
         ], function(Component) {
@@ -72,6 +81,10 @@ define([
         this.jsonSwiffy = JSON.parse(this.$xmlData.__cdata);
         this.initiateSwiffy();
         this.bAudioListenersAdded = true;
+    }; 
+	SwiffyWidget.prototype.isAudioAvailable				= function () {
+        //console.log('SwiffyWidget.isAudioAvailable() | '+this+' : Audio Available = '+this.getConfig().audioAvailable);
+        return this.getConfig().audioAvailable;
     };
 
     SwiffyWidget.prototype.initiateSwiffy					= function () {
@@ -111,7 +124,10 @@ define([
     function onSwiffyAPILoaded(){
         //console.log('SwiffyWidget.onSwiffyAPILoaded() | ');
         addSwiffyAPIListeners.call(this);
-        this.aSwiffyFrameMap = this.oSwiffy.api.aFrameMap.slice(0);
+		this.aSwiffyFrameMap = [];
+		if(this.oSwiffy.api.aFrameMap !== undefined){
+			this.aSwiffyFrameMap = this.oSwiffy.api.aFrameMap.slice(0);
+		}
         this.dispatchComponentLoadedEvent();
     }
 
@@ -597,11 +613,25 @@ define([
 		removeAudioPanelListeners.call(this);
 
 		this.oSwiffy.destroy();
+		
 		this.oSwiffy = null;
-
+		this.oAudioPanel = null;
 		this.jsonSwiffy = null;
 		this.nSwiffyReadyInterval = null;
+		this.aSwiffyFrameMap = null;
 		this.bAudioListenersAdded = null;
+		this.sLastPlayedAudio = null;
+		this.nPositionUpdate = null;
+		this.bAudioComplete = null;
+		this.bPlaying = null;
+
+		this.bCueAudioComplete = null;
+		this.bCueAnimComplete = null;
+		this.bAnimationComplete = null;
+		this.oSeekInfo = null;
+		this.oCueCompleteEventInfo = null;
+
+		this.handleAudioPanelEvents = null;
 
 		this.prototype		= null;
 

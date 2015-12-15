@@ -36,6 +36,7 @@ define([
             //}
         };
         this.sCurrentPageName = null;
+		this.sCurrentPageType = null;
 
         //this.setEnvironment(false);
     }
@@ -53,15 +54,22 @@ define([
         setCurrentPageName : function(p_sPageName){
             this.sCurrentPageName = p_sPageName;
         },
-        getCurrentPageName : function(p_sPageName){
+        getCurrentPageName : function(){
             return this.sCurrentPageName;
         },
-        getLocation : function(p_sValue){
+		setCurrentPageType : function(p_sPageType){
+            this.sCurrentPageType = p_sPageType;
+        },
+        getCurrentPageType : function(){
+            return this.sCurrentPageType;
+        },
+        getLocation : function(p_sValue, p_sPageName){
             if(!this.oLocations.locations.hasOwnProperty(p_sValue)){
                 // Error
             }
-            var o = this.oLocations.locations[p_sValue];
-            return this.oLocations[o.url].replace('@@pageName@@', this.sCurrentPageName) + o.path.replace('@@language@@', this.sAudioLanguage);
+            var o = this.oLocations.locations[p_sValue],
+				sPageName = p_sPageName || this.sCurrentPageName;
+            return this.oLocations[o.url].replace('@@pageName@@', sPageName) + o.path.replace('@@language@@', this.sAudioLanguage);
             /*if(!this.oLocationPointer.locations.hasOwnProperty(p_sValue)){
                 // Error
             }

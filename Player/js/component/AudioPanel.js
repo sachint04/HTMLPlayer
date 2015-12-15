@@ -26,7 +26,9 @@ define([
         this.$playheadSlider;
         this.$volumeSlider;
 
-        this.nVolumeLevel;
+        this.nVolumeLevel = 0;
+		this.bAudioControlsVisible = true;
+		this.bAudioControlsEnabled = true;
 
         this.oEventDS	= {
 				play		: 'PLAY',
@@ -46,7 +48,7 @@ define([
                 },
         };
 
-        this.showAudioControls = this.showAudioControls.bind(this),
+        this.handleAudioAddedEvent = handleAudioAddedEvent.bind(this),
         this.updateStates = this.updateStates.bind(this);
         //this.handleSwiffyAnimationUpdates = this.handleSwiffyAnimationUpdates.bind(this);
 		this.popupEventHandler = this.popupEventHandler.bind(this);
@@ -64,7 +66,8 @@ define([
         if(p_oSwiffyWidget.toString().indexOf('SwiffyWidget') > -1){
             removeAudioManagerListeners.call(this);
             this.oSwiffyAnimRef = p_oSwiffyWidget;
-            addSwiffyListeners.call(this);
+			this.showAudioControls(this.oSwiffyAnimRef.isAudioAvailable());
+			addSwiffyListeners.call(this);
             return true;
         }
         removeSwiffyListeners.call(this);
@@ -72,9 +75,14 @@ define([
         addAudioManagerListeners.call(this);
         return false;
     };
+	
+	function handleAudioAddedEvent(e){
+		//console.log('AudioPanel.handleAudioAddedEvent() | '+e.audioAvailable);
+		this.showAudioControls(e.audioAvailable);
+	}
 
     function addAudioManagerListeners(){
-        //AudioManager.addEventListener('AUDIO_ADDED', this.showAudioControls);
+        AudioManager.addEventListener('AUDIO_ADDED', this.handleAudioAddedEvent);
         //AudioManager.addEventListener('AUDIO_LIST_CLEARED', this.showAudioControls);
 
         AudioManager.addEventListener('AUDIO_PLAY', this.updateStates);
@@ -90,9 +98,9 @@ define([
         AudioManager.addEventListener('AUDIO_UNMUTE', this.updateStates);*/
     };
     function removeAudioManagerListeners(){
-        //AudioManager.removeEventListener('AUDIO_ADDED', this.showAudioControls);
+        AudioManager.removeEventListener('AUDIO_ADDED', this.handleAudioAddedEvent);
         //AudioManager.removeEventListener('AUDIO_LIST_CLEARED', this.showAudioControls);
-
+		
         AudioManager.removeEventListener('AUDIO_PLAY', this.updateStates);
         AudioManager.removeEventListener('AUDIO_PAUSE', this.updateStates);
         AudioManager.removeEventListener('AUDIO_RESUME', this.updateStates);
@@ -109,6 +117,8 @@ define([
     function addSwiffyListeners(){
         //console.log("AudioPanel.addSwiffyListeners() | ");
         if(this.oSwiffyAnimRef){
+			//this.oSwiffyAnimRef.addEventListener('AUDIO_ADDED', this.handleAudioAddedEvent);
+			
             this.oSwiffyAnimRef.addEventListener('ANIMATION_PLAY', this.updateStates);
             this.oSwiffyAnimRef.addEventListener('ANIMATION_REPLAY', this.updateStates);
             this.oSwiffyAnimRef.addEventListener('ANIMATION_PAUSE', this.updateStates);
@@ -121,6 +131,8 @@ define([
     function removeSwiffyListeners(){
         //console.log("AudioPanel.removeSwiffyListeners() | ");
         if(this.oSwiffyAnimRef){
+			//this.oSwiffyAnimRef.addEventListener('AUDIO_ADDED', this.handleAudioAddedEvent);
+		
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_PLAY', this.updateStates);
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_REPLAY', this.updateStates);
             this.oSwiffyAnimRef.removeEventListener('ANIMATION_PAUSE', this.updateStates);
@@ -178,10 +190,11 @@ define([
     };
     AudioPanel.prototype.createComponent					= function(){
 		//console.log('AudioPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
-	    var oScope = this;
-	    LoaderUtil.loadResource([this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view], function(data){
+	    var oScope = this,
+			oLoaderUtil = new LoaderUtil();
+	    oLoaderUtil.loadResource([this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view], function(data){
 	        onViewLoaded.call(oScope, data);
-	    })
+	    });
 	};
 	function onViewLoaded(data){
         this.$component.append(data[0]);
@@ -196,7 +209,7 @@ define([
                 this.bindHandlers(aItems[i]);
             }
         }
-
+		hideAllControls.call(this);
         this.initialize();
         this.dispatchComponentLoadedEvent();
 	}
@@ -218,7 +231,7 @@ define([
             sItemType = oItem._type.toUpperCase(),
             bItemAvailable = StringUtil.sanitizeValue(oItem._available),
             $elem = this.$component.find('#'+sItemId);
-		//console.log('AudioPanel.bindHandlers() | '+ sItemType+ ' | sItemId = '+sItemId);
+		//console.log('AudioPanel.bindHandlers() | \n\t'+ sItemType+ '\n\tsItemId = '+sItemId+'\n\tIs Available = '+bItemAvailable);
         if(!bItemAvailable){
             $elem.addClass('hide');
         }
@@ -312,10 +325,33 @@ define([
 			}
 		}
 	};
+	AudioPanel.prototype.unbindHandlers						= function(p_oItem){
+		var oItem = p_oItem,
+            sItemId = oItem._id,
+			sItemType = oItem._type.toUpperCase(),
+            $elem = this.$component.find('#'+sItemId);
+		//console.log('AudioPanel.bindHandlers() | \n\tsItemId = '+sItemId);
+
+		if(sItemType === 'BUTTON'){
+			$elem.off();
+		}
+
+		if(sItemType === 'SLIDER'){
+			var bSeekingAvailable = StringUtil.sanitizeValue(oItem._seeking, false);
+			if(!bSeekingAvailable){
+				$elem.find('.ui-slider-range').off();
+				$elem.find('.ui-slider-handle').off();
+				$elem.off();
+			}
+			$elem.slider( "destroy" );
+		}
+	};
 	AudioPanel.prototype.initialize							= function(p_sType, p_sID, p_$elem, xmlNode){
 		//console.log('AudioPanel.initialize() | ');
 		this.$pauseBtn.addClass('hide');
-		this.$volumeSlider.trigger('stop');
+		this.nVolumeLevel = AudioManager.getVolume();
+		this.$volumeSlider.slider("value", this.nVolumeLevel);
+		//this.$volumeSlider.trigger('stop');
 		//this.$unmuteBtn.addClass('hide');
 	};
 
@@ -423,23 +459,7 @@ define([
 			case 'ANIMATION_PAUSE':
 			case 'ANIMATION_RESUME':
                 this.enable(this.$stopBtn, true);
-                if(this.oSwiffyAnimRef){
-                    if(this.oSwiffyAnimRef.isPlaying()){
-                        this.$playBtn.addClass('hide');
-                        this.$pauseBtn.removeClass('hide');
-                    }else{
-                        this.$playBtn.removeClass('hide');
-                        this.$pauseBtn.addClass('hide');
-                    }
-                }else{
-                    if (AudioManager.isPlaying()) {
-                        this.$playBtn.addClass('hide');
-                        this.$pauseBtn.removeClass('hide');
-                    } else {
-                        this.$playBtn.removeClass('hide');
-                        this.$pauseBtn.addClass('hide');
-                    }
-                }
+                updatePlayState.call(this);
 		        break;
 			case 'AUDIO_POSITION_UPDATE':
                 /*
@@ -569,7 +589,38 @@ define([
         //console.log('Audio Position = '+val);
         //this.$volumeSlider.slider("value", val);
     }
+	function hideAllControls(){
+		this.$playBtn.addClass('hide');
+		this.$pauseBtn.addClass('hide');
+		this.$replayBtn.addClass('hide');
+		/*this.$stopBtn.addClass('hide');
+		this.$muteBtn.addClass('hide');
+		this.$unmuteBtn.addClass('hide');
+		this.$transcriptBtn.addClass('hide');*/
 
+		this.$playheadSlider.addClass('hide');
+		this.$volumeSlider.addClass('hide');
+		this.bAudioControlsVisible = false;
+	}
+	function updatePlayState(){
+		if(this.oSwiffyAnimRef){
+			if(this.oSwiffyAnimRef.isPlaying()){
+				this.$playBtn.addClass('hide');
+				this.$pauseBtn.removeClass('hide');
+			}else{
+				this.$playBtn.removeClass('hide');
+				this.$pauseBtn.addClass('hide');
+			}
+		}else{
+			if (AudioManager.isPlaying()) {
+				this.$playBtn.addClass('hide');
+				this.$pauseBtn.removeClass('hide');
+			} else {
+				this.$playBtn.removeClass('hide');
+				this.$pauseBtn.addClass('hide');
+			}
+		}
+	}
     // ** Public Methods
     AudioPanel.prototype.play                               = function(){
         playClick.call(this)
@@ -590,31 +641,60 @@ define([
         return AudioManager.getVolume();
     };
 
-	AudioPanel.prototype.showAudioControls					= function(e) {
+	AudioPanel.prototype.showAudioControls					= function(p_bShow) {
         //console.log('AudioPanel.showAudioControls() | Panel Hidden = ' + this.$audioPanel.hasClass('hide') + ' : Event Type = ' + e.type);
+		//console.log('AudioPanel.showAudioControls() | Show = '+p_bShow);
         //this.$audioPanel.stop();
-        if (e.type == 'AUDIO_ADDED') {
-            this.$transcriptBtn.addClass('in');
-            this.$audioBtn.addClass('in');
-            this.$transcriptBtn.removeClass('out');
-            this.$audioBtn.removeClass('out');
-        } else {
-            $("#ios_play").addClass("hide");
-            this.$transcriptBtn.removeClass('in');
-            this.$audioBtn.removeClass('in');
-            this.$transcriptBtn.addClass('out');
-            this.$audioBtn.addClass('out');
+		if(this.bAudioControlsVisible === p_bShow){return;}
+		if(p_bShow){
+			updatePlayState.call(this);
+			this.$replayBtn.removeClass('hide');
+			/*this.$stopBtn.removeClass('hide');
+			this.$muteBtn.removeClass('hide');
+			this.$unmuteBtn.removeClass('hide');
+			this.$transcriptBtn.removeClass('hide');*/
 
-        }
+			this.$playheadSlider.removeClass('hide');
+			this.$volumeSlider.removeClass('hide');
+		}else{
+			updatePlayState.call(this);
+			this.$replayBtn.addClass('hide');
+			/*this.$stopBtn.addClass('hide');
+			this.$muteBtn.addClass('hide');
+			this.$unmuteBtn.addClass('hide');
+			this.$transcriptBtn.addClass('hide');*/
+
+			this.$playheadSlider.addClass('hide');
+			this.$volumeSlider.addClass('hide');
+		}
+		this.bAudioControlsVisible = p_bShow;
     };
 	AudioPanel.prototype.enableAudioControls				= function(p_bEnable) {
+		if(this.bAudioControlsEnabled === p_bEnable){return;}
         if (p_bEnable) {
             this.$playBtn.removeClass('disabled');
             this.$pauseBtn.removeClass('disabled');
+			this.$replayBtn.removeClass('disabled');
+			/*this.$stopBtn.removeClass('disabled');
+			this.$muteBtn.removeClass('disabled');
+			this.$unmuteBtn.removeClass('disabled');
+			this.$transcriptBtn.removeClass('disabled');*/
+
+			this.$playheadSlider.removeClass('disabled');
+			this.$volumeSlider.removeClass('disabled');
         } else {
             this.$playBtn.addClass('disabled');
             this.$pauseBtn.addClass('disabled');
+			this.$replayBtn.addClass('disabled');
+			/*this.$stopBtn.addClass('disabled');
+			this.$muteBtn.addClass('disabled');
+			this.$unmuteBtn.addClass('disabled');
+			this.$transcriptBtn.addClass('disabled');*/
+
+			this.$playheadSlider.addClass('disabled');
+			this.$volumeSlider.addClass('disabled');
         }
+		this.bAudioControlsEnabled = p_bEnable;
     };
     AudioPanel.prototype.enable								= function(p_$btn, p_bEnable){
 		/* TODO: Enable / Disable Audio buttons and sliders */
@@ -677,7 +757,38 @@ define([
 		e.stopImmediatePropagation();
 	};
     AudioPanel.prototype.destroy							= function() {
-		this.popupEventHandler	= null;
+		if(this.$xmlData.item){
+            if(this.$xmlData.item.length === undefined){this.$xmlData.item = [this.$xmlData.item];}
+            var aItems = this.$xmlData.item,
+                i;
+            for(i=0; i<aItems.length; i++){
+                this.unbindHandlers(aItems[i]);
+            }
+        }
+		AudioManager.destroyPlayList();
+		
+		this.$playBtn = null;
+        this.$pauseBtn = null;
+        this.$replayBtn = null;
+        this.$stopBtn = null;
+        this.$muteBtn = null;
+        this.$unmuteBtn = null;
+        this.$transcriptBtn = null;
+
+        this.$playheadSlider = null;
+        this.$volumeSlider = null;
+
+        this.nVolumeLevel = null;
+		this.bAudioControlsVisible = null;
+		this.bAudioControlsEnabled = null;
+
+        this.oEventDS	= null;
+        this.handleAudioAddedEvent = null;
+        this.updateStates = null;
+        //this.handleSwiffyAnimationUpdates = null;
+		this.popupEventHandler = null;
+
+        this.oSwiffyAnimRef = null;
 		this.prototype			= null;
 
 		AbstractComponent.prototype.destroy.call(this);
