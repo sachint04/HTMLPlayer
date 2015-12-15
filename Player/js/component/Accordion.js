@@ -352,44 +352,16 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	}
 	
 	Accordion.prototype.selectBoard = function(p_dir) {
-		var $elem, $chap, $container;
+			var $elem;
 		if(p_dir.toLowerCase() === "next"){
-			$elem = this.$selectedElem.next(".acc-board");
+			$elem = this.$selectedElem.next();
 		}
 		if(p_dir.toLowerCase() === "prev"){
-			$elem = this.$selectedElem.prev(".acc-board");
+			$elem = this.$selectedElem.prev();
 		}
-		if($elem.length == 0){
-			if(p_dir.toLowerCase() === "next"){
-				var $chap = this.$selectedElem.parent().next('.acc-chap');
-				if($chap.length > 0 )
-				{
-					if(!$chap.hasClass('open')){
-						$chap.trigger("click");
-					}
-					var $container = $chap.next('.board-container');
-					$elem = $container.find(".acc-board").first();
-				}				
-			}else if(p_dir.toLowerCase() === "prev"){
-				var $chap 	= this.$selectedElem.parent().prev('.acc-chap');
-				var nIndex 	= Number($chap.attr("id"));
-					$chap 	= $chap.parent().find('#'+(nIndex - 1)+'.acc-chap');
-			
-				if($chap.length > 0 )
-				{
-					if(!$chap.hasClass('open')){
-						$chap.trigger("click");
-					}
-					var $container = $chap.next('.board-container');
-					$elem = $container.find(".acc-board").last();
-				}
-
-			}
-		}
-		
 		if($elem.length > 0){
-			$elem.trigger("click");
-		}	
+			$elem.trigger("click");		
+		}
 //		this.$selectedElem.next().trigger("click");
 	}
 

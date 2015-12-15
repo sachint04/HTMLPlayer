@@ -42,7 +42,7 @@ body{
 }
 #content_wrapper > #content{
 	height:90%;
-	display:inline-block;
+	display:table;
 	width:100%;
 }
 
