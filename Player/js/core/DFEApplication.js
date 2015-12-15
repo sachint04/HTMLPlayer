@@ -5,8 +5,8 @@
  */
 define([
     'controller/CourseController',
-    'controller/NavController'
-], function(CourseController, NavController){
+    'controller/NavController',
+], function(CourseController, NavController,SubNavController){
     'use strict';
 
     function DFEApplication(){

@@ -190,7 +190,8 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 
 		$elem.click(function(e) {
 			if (e.preventDefault) {
-				e.preventDefault();			}
+				e.preventDefault();
+			}
 			oScope.onBoardClicked(e);
 			oScope.$selectedElem = $(this);
 		});
