@@ -74,7 +74,7 @@ function init(){
 	saveXML(sFinalXML);
 	
 	sHTMLData = '<!-- The ID below for the root div tag wil be replaced dynamically by the Pages GUID -->';
-	sHTMLData += '<div id="content" class="page-content swiffy-page">';
+	sHTMLData += '<div id="content" class="page-content DER swiffy-page">';
 	sHTMLData += '<div id="page_wrapper">';
 	sHTMLData += '<div id="swiffy_holder">';
 	sHTMLData += '<div id="swiffycontainer">';

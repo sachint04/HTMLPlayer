@@ -41,6 +41,18 @@ function getLayerByName(p_sLayerName, p_bCaseSensitive){
 	
 	return null;
 }
+function deleteOtherFrames(p_aFramesToDelete, p_aExceptionFrames){
+	var nFrmCount = oTimeline.layers[0].frameCount;
+	oTimeline.currentFrame	= 1;
+	
+	while(nFrmCount > 1){
+		oTimeline.removeFrames(1); 
+		nFrmCount = oTimeline.layers[0].frameCount;
+		//fl.trace('nFrmCount = '+nFrmCount);
+		break;
+	}
+	oTimeline.currentFrame	= 1;
+}
 function deleteLayer(p_aLayerNames, p_aExceptionLayers){
 	// ** Deletes all layers if name not specified
 	//fl.trace('Total Layers: '+oTimeline.layers.length);
@@ -67,10 +79,16 @@ function addItemToStage(p_sItemName){
 			x: 0,
 			y: 0
 		});
+		var nMaxWidth = Math.round(oDocument.getElementProperty("width")),
+			nMaxHeight = Math.round(oDocument.getElementProperty("height")) + 20;
+		oDocument.width = nMaxWidth;
+		oDocument.height = nMaxHeight;
 		oDocument.align("left", true);
 		oDocument.align("top", true);
-		//oDocument.setElementProperty('x', 200)
-		//oDocument.setElementProperty('y', 500)
+		//fl.trace('addItemToStage() | Item Exists in Library = '+ oDocument.getElementProperty("height"));
+		//fl.trace('nMaxWidth = '+nMaxWidth+' : nMaxHeight = '+nMaxHeight);
+	}else{
+		fl.trace('Item named "'+p_sItemName+'" does not exist in library');
 	}
 }
 
@@ -83,6 +101,14 @@ function saveAsCopy(){
 	fl.saveDocument(fl.documents[0], docURI);//save as new doc name
 	fl.openDocument(docURI);//open this newly saved document
 }
+function exportPNG(p_sPngFileName){
+	if(!URIExists(sSaveDir + sDocumentName)){
+		createFolder(sSaveDir + sDocumentName);
+	}
+	var sPngFileName = p_sPngFileName || sDocumentName;
+	fl.trace("exportPNG() | "+sSaveDir + sDocumentName + "/" + sPngFileName + ".png");
+	oDocument.exportPNG(sSaveDir + sDocumentName + "/" + sPngFileName + ".png", true, true);
+}
 function saveXML(){
 	fl.trace("saveXML()");
 	sXMLData = "<data pageType='DER'>" + sComponentXML + sSoundsXML + "</data>";
@@ -92,22 +118,42 @@ function saveXML(){
 	}
 	FLfile.write(sSaveDir + sDocumentName + "/page.xml", sXMLData);
 }
+function saveHTML(sHTMLData){
+	fl.trace("saveHTML()");
+	if(!URIExists(sSaveDir + sDocumentName)){
+		createFolder(sSaveDir + sDocumentName);
+	}
+	FLfile.write(sSaveDir + sDocumentName + "/page.html", sHTMLData);
+}
+
 function init(){
 	fl.outputPanel.clear();
-	deleteLayer(null, ["BG"]);
+	deleteLayer(null, ['BG']);
+	deleteOtherFrames();
+	exportPNG('bg');
+	deleteLayer();
 	addItemToStage('allData');
-	sComponentXML = '<component type="swiffy" componentID="swiffycontainer"  audioController="AudioPanel" soundID="';
-	sSoundsXML += '<sounds location="audio">';
-	sComponentXML += '"><![CDATA[]]></component>';
+	exportPNG();
 	
 	sComponentXML += '<component type="derivationpanel" componentID="derivationpanelcontainer" view="derivation_panel.html" viewLocation="global_html"><item type="button" id="btn_understand_concept" available="true"></item><item type="button" id="btn_assumptions" available="true"></item><item type="button" id="btn_begin_derivation" available="true"></item><item type="button" id="btn_at_a_glance" available="true"></item></component>';
-	
-	sComponentXML += '<component type="audiopanel" componentID="audiopanelcontainer" view="audio_panel.html" viewLocation="global_html"><item type="button" id="btn_play" available="true"></item><item type="button" id="btn_pause" available="true"></item><item type="button" id="btn_replay" available="true"></item><item type="slider" id="slider_volume_seek" available="true" seeking="true" direction="horizontal"></item><item type="slider" id="slider_playhead_seek" available="true" seeking="true" direction="horizontal"></item></component>';
-	sSoundsXML += '</sounds>';
 	saveXML();
 	
-	saveAsCopy();
+	sHTMLData = '<!-- The ID below for the root div tag will be replaced dynamically by the Pages GUID -->';
+	sHTMLData += '<div id="content" class="page-content DER image-page">';
+	sHTMLData += '<div id="page_wrapper">';
+	sHTMLData += '<div id="image_holder">';
+	sHTMLData += '<div id="image_container">';
+	sHTMLData += '<img src="content/'+sDocumentName+'/'+sDocumentName +'.png" />'
+	sHTMLData += '</div>';
+	sHTMLData += '</div>';
+	sHTMLData += '<div id="derivationpanelcontainer">';
+	sHTMLData += '</div>';
+	sHTMLData += '</div>';
+	sHTMLData += '</div>';
+	saveHTML(sHTMLData);
+	
 	fl.trace("All DONE...!");
+	oDocument.close(false);
 }
 
 init();
