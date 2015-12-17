@@ -29,3 +29,8 @@ button.ui-der-panel-btn {
 button#btn_at_a_glance {
     border-right: 1px solid #E9EAEA;
 }
+
+.page-content.DER.image-page  #image_holder{
+	background-image: url('../../../content/ME_TD_DER_U9_B8_FD/bg.png');
+    background-repeat: no-repeat;
+}

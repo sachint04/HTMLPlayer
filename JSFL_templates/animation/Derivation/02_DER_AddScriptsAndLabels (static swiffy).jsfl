@@ -45,19 +45,42 @@ function deleteLayer(p_aLayerNames, p_aExceptionLayers){
 	// ** Deletes all layers if name not specified
 	//fl.trace('Total Layers: '+oTimeline.layers.length);
 	var aLayerNames = p_aLayerNames || [],
-		aExceptionLayers = p_aExceptionLayers || [];
-	for (var i = oTimeline.layers.length - 1; i >= 0 ; i--){
-		var oLayer = oTimeline.layers[i],
-			sLayerName = oLayer.name;
+		nTotalLayers = oTimeline.layers.length,
+		aExceptionLayers = p_aExceptionLayers || [],
+		aPassedExceptions = [],
+		i,
+		oLayer,
+		sLayerName;
+	for (i = nTotalLayers - 1; i >= 0 ; i--){
+		oLayer = oTimeline.layers[i];
+		sLayerName = oLayer.name;
+		
 		if(aLayerNames.length === 0 && aExceptionLayers.indexOf(sLayerName) === -1){
 			//fl.trace(i+' : Deleting Layer: '+oLayer.name);
 			oTimeline.deleteLayer(i);
 			continue;
+		}else{
+			aPassedExceptions.push(sLayerName);
 		}
 		if(aLayerNames.indexOf(sLayerName) > -1){
 			oTimeline.deleteLayer(oLayer.index);
 		}
 	}
+	if(aExceptionLayers.length > 0 && aPassedExceptions.length === 0){
+		fl.trace('Exception layers by name/s "'+aExceptionLayers+' not found."');
+	}
+}
+function deleteOtherFrames(p_aFramesToDelete, p_aExceptionFrames){
+	var nFrmCount = oTimeline.layers[0].frameCount;
+	oTimeline.currentFrame	= 1;
+	
+	while(nFrmCount > 1){
+		oTimeline.removeFrames(1); 
+		nFrmCount = oTimeline.layers[0].frameCount;
+		//fl.trace('nFrmCount = '+nFrmCount);
+		break;
+	}
+	oTimeline.currentFrame	= 1;
 }
 function addItemToStage(p_sItemName){
 	//fl.trace('addItemToStage() | Item Exists in Library = '+ oLibrary.itemExists(p_sItemName));
@@ -67,39 +90,10 @@ function addItemToStage(p_sItemName){
 			x: 0,
 			y: 0
 		});
-		var nMaxWidth = Math.round(oDocument.getElementProperty("width")),
-			nMaxHeight = Math.round(oDocument.getElementProperty("height")) + 20;
-		oDocument.width = nMaxWidth;
-		oDocument.height = nMaxHeight;
 		oDocument.align("left", true);
 		oDocument.align("top", true);
-		//fl.trace('addItemToStage() | Item Exists in Library = '+ oDocument.getElementProperty("height"));
-		/*var aLayers = oTimeline.layers,
-			nLayers = aLayers.length,
-			nMaxHeight = 0,
-			nMaxWidth = 0,
-			aFrames,
-			nFrames,
-			aElements,
-			nElements,
-			i,
-			j,
-			k;
-		for(i=0; i<nLayers; i++){
-			aFrames = aLayers[i].frames;
-			nFrames = aFrames.length;
-			for(j=0; j<nFrames; j++){
-				aElements = aFrames[j].elements;
-				nElements = aElements.length;
-				for(k=0; k<nElements; k++){
-					nMaxWidth = (aElements[k].width > nMaxWidth) ? aElements[k].width : nMaxWidth;
-					nMaxHeight = (aElements[k].height > nMaxHeight) ? aElements[k].height : nMaxHeight;
-				}
-			}
-		}*/
-		fl.trace('nMaxWidth = '+nMaxWidth+' : nMaxHeight = '+nMaxHeight);
-		//oDocument.setElementProperty('x', 200)
-		//oDocument.setElementProperty('y', 500)
+	}else{
+		fl.trace('Item named "'+p_sItemName+'" does not exist in library');
 	}
 }
 
@@ -112,13 +106,6 @@ function saveAsCopy(){
 	fl.saveDocument(fl.documents[0], docURI);//save as new doc name
 	fl.openDocument(docURI);//open this newly saved document
 }
-function exportPNG(){
-	if(!URIExists(sSaveDir + sDocumentName)){
-		createFolder(sSaveDir + sDocumentName);
-	}
-	fl.trace("exportPNG() | "+sSaveDir + sDocumentName + "/" + sDocumentName + ".png");
-	oDocument.exportPNG(sSaveDir + sDocumentName + "/" + sDocumentName + ".png", true, true);
-}
 function saveXML(){
 	fl.trace("saveXML()");
 	sXMLData = "<data pageType='DER'>" + sComponentXML + sSoundsXML + "</data>";
@@ -128,39 +115,23 @@ function saveXML(){
 	}
 	FLfile.write(sSaveDir + sDocumentName + "/page.xml", sXMLData);
 }
-function saveHTML(sHTMLData){
-	fl.trace("saveHTML()");
-	if(!URIExists(sSaveDir + sDocumentName)){
-		createFolder(sSaveDir + sDocumentName);
-	}
-	FLfile.write(sSaveDir + sDocumentName + "/page.html", sHTMLData);
-}
-
 function init(){
 	fl.outputPanel.clear();
-	deleteLayer(null, []);
+	deleteLayer(null, ["BG"]);
+	deleteOtherFrames();
 	addItemToStage('allData');
-	exportPNG();
+	sComponentXML = '<component type="swiffy" componentID="swiffycontainer"  audioController="AudioPanel" soundID="';
+	sSoundsXML += '<sounds location="audio">';
+	sComponentXML += '"><![CDATA[]]></component>';
 	
 	sComponentXML += '<component type="derivationpanel" componentID="derivationpanelcontainer" view="derivation_panel.html" viewLocation="global_html"><item type="button" id="btn_understand_concept" available="true"></item><item type="button" id="btn_assumptions" available="true"></item><item type="button" id="btn_begin_derivation" available="true"></item><item type="button" id="btn_at_a_glance" available="true"></item></component>';
+	
+	sComponentXML += '<component type="audiopanel" componentID="audiopanelcontainer" view="audio_panel.html" viewLocation="global_html"><item type="button" id="btn_play" available="true"></item><item type="button" id="btn_pause" available="true"></item><item type="button" id="btn_replay" available="true"></item><item type="slider" id="slider_volume_seek" available="true" seeking="true" direction="horizontal"></item><item type="slider" id="slider_playhead_seek" available="true" seeking="true" direction="horizontal"></item></component>';
+	sSoundsXML += '</sounds>';
 	saveXML();
 	
-	sHTMLData = '<!-- The ID below for the root div tag will be replaced dynamically by the Pages GUID -->';
-	sHTMLData += '<div id="content" class="page-content image-page">';
-	sHTMLData += '<div id="page_wrapper">';
-	sHTMLData += '<div id="image_holder">';
-	sHTMLData += '<div id="image_container">';
-	sHTMLData += '<img src="content/'+sDocumentName+'/'+sDocumentName +'.png" />'
-	sHTMLData += '</div>';
-	sHTMLData += '</div>';
-	sHTMLData += '<div id="derivationpanelcontainer">';
-	sHTMLData += '</div>';
-	sHTMLData += '</div>';
-	sHTMLData += '</div>';
-	saveHTML(sHTMLData);
-	
+	saveAsCopy();
 	fl.trace("All DONE...!");
-	oDocument.close(false);
 }
 
 init();

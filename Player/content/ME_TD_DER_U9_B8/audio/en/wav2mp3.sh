@@ -1,1 +1,0 @@
-easympeg -i './*.wav' -f mp3 -o './'
