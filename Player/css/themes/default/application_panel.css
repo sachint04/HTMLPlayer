@@ -1,4 +1,4 @@
-#derivationpanelcontainer {
+#applicationpanelcontainer {
     position: absolute;
     top: 503px;
     height: 30px;
@@ -10,12 +10,12 @@
     border-top-right-radius: 10px;
 	z-index: 2;
 }
-div#derivation_panel {
+div#application_panel {
     height: 100%;
     display: inline-block;
 }
 
-button.ui-der-panel-btn {
+button.ui-app-panel-btn {
     background-image: none;
     background-color: #3B455E;
     height: 30px;
@@ -26,14 +26,14 @@ button.ui-der-panel-btn {
     padding: 0;
     border-left: 1px solid #E9EAEA;
 }
-button.ui-der-panel-btn.selected{
+button.ui-app-panel-btn.selected{
 	background-color: #6F7585;
 }
-button#btn_at_a_glance {
+button#btn_see_solution {
     border-right: 1px solid #E9EAEA;
 }
 
-.page-content.DER.image-page  #image_holder{
+.page-content.APP.image-page  #image_holder{
 	background-image: url('../../../content/ME_TD_DER_U9_B8_FD/bg.png');
     background-repeat: no-repeat;
 	padding-bottom: 5px;

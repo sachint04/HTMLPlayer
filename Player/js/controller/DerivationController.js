@@ -86,6 +86,26 @@ define([
 		return sCurrentPageName;
 	}
 	
+	function getSelectedButton(){
+		var sCurrentPageName = Constants.getCurrentPageName(),
+			nKSIndex = sCurrentPageName.lastIndexOf('_KS'),
+			nASIndex = sCurrentPageName.lastIndexOf('_AS'),
+			nBDIndex = sCurrentPageName.lastIndexOf('_BD'),
+			nFDIndex = sCurrentPageName.lastIndexOf('_FD');
+		if((nKSIndex > -1 && nKSIndex === (sCurrentPageName.length-3))){
+			return 'btn_understand_concept';
+		}
+		if((nASIndex > -1 && nASIndex === (sCurrentPageName.length-3))){
+			return 'btn_assumptions';
+		}
+		if((nBDIndex > -1 && nBDIndex === (sCurrentPageName.length-3))){
+			return 'btn_begin_derivation';
+		}
+		if((nFDIndex > -1 && nFDIndex === (sCurrentPageName.length-3))){
+			return 'btn_at_a_glance';
+		}
+	}
+	
     DerivationController.prototype.destroy = function(){
         this.oDerivationPanel.destroy();
 		this.oDerivationPanel = null;
@@ -96,6 +116,7 @@ define([
     function showDerivationPanel(e){
 		e.currentTarget.removeEventListener('PAGE_LOADED', this.showDerivationPanel);
         //if(this.oAudioPanel && this.oSwiffyComponent && this.oDerivationPanel){
+			this.oDerivationPanel.setSelected(getSelectedButton.call(this), true);
 			this.oDerivationPanel.show(true);
         //}
     }

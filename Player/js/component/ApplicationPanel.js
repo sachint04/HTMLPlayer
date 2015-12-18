@@ -5,31 +5,31 @@ define([
     'util/MessageLogger'
 ], function(AbstractComponent, StringUtil, LoaderUtil, Logger) {
 
-    function DerivationPanel() {
-        //console.log('DerivationPanel.CONSTRUCTOR() ');
+    function ApplicationPanel() {
+        //console.log('ApplicationPanel.CONSTRUCTOR() ');
         AbstractComponent.call(this);
 
-		this.bDerivationPanelVisible = true;
-		this.bDerivationPanelEnabled = true;
+		this.bApplicationPanelVisible = true;
+		this.bApplicationPanelEnabled = true;
 
         return this;
     }
 
-    DerivationPanel.prototype									= Object.create(AbstractComponent.prototype);
-    DerivationPanel.prototype.constructor						= DerivationPanel;
+    ApplicationPanel.prototype									= Object.create(AbstractComponent.prototype);
+    ApplicationPanel.prototype.constructor						= ApplicationPanel;
 
-    DerivationPanel.prototype.getComponentConfig					= function() {
-		//console.log('DerivationPanel.getComponentConfig() | ');
+    ApplicationPanel.prototype.getComponentConfig					= function() {
+		//console.log('ApplicationPanel.getComponentConfig() | ');
 		return {
 			/*TODO: Implement any default configurations*/
 		};
 	};
-    DerivationPanel.prototype.init								= function(p_sID, p_oConfig, p_$xmlComponent) {
-        //console.log('DerivationPanel.init() | p_sID = ' + p_sID + ' : p_oConfig = ' + JSON.stringify(p_oConfig)+' : p_$xmlComponent = '+p_$xmlComponent[0]);
+    ApplicationPanel.prototype.init								= function(p_sID, p_oConfig, p_$xmlComponent) {
+        //console.log('ApplicationPanel.init() | p_sID = ' + p_sID + ' : p_oConfig = ' + JSON.stringify(p_oConfig)+' : p_$xmlComponent = '+p_$xmlComponent[0]);
 		AbstractComponent.prototype.init.call(this, p_sID, p_oConfig, p_$xmlComponent);
     };
-    DerivationPanel.prototype.createComponent					= function(){
-		//console.log('DerivationPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
+    ApplicationPanel.prototype.createComponent					= function(){
+		//console.log('ApplicationPanel.createComponent() | '+this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view);
 	    var oScope = this,
 			oLoaderUtil = new LoaderUtil();
 	    oLoaderUtil.loadResource([this.getLocation(this.$xmlData._viewLocation) + this.$xmlData._view], function(data){
@@ -52,8 +52,8 @@ define([
         this.initialize();
         this.dispatchComponentLoadedEvent();
 	}
-	DerivationPanel.prototype.addAriaRoles						= function(p_sType, p_$elem, p_sText, xmlNode, p_bAvailable){
-		//console.log('DerivationPanel.addAriaRoles() | ');
+	ApplicationPanel.prototype.addAriaRoles						= function(p_sType, p_$elem, p_sText, xmlNode, p_bAvailable){
+		//console.log('ApplicationPanel.addAriaRoles() | ');
 		if (p_sType === 'button') {
             p_$elem.attr({
             	'aria-role': 'button',
@@ -64,13 +64,13 @@ define([
             });
         }
 	};
-	DerivationPanel.prototype.bindHandlers						= function(p_oItem){
+	ApplicationPanel.prototype.bindHandlers						= function(p_oItem){
 		var oItem = p_oItem,
             sItemId = oItem._id,
             sItemType = oItem._type.toUpperCase(),
             bItemAvailable = StringUtil.sanitizeValue(oItem._available),
             $elem = this.$component.find('#'+sItemId);
-		//console.log('DerivationPanel.bindHandlers() | \n\t'+ sItemType+ '\n\tsItemId = '+sItemId+'\n\tIs Available = '+bItemAvailable);
+		//console.log('ApplicationPanel.bindHandlers() | \n\t'+ sItemType+ '\n\tsItemId = '+sItemId+'\n\tIs Available = '+bItemAvailable);
         if(!bItemAvailable){
             $elem.addClass('hide');
 			return;
@@ -78,54 +78,54 @@ define([
 		var oScope	= this
 		$elem.on('click', function(e) {
 			if($(this).hasClass('disabled')){return;}
-			oScope.dispatchEvent('DERIVATION_PANEL_BUTTON_CLICK', {
+			oScope.dispatchEvent('APPLICATION_PANEL_BUTTON_CLICK', {
 				target: oScope, 
-				type: 'DERIVATION_PANEL_BUTTON_CLICK',
+				type: 'APPLICATION_PANEL_BUTTON_CLICK',
 				button: this
 			});
 		});
 	};
-	DerivationPanel.prototype.unbindHandlers						= function(p_oItem){
+	ApplicationPanel.prototype.unbindHandlers						= function(p_oItem){
 		var oItem = p_oItem,
             sItemId = oItem._id,
 			sItemType = oItem._type.toUpperCase(),
             $elem = this.$component.find('#'+sItemId);
-		//console.log('DerivationPanel.bindHandlers() | \n\tsItemId = '+sItemId);
+		//console.log('ApplicationPanel.bindHandlers() | \n\tsItemId = '+sItemId);
 		$elem.off();
 	};
-	DerivationPanel.prototype.initialize							= function(p_sType, p_sID, p_$elem, xmlNode){
-		//console.log('DerivationPanel.initialize() | ');
+	ApplicationPanel.prototype.initialize							= function(p_sType, p_sID, p_$elem, xmlNode){
+		//console.log('ApplicationPanel.initialize() | ');
 	};
     
-	DerivationPanel.prototype.show								= function(p_bShow) {
-        //console.log('DerivationPanel.showDerivationPanel() | Panel Hidden = ' + this.$component.hasClass('hide') + ' : Event Type = ' + e.type);
-		//console.log('DerivationPanel.showDerivationPanel() | Show = '+p_bShow);
-		if(this.bDerivationPanelVisible === p_bShow){return;}
+	ApplicationPanel.prototype.show								= function(p_bShow) {
+        //console.log('ApplicationPanel.showApplicationPanel() | Panel Hidden = ' + this.$component.hasClass('hide') + ' : Event Type = ' + e.type);
+		//console.log('ApplicationPanel.showApplicationPanel() | Show = '+p_bShow);
+		if(this.bApplicationPanelVisible === p_bShow){return;}
 		if(p_bShow){
 			this.$component.removeClass('hide');
 		}else{
 			this.$component.addClass('hide');
 		}
-		this.bDerivationPanelVisible = p_bShow;
+		this.bApplicationPanelVisible = p_bShow;
     };
-	DerivationPanel.prototype.enable							= function(p_bEnable) {
-		if(this.bDerivationPanelEnabled === p_bEnable){return;}
-		var aButtons = this.$component.find('button.ui-der-panel-btn'),
+	ApplicationPanel.prototype.enable							= function(p_bEnable) {
+		if(this.bApplicationPanelEnabled === p_bEnable){return;}
+		var aButtons = this.$component.find('button.ui-app-panel-btn'),
 			i;
         if (p_bEnable) {
 			for(i=0; i<aButtons.length; i++){
-				$(aButtons[i]).removeClass('disbled');
+				$(aButtons[i]).removeClass('disabled');
 			}
         } else {
             for(i=0; i<aButtons.length; i++){
-				$(aButtons[i]).addClass('disbled');
+				$(aButtons[i]).addClass('disabled');
 			}
         }
-		this.bDerivationPanelEnabled = p_bEnable;
+		this.bApplicationPanelEnabled = p_bEnable;
     };
-	DerivationPanel.prototype.setSelected						= function(p_sBtnId, p_bSelected) {
-		var aButtons = this.$component.find('button.ui-der-panel-btn'),
-			aButton = this.$component.find('button#'+p_sBtnId+'.ui-der-panel-btn'),
+	ApplicationPanel.prototype.setSelected						= function(p_sBtnId, p_bSelected) {
+		var aButtons = this.$component.find('button.ui-app-panel-btn'),
+			aButton = this.$component.find('button#'+p_sBtnId+'.ui-app-panel-btn'),
 			i;
 		for(i=0; i<aButtons.length; i++){
 			$(aButtons[i]).removeClass('selected');
@@ -137,7 +137,7 @@ define([
 		}
 	}
 	
-    DerivationPanel.prototype.destroy							= function() {
+    ApplicationPanel.prototype.destroy							= function() {
 		if(this.$xmlData.item){
             if(this.$xmlData.item.length === undefined){this.$xmlData.item = [this.$xmlData.item];}
             var aItems = this.$xmlData.item,
@@ -149,16 +149,16 @@ define([
 			}catch(e){}
         }
 
-		this.bDerivationPanelVisible = null;
-		this.bDerivationPanelEnabled = null;
+		this.bApplicationPanelVisible = null;
+		this.bApplicationPanelEnabled = null;
 
 		this.prototype			= null;
 
 		AbstractComponent.prototype.destroy.call(this);
     };
-    DerivationPanel.prototype.toString							= function() {
-		return 'component/DerivationPanel';
+    ApplicationPanel.prototype.toString							= function() {
+		return 'component/ApplicationPanel';
 	};
 
-    return DerivationPanel;
+    return ApplicationPanel;
 });

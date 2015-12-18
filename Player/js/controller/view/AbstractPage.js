@@ -5,13 +5,14 @@ define([
     'core/AudioManager',
     'controller/SwiffyController',
     'controller/DerivationController',
+    'controller/ApplicationController',
     'controller/QuizController',
     'controller/TutorialNumeralController',
     'util/LoaderUtil',
     'util/EventDispatcher',
     'validators/ErrorApi',
     'util/MessageLogger'
-], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, DerivationController, QuizController, TutorialNumeralController, LoaderUtil, EventDispatcher, Logger){
+], function($, X2JS/*, Constants*/, AudioManager, SwiffyController, DerivationController, ApplicationController, QuizController, TutorialNumeralController, LoaderUtil, EventDispatcher, Logger){
     'use strict';
     function AbstractPage(){;
         EventDispatcher.call(this);
@@ -27,6 +28,7 @@ define([
             audiopanel      : 'component/AudioPanel',
             swiffy          : 'component/SwiffyWidget',
             derivationpanel : 'component/DerivationPanel',
+            applicationpanel : 'component/ApplicationPanel',
             quizpanel		: 'component/QuizPanel',
             tutnumpanel		: 'component/TutNumPanel'
         };
@@ -158,6 +160,9 @@ define([
 				if (sComponentType === 'DERIVATIONPANEL') {
                     createComponent.call(this, this.oComponentClassPath.derivationpanel, oComponent);
                 }
+				if (sComponentType === 'APPLICATIONPANEL') {
+                    createComponent.call(this, this.oComponentClassPath.applicationpanel, oComponent);
+                }
                 if (sComponentType === 'QUIZPANEL') {
                     createComponent.call(this, this.oComponentClassPath.quizpanel, oComponent);
                 }
@@ -216,6 +221,12 @@ define([
 				this.oSwiffyController = null;
 				this.oSwiffyController = new DerivationController(this);
 			}
+		}else if(this.jsonXMLData.data._pageType === "APP"){
+			// ** Create a Derivation Controller
+			if(!this.oSwiffyController){
+				this.oSwiffyController = null;
+				this.oSwiffyController = new ApplicationController(this);
+			}
 		}else{
 			// ** Create a Swiffy Controller
 			if(!this.oSwiffyController){
@@ -232,6 +243,9 @@ define([
 		}
 		if(oComponent.getConfig()._type === 'derivationpanel'){
 			this.oSwiffyController.registerDerivationPanel(oComponent);
+		}
+		if(oComponent.getConfig()._type === 'applicationpanel'){
+			this.oSwiffyController.registerApplicationPanel(oComponent);
 		}
 
         if(oComponent.getConfig()._type === 'quizpanel'){
