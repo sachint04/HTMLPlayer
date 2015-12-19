@@ -121,12 +121,17 @@
 	background-color: #000000;
 }
 #nav_panel .acc-chap .acc-board-icon {
+	background: url('../../../images/spritesheet.png') no-repeat -152px -29px;
+	width: 8px;
+	height: 8px;
 	display: table-cell;
 	float: left;
-	width: 3%;
-	border: 1px solid;
-	height: 20px;
 	margin-right: 5px;
+	vertical-align: middle;
+	margin-top:5px;
+}
+#nav_panel .acc-chap.btn.open .acc-board-icon {
+	background: url('../../../images/spritesheet.png') no-repeat -152px -41px;	
 }
 #nav_panel .acc-chap .acc-chap-num {
 	color: #FECB65;
@@ -277,5 +282,24 @@
     z-index: 0;
     left:273px;
 }
+#nav_footer #btnPrev,
+#nav_footer #btnNext{
+	border:none;
+	width: 46px;
+	height: 27px;
+	cursor:pointer;
+}
+#nav_footer #btnPrev{
+	background-position: -202px -1px;
+}
+#nav_footer #btnPrev.hover{
+	background-position: -202px -38px;
+}
+#nav_footer #btnNext{
+	background-position:  0 0;
 
+}
+#nav_footer #btnNext.hover{
+	background-position:  0 -37px;
+}
 /* End */
