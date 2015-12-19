@@ -122,7 +122,7 @@ function exportPNG(p_sPngFileName){
 }
 function saveXML(){
 	fl.trace("saveXML()");
-	sXMLData = "<data pageType='DER'>" + sComponentXML + sSoundsXML + "</data>";
+	sXMLData = "<data pageType='APP'>" + sComponentXML + sSoundsXML + "</data>";
 	//fl.trace(sXMLData);
 	if(!URIExists(sSaveDir + sDocumentName)){
 		createFolder(sSaveDir + sDocumentName);
@@ -146,18 +146,18 @@ function init(){
 	addItemToStage('allData');
 	exportPNG();
 	
-	sComponentXML += '<component type="derivationpanel" componentID="derivationpanelcontainer" view="derivation_panel.html" viewLocation="global_html"><item type="button" id="btn_understand_concept" available="true"></item><item type="button" id="btn_assumptions" available="true"></item><item type="button" id="btn_begin_derivation" available="true"></item><item type="button" id="btn_at_a_glance" available="true"></item></component>';
+	sComponentXML += '<component type="applicationpanel" componentID="applicationpanelcontainer" view="application_panel.html" viewLocation="global_html"><item type="button" id="btn_see_tutorial" available="true"></item><item type="button" id="btn_see_formulae" available="true"></item><item type="button" id="btn_see_solution" available="true"></item></component>';
 	saveXML();
 	
 	sHTMLData = '<!-- The ID below for the root div tag will be replaced dynamically by the Pages GUID -->';
-	sHTMLData += '<div id="content" class="page-content DER image-page">';
+	sHTMLData += '<div id="content" class="page-content APP image-page">';
 	sHTMLData += '<div id="page_wrapper">';
 	sHTMLData += '<div id="image_holder">';
 	sHTMLData += '<div id="image_container">';
 	sHTMLData += '<img src="content/'+sDocumentName+'/'+sDocumentName +'.png" />'
 	sHTMLData += '</div>';
 	sHTMLData += '</div>';
-	sHTMLData += '<div id="derivationpanelcontainer">';
+	sHTMLData += '<div id="applicationpanelcontainer">';
 	sHTMLData += '</div>';
 	sHTMLData += '</div>';
 	sHTMLData += '</div>';
