@@ -38,6 +38,10 @@ define([
 		// Add listeners for swapping the pages
 		this.oApplicationPanel.addEventListener('APPLICATION_PANEL_BUTTON_CLICK', this.handelApplicationPanelClickEvents);
     };
+	ApplicationController.prototype.registerApplicationPanelStatic = function(p_oApplicationPanelStatic){
+		this.oApplicationPanel = p_oApplicationPanelStatic;
+		this.oApplicationPanel.show(false);
+    };
 	
 	function handelApplicationPanelClickEvents(e){
 		var oScope = this,
@@ -91,7 +95,9 @@ define([
 	}
 	
     ApplicationController.prototype.destroy = function(){
-        this.oApplicationPanel.destroy();
+		try{
+			this.oApplicationPanel.destroy();
+		}catch(e){};
 		this.oApplicationPanel = null;
 		this.handelApplicationPanelClickEvents = null;
 		SwiffyController.prototype.destroy.call(this);
@@ -100,7 +106,9 @@ define([
     function showApplicationPanel(e){
 		e.currentTarget.removeEventListener('PAGE_LOADED', this.showApplicationPanel);
         //if(this.oAudioPanel && this.oSwiffyComponent && this.oApplicationPanel){
-			this.oApplicationPanel.setSelected(getSelectedButton.call(this), true);
+			try{
+				this.oApplicationPanel.setSelected(getSelectedButton.call(this), true);
+			}catch(e){}
 			this.oApplicationPanel.show(true);
         //}
     }

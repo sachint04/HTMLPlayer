@@ -1,0 +1,1 @@
+<data pageType='APP'><component type="applicationpanel" componentID="applicationpanelcontainer" view="application_panel.html" viewLocation="global_html"><item type="button" id="btn_see_tutorial" available="true"></item><item type="button" id="btn_see_formulae" available="true"></item><item type="button" id="btn_see_solution" available="true"></item></component></data>
