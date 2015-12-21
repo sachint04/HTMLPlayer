@@ -108,7 +108,7 @@ function saveAsCopy(){
 }
 function saveXML(){
 	fl.trace("saveXML()");
-	sXMLData = "<data pageType='DER'>" + sComponentXML + sSoundsXML + "</data>";
+	sXMLData = "<data pageType='APP'>" + sComponentXML + sSoundsXML + "</data>";
 	//fl.trace(sXMLData);
 	if(!URIExists(sSaveDir + sDocumentName)){
 		createFolder(sSaveDir + sDocumentName);
@@ -120,11 +120,11 @@ function init(){
 	deleteLayer(null, ["BG"]);
 	deleteOtherFrames();
 	addItemToStage('allData');
-	sComponentXML = '<component type="swiffy" componentID="swiffycontainer"  audioController="AudioPanel" soundID="';
+	sComponentXML = '<component type="swiffy" componentID="swiffycontainer" audioController="AudioPanel" soundID="';
 	sSoundsXML += '<sounds location="audio">';
 	sComponentXML += '"><![CDATA[]]></component>';
 	
-	sComponentXML += '<component type="derivationpanel" componentID="derivationpanelcontainer" view="derivation_panel.html" viewLocation="global_html"><item type="button" id="btn_understand_concept" available="true"></item><item type="button" id="btn_assumptions" available="true"></item><item type="button" id="btn_begin_derivation" available="true"></item><item type="button" id="btn_at_a_glance" available="true"></item></component>';
+	sComponentXML += '<component type="applicationpanel" componentID="applicationpanelcontainer" view="application_panel.html" viewLocation="global_html"><item type="button" id="btn_see_tutorial" available="true"></item><item type="button" id="btn_see_formulae" available="true"></item><item type="button" id="btn_see_solution" available="true"></item></component>';
 	
 	sComponentXML += '<component type="audiopanel" componentID="audiopanelcontainer" view="audio_panel.html" viewLocation="global_html"><item type="button" id="btn_play" available="true"></item><item type="button" id="btn_pause" available="true"></item><item type="button" id="btn_replay" available="true"></item><item type="slider" id="slider_volume_seek" available="true" seeking="true" direction="horizontal"></item><item type="slider" id="slider_playhead_seek" available="true" seeking="true" direction="horizontal"></item></component>';
 	sSoundsXML += '</sounds>';
