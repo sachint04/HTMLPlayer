@@ -292,11 +292,23 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	Accordion.prototype.getPageByType = function(p_sType) {
 		if (!this.oBoard)
 			return null;
+		
+		var aType;
+		if(p_sType === 'DER'){
+			aType = [p_sType, p_sType + '_ST'];
+		}else if(p_sType === 'APP'){
+			aType = [p_sType, p_sType + '_ST'];
+		}else{
+			aType = [p_sType];
+		}
+		
 		if (this.sSectionTitle == "Board") {
 			aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
 			for (var i = 0; i < aPages.length; i++) {
-				if (aPages[i]._Type == p_sType) {
-					return aPages[i];
+				for (var j = 0; j < aType.length; j++) {
+					if (aPages[i]._Type === aType[j]) {
+						return aPages[i];
+					}
 				}
 			};
 		}
@@ -311,7 +323,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 		if (this.sSectionTitle == "Board") {
 			aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
 			for (var i = 0; i < aPages.length; i++) {
-				result.push(aPages[i]._Type)
+				result.push(aPages[i]._Type);
 			};
 		}
 

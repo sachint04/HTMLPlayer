@@ -38,6 +38,10 @@ define([
 		// Add listeners for swapping the pages
 		this.oDerivationPanel.addEventListener('DERIVATION_PANEL_BUTTON_CLICK', this.handelDerivationPanelClickEvents);
     };
+	DerivationController.prototype.registerDerivationPanelStatic = function(p_oDerivationPanelStatic){
+		this.oDerivationPanel = p_oDerivationPanelStatic;
+		this.oDerivationPanel.show(false);
+    };
 	
 	function handelDerivationPanelClickEvents(e){
 		var oScope = this,
@@ -107,7 +111,9 @@ define([
 	}
 	
     DerivationController.prototype.destroy = function(){
-        this.oDerivationPanel.destroy();
+		try{
+			this.oDerivationPanel.destroy();
+		}catch(e){};
 		this.oDerivationPanel = null;
 		this.handelDerivationPanelClickEvents = null;
 		SwiffyController.prototype.destroy.call(this);
@@ -116,7 +122,9 @@ define([
     function showDerivationPanel(e){
 		e.currentTarget.removeEventListener('PAGE_LOADED', this.showDerivationPanel);
         //if(this.oAudioPanel && this.oSwiffyComponent && this.oDerivationPanel){
-			this.oDerivationPanel.setSelected(getSelectedButton.call(this), true);
+			try{
+				this.oDerivationPanel.setSelected(getSelectedButton.call(this), true);
+			}catch(e){}
 			this.oDerivationPanel.show(true);
         //}
     }

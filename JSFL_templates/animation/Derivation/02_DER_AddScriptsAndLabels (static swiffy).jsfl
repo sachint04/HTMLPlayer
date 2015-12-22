@@ -120,7 +120,7 @@ function init(){
 	deleteLayer(null, ["BG"]);
 	deleteOtherFrames();
 	addItemToStage('allData');
-	sComponentXML = '<component type="swiffy" componentID="swiffycontainer"  audioController="AudioPanel" soundID="';
+	sComponentXML = '<component type="swiffy" componentID="swiffycontainer" audioController="AudioPanel" soundID="';
 	sSoundsXML += '<sounds location="audio">';
 	sComponentXML += '"><![CDATA[]]></component>';
 	

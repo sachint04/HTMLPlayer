@@ -15,6 +15,11 @@
 					<Target Type="DER" TotalFrame="9932" FileName="ME_TD_DER_U9_B8"/>
 					<Target Type="APP" TotalFrame="12972" FileName="ME_TD_APP_U9_B8"/>
 			</Board>
+			<Board SubHeading="" ID="4" sort="4" BoardName="Dual Cycle" Type="Normal">
+					<Target Type="DEF" TotalFrame="3565" FileName="ME_IC_DEF_U2_B8"/>
+					<Target Type="DER_ST" TotalFrame="6000" FileName="EC_AC_DER_U1_B11_FD"/>
+					<Target Type="APP_ST" TotalFrame="6000" FileName="EC_AC_APP_U1_B10_FS"/>
+			</Board>
 			<Board SubHeading="" ID="1" sort="1" BoardName="Topic of Learning 1" Type="Normal">
 					<Target Type="DEF" TotalFrame="1747" FileName="ME_AE_DIA_U6_B10_MCQ1"/>
 					<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>

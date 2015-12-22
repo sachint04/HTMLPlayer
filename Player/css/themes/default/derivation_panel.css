@@ -10,7 +10,7 @@
     border-top-right-radius: 10px;
 	z-index: 2;
 }
-div#derivation_panel {
+#derivation_panel {
     height: 100%;
     display: inline-block;
 }
@@ -37,4 +37,15 @@ button#btn_at_a_glance {
 	background-image: url('../../../content/ME_TD_DER_U9_B8_FD/bg.png');
     background-repeat: no-repeat;
 	padding-bottom: 5px;
+}
+
+#derivationpanelcontainer.static {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+#derivationpanelcontainer.static  #derivation_panel {
+    color: #FFFFFF;
+    font-size: 1.2em;
+    font-weight: normal;
+    padding: 5px;
 }

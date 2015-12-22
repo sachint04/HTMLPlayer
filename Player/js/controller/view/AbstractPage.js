@@ -28,7 +28,9 @@ define([
             audiopanel      : 'component/AudioPanel',
             swiffy          : 'component/SwiffyWidget',
             derivationpanel : 'component/DerivationPanel',
+            derivationpanelstatic : 'component/DerivationPanelStatic',
             applicationpanel : 'component/ApplicationPanel',
+            applicationpanelstatic : 'component/ApplicationPanelStatic',
             quizpanel		: 'component/QuizPanel',
             tutnumpanel		: 'component/TutNumPanel'
         };
@@ -160,8 +162,14 @@ define([
 				if (sComponentType === 'DERIVATIONPANEL') {
                     createComponent.call(this, this.oComponentClassPath.derivationpanel, oComponent);
                 }
+				if (sComponentType === 'DERIVATIONPANEL_STATIC') {
+                    createComponent.call(this, this.oComponentClassPath.derivationpanelstatic, oComponent);
+                }
 				if (sComponentType === 'APPLICATIONPANEL') {
                     createComponent.call(this, this.oComponentClassPath.applicationpanel, oComponent);
+                }
+				if (sComponentType === 'APPLICATIONPANEL_STATIC') {
+                    createComponent.call(this, this.oComponentClassPath.applicationpanelstatic, oComponent);
                 }
                 if (sComponentType === 'QUIZPANEL') {
                     createComponent.call(this, this.oComponentClassPath.quizpanel, oComponent);
@@ -215,13 +223,13 @@ define([
         if(this.aComponents === null){this.aComponents = [];}
         this.aComponents.push(oComponent);
 		
-		if(this.jsonXMLData.data._pageType === "DER"){
+		if(this.jsonXMLData.data._pageType === "DER" || this.jsonXMLData.data._pageType === "DER_ST"){
 			// ** Create a Derivation Controller
 			if(!this.oSwiffyController){
 				this.oSwiffyController = null;
 				this.oSwiffyController = new DerivationController(this);
 			}
-		}else if(this.jsonXMLData.data._pageType === "APP"){
+		}else if(this.jsonXMLData.data._pageType === "APP" || this.jsonXMLData.data._pageType === "APP_ST"){
 			// ** Create a Derivation Controller
 			if(!this.oSwiffyController){
 				this.oSwiffyController = null;
@@ -244,8 +252,14 @@ define([
 		if(oComponent.getConfig()._type === 'derivationpanel'){
 			this.oSwiffyController.registerDerivationPanel(oComponent);
 		}
+		if(oComponent.getConfig()._type === 'derivationpanel_static'){
+			this.oSwiffyController.registerDerivationPanelStatic(oComponent);
+		}
 		if(oComponent.getConfig()._type === 'applicationpanel'){
 			this.oSwiffyController.registerApplicationPanel(oComponent);
+		}
+		if(oComponent.getConfig()._type === 'applicationpanel_static'){
+			this.oSwiffyController.registerApplicationPanelStatic(oComponent);
 		}
 
         if(oComponent.getConfig()._type === 'quizpanel'){

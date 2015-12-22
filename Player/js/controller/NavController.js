@@ -142,7 +142,7 @@ define([
 		oTarget 	= this.selectedComponent.getPageByType(sCat);
 		this.panel.find('.cat-btn').removeClass('selected');
 		$target.addClass('selected');
-		this.loadPage(oTarget)		
+		this.loadPage(oTarget);
 	};
 	NavController.prototype.onTabClicked = function(e){
 		var $target = $(e.currentTarget),
@@ -182,7 +182,7 @@ define([
 	NavController.prototype.loadPage = function(p_oData){
 		var sFile 		= p_oData._FileName,
 		nTotalFrames	= p_oData._TotalFrame,
-		sType			= p_oData._Type;
+		sType			= filterPageType.call(this, p_oData._Type);
 		
 		if(CourseController){
         	 this.selectedComponent.setSelectedPage(p_oData);
@@ -193,7 +193,14 @@ define([
 		this.updateFooterState(p_oData);
 		this.updateHeaderState(p_oData);
 		
-	}		
+	}
+	function filterPageType(p_sPageType){
+		var nUnderscoreIndex = p_sPageType.indexOf('_');
+		if(nUnderscoreIndex > -1){
+			p_sPageType = p_sPageType.substring(0, nUnderscoreIndex);
+		}
+		return p_sPageType;
+	}
 	
 	
 	NavController.prototype.initFooter = function() {
@@ -238,7 +245,7 @@ define([
 	}
 	NavController.prototype.updateHeaderState = function(p_oData){
 		this.header.find('.title').html(this.getBoardName());
-		this.header.find('.type').html(p_oData._Type);
+		this.header.find('.type').html(filterPageType.call(this, p_oData._Type));
 	}
 	NavController.prototype.updateFooterState = function(){
 		if(this.hasPreviousPage()){
