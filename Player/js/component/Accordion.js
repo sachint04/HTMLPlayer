@@ -74,7 +74,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	};
 
 	Accordion.prototype.getBoardByID = function(p_sID) {
-		for (var i = 0; i < this.aChap.Boardlength; i++) {
+		for (var i = 0; i < this.aChap.length; i++) {
 			var oSection = this.aChap[i], aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
 			for (var s = 0; s < aBoard.length; s++) {
 				if (aBoard[s]._ID === p_sID) {
@@ -102,13 +102,32 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	};
 
 	Accordion.prototype.getBoardAtIndex = function(p_nIndex) {
-		for (var i = 0; i < this.aChap.Boardlength; i++) {
+		for (var i = 0; i < this.aChap.length; i++) {
 			var oSection = this.aChap[i], aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
 			if (p_nIndex < (aBoard.length - 1)) {
 				return aBoard[p_nIndex];
 			}
 		};
 		return null;
+	};
+	
+	Accordion.prototype.getBoardIndex = function(p_oBoard) {
+		var result = -1;
+		for (var i = 0; i < this.aChap.length; i++) {
+			var oSection = this.aChap[i], 
+			aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
+			for (var s = 0; s < aBoard.length; s++) {
+				if (aBoard[s]._ID === p_oBoard._ID) {
+					result = s;
+					break;
+				}
+			}
+			if(result != -1){
+				break;
+			}
+		};
+		
+		return result;
 	};
 
 	Accordion.prototype.getTotalTime = function(frames) {
@@ -258,6 +277,9 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 			return null;
 			
 		if (this.sSectionTitle == "Board") {
+			this._selectedPageIndex = this.getBoardIndex(this.oBoard);
+			
+			/*
 			var aTarget = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
 			for (var i = 0; i < aTarget.length; i++) {
 				var oTarget = aTarget[i];
@@ -266,6 +288,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 					break;
 				}
 			};
+			*/
 		}else{
 			this._selectedPageIndex = 0;
 		}

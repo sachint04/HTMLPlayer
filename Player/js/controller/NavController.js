@@ -219,7 +219,7 @@ define([
 			if(e.preventDefult){
 				e.preventDefult();
 			}
-			//if($(this).hasClass("disabled"))return;
+			if($(this).hasClass("disabled"))return;
 //			var oData =	oScope.loadNext();
 			if(oScope.selectedComponent){
 				oScope.selectedComponent.selectBoard("next");				
@@ -231,7 +231,7 @@ define([
 			if(e.preventDefult){
 				e.preventDefult();
 			}
-			//if($(this).hasClass("disabled"))return;
+			if($(this).hasClass("disabled"))return;
 			//var oData = oScope.loadPrevious();
 			if(oScope.selectedComponent){
 				oScope.selectedComponent.selectBoard("prev");
@@ -249,15 +249,15 @@ define([
 	}
 	NavController.prototype.updateFooterState = function(){
 		if(this.hasPreviousPage()){
-			this.footer.find("#btnPrev").removeClass('disabled');	
+			this.$prev.removeClass('disabled');	
 		}else{
-			this.footer.find("#btnPrev").addClass('disabled');				
+			this.$prev.addClass('disabled');				
 		};
 			
 		if(this.hasNextPage()){
-			this.footer.find("#btnNext").removeClass('disabled');				
+			this.$next.removeClass('disabled');				
 		}else{
-			this.footer.find("#btnNext").removeClass('disabled');							
+			this.$next.removeClass('disabled');							
 		};	
 	}
 	

@@ -28,6 +28,12 @@ body{
 .outline {
 	border: 1px solid #d0d0b9;
 }
+.btn{
+	cursor:pointer;
+}
+.btn.disabled{
+	cursor:default;	
+}
 /* Styles for the Main Content Wrapper */
 
  #content_wrapper {
