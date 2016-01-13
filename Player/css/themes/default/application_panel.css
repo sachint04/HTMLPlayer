@@ -34,7 +34,7 @@ button#btn_see_solution {
 }
 
 .page-content.APP.image-page  #image_holder{
-	background-image: url('../../../content/ME_TD_DER_U9_B8_FD/bg.png');
+	background-image: url('../../../images/bg.png');
     background-repeat: no-repeat;
 	padding-bottom: 5px;
 }
