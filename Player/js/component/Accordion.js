@@ -435,7 +435,7 @@ define([
 	Accordion.prototype.selectBoard = function(p_dir) {
 		var $elem,
 		stype = this.getBoardType(this.$selectedElem.attr("id"));
-		if(stype.toUpperCase() === "QUIZ"){
+		if(stype && stype.toUpperCase() === "QUIZ"){
 			var aPage 	= this.getPageList(),
 			oPage,
 			idx	= (aPage.index)? aPage.index :0;
