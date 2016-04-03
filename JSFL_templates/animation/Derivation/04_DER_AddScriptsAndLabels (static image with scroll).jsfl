@@ -139,10 +139,11 @@ function saveHTML(sHTMLData){
 
 function init(){
 	fl.outputPanel.clear();
-	deleteLayer(null, ['BG']);
+	//deleteLayer(null, ['BG']);
+	deleteLayer(null);
 	deleteOtherFrames();
-	exportPNG('bg');
-	deleteLayer();
+	//exportPNG('bg');
+	//deleteLayer();
 	addItemToStage('allData');
 	exportPNG();
 	
