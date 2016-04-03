@@ -1,4 +1,8 @@
-define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], function($, AbstractComponent, EventDispatcher) {
+define([
+	'jquery', 
+	'component/AbstractComponent', 
+	'util/EventDispatcher'
+	], function($, AbstractComponent, EventDispatcher) {
 
 	var Accordion = function() {
 		AbstractComponent.call(this);
@@ -11,7 +15,8 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 		this.fps = 20;
 		this.sSectionTitle;
 		this.$selectedElem;
-		this._selectedPageIndex
+		this._selectedPageIndex;
+		this.navController;
 
 		this.onBoardClicked = this.onBoardClicked.bind(this);
 		return this;
@@ -20,8 +25,9 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	Accordion.prototype = Object.create(AbstractComponent.prototype);
 	Accordion.prototype.constructor = Accordion;
 
-	Accordion.prototype.init = function(p_$panel, p_oConfig, oData, sSectionName) {
+	Accordion.prototype.init = function(p_$panel, p_oConfig, oData, sSectionName, p_oController) {
 		//Accordion.prototype.init =function($view, oCompConfig, p_oComponent){
+		this.navController = p_oController;
 		this.$panel = p_$panel;
 		this.aChap = (oData.length != undefined) ? oData : [oData];
 		this.oConfig = p_oConfig;
@@ -130,6 +136,24 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 		return result;
 	};
 
+	Accordion.prototype.getBoardType = function(p_sId) {
+		var result = null;
+		for (var i = 0; i < this.aChap.length; i++) {
+			var chapID = "board_"+(i+1);
+			var oSection = this.aChap[i], 
+			aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
+			for (var s = 0; s < aBoard.length; s++) {
+				var boardID = chapID+"_"+(s+1);
+				if (boardID === p_sId) {
+					result = aBoard[s]._Type;
+					return result;
+				}
+			}
+
+		};
+		
+		return null;
+	};
 	Accordion.prototype.getTotalTime = function(frames) {
 		var sec = 0, min = 0, hr = 0, txt_hr = '', txt_min = '', txt_sec = '';
 		var sec = (frames / this.fps);
@@ -338,6 +362,28 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 
 		return null;
 	};
+	
+	Accordion.prototype.getPageIndex = function(p_sType) {
+		return 0;
+		if (!this.oBoard)
+			return null;
+		
+		var aType;
+		
+		if (this.sSectionTitle == "Board") {
+			aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
+			for (var i = 0; i < aPages.length; i++) {
+				for (var j = 0; j < aType.length; j++) {
+					if (aPages[i]._Type === aType[j]) {
+						return aPages[i];
+					}
+				}
+			};
+		}
+
+		return null;
+	};
+
 
 	Accordion.prototype.getPageTypeList = function(p_sType) {
 		if (!this.oBoard)
@@ -387,7 +433,33 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	}
 	
 	Accordion.prototype.selectBoard = function(p_dir) {
-			var $elem;
+		var $elem,
+		stype = this.getBoardType(this.$selectedElem.attr("id"));
+		if(stype.toUpperCase() === "QUIZ"){
+			var aPage 	= this.getPageList(),
+			oPage,
+			idx	= (aPage.index)? aPage.index :0;
+			if(p_dir.toLowerCase() === "next"){
+				if(aPage.length >  idx){
+					idx++;
+					oPage = aPage[idx]
+				}
+			}else if(p_dir.toLowerCase() === "prev"){
+				if(idx > 0){
+					idx--;
+					oPage = aPage[idx]
+				}					
+			}
+			
+			if(oPage){
+				aPage.index = idx;					
+				this.navController.loadPage(oPage);
+				return;
+			}
+			
+			
+		}
+
 		if(p_dir.toLowerCase() === "next"){
 			$elem = this.$selectedElem.next();
 		}

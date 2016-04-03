@@ -51,13 +51,13 @@ define([
         this.oLecturePlan.addEventListener('BOARD_SELECTED', this.handleAccEvents)
         this.oLecturePlan.addEventListener('SECTION_SELECTED', this.handleAccEvents)
 		var aData 				= this.jsonXMLData.Data.showAll.Chap;
-        this.oLecturePlan.init(this.panel.find('.lecture-container'), {}, aData, 'Board');
+        this.oLecturePlan.init(this.panel.find('.lecture-container'), {}, aData, 'Board', this);
         
         this.oTutorials			= new Accordion();
         this.oTutorials.addEventListener('BOARD_SELECTED', this.handleAccEvents)
         this.oTutorials.addEventListener('SECTION_SELECTED', this.handleAccEvents)
 		aData 				= this.jsonXMLData.Data.showAll.Tutorials;
-        this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT');
+        this.oTutorials.init(this.panel.find('.tutorials-container'), {}, aData, 'TUT', this);
 		
 		this.oSearch		= new Search();
         this.oSearch.addEventListener('BOARD_SELECTED', this.handleAccEvents)
