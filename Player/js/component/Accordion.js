@@ -138,7 +138,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	};
 
 	Accordion.prototype.createSection = function(p_sID, p_sNum, p_sName, p_sTime) {
-		var oScope = this, $elem = $("<div></div>"), sText = '<span class="acc-board-icon"></span><span class="acc-chap-num">' + p_sNum + ' </span><span class="acc-chap-title">' + p_sName + '</span><span class="acc-chap-time">' + p_sTime + '</span>';
+		var oScope = this, $elem = $("<div></div>"), sText = '<span class="acc-board-icon"><span class="accordion-icon"></span></span><span class="acc-chap-num">' + p_sNum + '&nbsp;</span><span class="acc-chap-title">' + p_sName + '</span><span class="acc-chap-time">' + p_sTime + '</span>';
 
 		$elem.attr({
 			"id" : p_sID,
@@ -163,7 +163,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	};
 
 	Accordion.prototype.createBoard = function(p_sSectionID, p_sBoardID, p_sNum, p_sBoardName, p_aType, p_sTime, b_showType) {
-		var oScope = this, str = '<div id="board_' + p_sSectionID + '_' + p_sBoardID + '" class="acc-board">' + '<span class="acc-board-num">' + p_sNum + ' </span>' + '<span class="acc-board-title">' + p_sBoardName + '</span>' + '<span class="acc-board-time-container">' + '<div class="acc-board-time">' + p_sTime + '</div>' + '<div class="type-container hide">' + '<span class="DEF board-type"></span>' + '<span class="DIA board-type"></span>' + '<span class="DER board-type"></span>' + '<span class="APP board-type"></span>' + '</div>' + '</span>' + '</div>';
+		var oScope = this, str = '<div id="board_' + p_sSectionID + '_' + p_sBoardID + '" class="acc-board">' + '<span class="acc-board-num">' + p_sNum + '&nbsp;</span>' + '<span class="acc-board-title">' + p_sBoardName + '</span>' + '<span class="acc-board-time-container">' + '<div class="acc-board-time">' + p_sTime + '</div>' + '<div class="type-container hide">' + '<span class="DEF board-type"></span>' + '<span class="DIA board-type"></span>' + '<span class="DER board-type"></span>' + '<span class="APP board-type"></span>' + '</div>' + '</span>' + '</div>';
 
 		var $elem = $(str);
 		if (b_showType) {

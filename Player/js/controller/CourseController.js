@@ -41,7 +41,7 @@ define([
     }
 
     CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage){
-        //console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
+        console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
         Constants.setCurrentPageName(p_sFolderName);
 		Constants.setCurrentPageType(p_sPageType);
         if(this.oCurrentPage){

@@ -13,7 +13,7 @@ background: radial-gradient(ellipse at center,  #dee0e2 0%,#b8c9d6 100%,#b8c9d6 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dee0e2', endColorstr='#b8c9d6',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
 width:100%;
 position:relative;
-height:540px;
+height:495px;
 display: table;
 padding-top:10px;
 padding-bottom:40px;

@@ -28,6 +28,20 @@ body {
     color:#585858;
     margin: 0;
 }
+
+
+
+.cls
+
+
+element.style {
+}
+img {
+    margin: 0;
+    padding: 0;
+    border: none;
+    display: block;
+}
 /* Global BUTTONs */
 button:focus, a:focus, input[type="button"]:focus {
 	outline					: none;
@@ -290,8 +304,9 @@ p.debug {
 /* Styles for the Main Content Wrapper */
 #content_wrapper {
 	position				: relative;
+	vertical-align			: middle;
 	z-index					: 1;
-	margin                    : 0 auto;
+	margin                  : 0 auto;
 }
 /* END */
 
@@ -352,9 +367,11 @@ p.debug {
 #application {
  display: block;
     margin: 0 auto;
-	width: 100%;
-/*	height: 100%;*/
-	height: 600px;
+	/*width: 100%;
+	height: 100%;
+	height: 600px;*/
+	width: 1000px;
+	height: 568px;
 	position: relative;
 	overflow: hidden;
 }
