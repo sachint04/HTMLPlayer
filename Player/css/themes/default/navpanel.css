@@ -2,13 +2,22 @@
 .disabled{
 	opacity:0.4;
 }
+#content_area {
+     float: left;
+     position: relative;
+     top: 0;
+     width: 745px;
+     height: 568px;
+     outline: 1px pink;
+     background-color: pink;
+ }
  #content_wrapper {
-	position: relative;
+/*	position: relative;
 	width: 745px;
 	background-color: transparent;
 	float:left;
 	display: inline-block;
-	height:534px;
+	height:534px;*/
 }
 
 #nav_header {
