@@ -41,10 +41,9 @@ define([
     }
 
     CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage){
-        //console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
+        console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
         Constants.setCurrentPageName(p_sFolderName);
 		Constants.setCurrentPageType(p_sPageType);
-        $('#loader').removeClass('hide');
         if(this.oCurrentPage){
             $('#content').contents().wrapAll('<div id="temp_content"></div>');
 			var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;

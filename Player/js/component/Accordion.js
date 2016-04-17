@@ -1,8 +1,4 @@
-define([
-	'jquery', 
-	'component/AbstractComponent', 
-	'util/EventDispatcher'
-	], function($, AbstractComponent, EventDispatcher) {
+define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], function($, AbstractComponent, EventDispatcher) {
 
 	var Accordion = function() {
 		AbstractComponent.call(this);
@@ -15,8 +11,7 @@ define([
 		this.fps = 20;
 		this.sSectionTitle;
 		this.$selectedElem;
-		this._selectedPageIndex;
-		this.navController;
+		this._selectedPageIndex
 
 		this.onBoardClicked = this.onBoardClicked.bind(this);
 		return this;
@@ -25,9 +20,8 @@ define([
 	Accordion.prototype = Object.create(AbstractComponent.prototype);
 	Accordion.prototype.constructor = Accordion;
 
-	Accordion.prototype.init = function(p_$panel, p_oConfig, oData, sSectionName, p_oController) {
+	Accordion.prototype.init = function(p_$panel, p_oConfig, oData, sSectionName) {
 		//Accordion.prototype.init =function($view, oCompConfig, p_oComponent){
-		this.navController = p_oController;
 		this.$panel = p_$panel;
 		this.aChap = (oData.length != undefined) ? oData : [oData];
 		this.oConfig = p_oConfig;
@@ -80,7 +74,7 @@ define([
 	};
 
 	Accordion.prototype.getBoardByID = function(p_sID) {
-		for (var i = 0; i < this.aChap.length; i++) {
+		for (var i = 0; i < this.aChap.Boardlength; i++) {
 			var oSection = this.aChap[i], aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
 			for (var s = 0; s < aBoard.length; s++) {
 				if (aBoard[s]._ID === p_sID) {
@@ -108,7 +102,7 @@ define([
 	};
 
 	Accordion.prototype.getBoardAtIndex = function(p_nIndex) {
-		for (var i = 0; i < this.aChap.length; i++) {
+		for (var i = 0; i < this.aChap.Boardlength; i++) {
 			var oSection = this.aChap[i], aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
 			if (p_nIndex < (aBoard.length - 1)) {
 				return aBoard[p_nIndex];
@@ -116,44 +110,7 @@ define([
 		};
 		return null;
 	};
-	
-	Accordion.prototype.getBoardIndex = function(p_oBoard) {
-		var result = -1;
-		for (var i = 0; i < this.aChap.length; i++) {
-			var oSection = this.aChap[i], 
-			aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
-			for (var s = 0; s < aBoard.length; s++) {
-				if (aBoard[s]._ID === p_oBoard._ID) {
-					result = s;
-					break;
-				}
-			}
-			if(result != -1){
-				break;
-			}
-		};
-		
-		return result;
-	};
 
-	Accordion.prototype.getBoardType = function(p_sId) {
-		var result = null;
-		for (var i = 0; i < this.aChap.length; i++) {
-			var chapID = "board_"+(i+1);
-			var oSection = this.aChap[i], 
-			aBoard = (oSection[this.sSectionTitle].length != undefined) ? oSection[this.sSectionTitle] : [oSection[this.sSectionTitle]];
-			for (var s = 0; s < aBoard.length; s++) {
-				var boardID = chapID+"_"+(s+1);
-				if (boardID === p_sId) {
-					result = aBoard[s]._Type;
-					return result;
-				}
-			}
-
-		};
-		
-		return null;
-	};
 	Accordion.prototype.getTotalTime = function(frames) {
 		var sec = 0, min = 0, hr = 0, txt_hr = '', txt_min = '', txt_sec = '';
 		var sec = (frames / this.fps);
@@ -181,7 +138,7 @@ define([
 	};
 
 	Accordion.prototype.createSection = function(p_sID, p_sNum, p_sName, p_sTime) {
-		var oScope = this, $elem = $("<div></div>"), sText = '<span class="acc-board-icon"></span><span class="acc-chap-num">' + p_sNum + ' </span><span class="acc-chap-title">' + p_sName + '</span><span class="acc-chap-time">' + p_sTime + '</span>';
+		var oScope = this, $elem = $("<div></div>"), sText = '<span class="acc-board-icon"><span class="accordion-icon"></span></span><span class="acc-chap-num">' + p_sNum + '&nbsp;</span><span class="acc-chap-title">' + p_sName + '</span><span class="acc-chap-time">' + p_sTime + '</span>';
 
 		$elem.attr({
 			"id" : p_sID,
@@ -206,7 +163,7 @@ define([
 	};
 
 	Accordion.prototype.createBoard = function(p_sSectionID, p_sBoardID, p_sNum, p_sBoardName, p_aType, p_sTime, b_showType) {
-		var oScope = this, str = '<div id="board_' + p_sSectionID + '_' + p_sBoardID + '" class="acc-board">' + '<span class="acc-board-num">' + p_sNum + ' </span>' + '<span class="acc-board-title">' + p_sBoardName + '</span>' + '<span class="acc-board-time-container">' + '<div class="acc-board-time">' + p_sTime + '</div>' + '<div class="type-container hide">' + '<span class="DEF board-type"></span>' + '<span class="DIA board-type"></span>' + '<span class="DER board-type"></span>' + '<span class="APP board-type"></span>' + '</div>' + '</span>' + '</div>';
+		var oScope = this, str = '<div id="board_' + p_sSectionID + '_' + p_sBoardID + '" class="acc-board">' + '<span class="acc-board-num">' + p_sNum + '&nbsp;</span>' + '<span class="acc-board-title">' + p_sBoardName + '</span>' + '<span class="acc-board-time-container">' + '<div class="acc-board-time">' + p_sTime + '</div>' + '<div class="type-container hide">' + '<span class="DEF board-type"></span>' + '<span class="DIA board-type"></span>' + '<span class="DER board-type"></span>' + '<span class="APP board-type"></span>' + '</div>' + '</span>' + '</div>';
 
 		var $elem = $(str);
 		if (b_showType) {
@@ -301,9 +258,6 @@ define([
 			return null;
 			
 		if (this.sSectionTitle == "Board") {
-			this._selectedPageIndex = this.getBoardIndex(this.oBoard);
-			
-			/*
 			var aTarget = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
 			for (var i = 0; i < aTarget.length; i++) {
 				var oTarget = aTarget[i];
@@ -312,7 +266,6 @@ define([
 					break;
 				}
 			};
-			*/
 		}else{
 			this._selectedPageIndex = 0;
 		}
@@ -362,28 +315,6 @@ define([
 
 		return null;
 	};
-	
-	Accordion.prototype.getPageIndex = function(p_sType) {
-		return 0;
-		if (!this.oBoard)
-			return null;
-		
-		var aType;
-		
-		if (this.sSectionTitle == "Board") {
-			aPages = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
-			for (var i = 0; i < aPages.length; i++) {
-				for (var j = 0; j < aType.length; j++) {
-					if (aPages[i]._Type === aType[j]) {
-						return aPages[i];
-					}
-				}
-			};
-		}
-
-		return null;
-	};
-
 
 	Accordion.prototype.getPageTypeList = function(p_sType) {
 		if (!this.oBoard)
@@ -433,33 +364,7 @@ define([
 	}
 	
 	Accordion.prototype.selectBoard = function(p_dir) {
-		var $elem,
-		stype = this.getBoardType(this.$selectedElem.attr("id"));
-		if(stype && stype.toUpperCase() === "QUIZ"){
-			var aPage 	= this.getPageList(),
-			oPage,
-			idx	= (aPage.index)? aPage.index :0;
-			if(p_dir.toLowerCase() === "next"){
-				if(aPage.length >  idx){
-					idx++;
-					oPage = aPage[idx]
-				}
-			}else if(p_dir.toLowerCase() === "prev"){
-				if(idx > 0){
-					idx--;
-					oPage = aPage[idx]
-				}					
-			}
-			
-			if(oPage){
-				aPage.index = idx;					
-				this.navController.loadPage(oPage);
-				return;
-			}
-			
-			
-		}
-
+			var $elem;
 		if(p_dir.toLowerCase() === "next"){
 			$elem = this.$selectedElem.next();
 		}

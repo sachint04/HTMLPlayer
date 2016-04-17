@@ -44,75 +44,73 @@
         </div>
         <div id="application_wrapper">
             <div id="application">
-            <!-- Logger -->
-            <div id="logger" class="hide" style="display:none;">
-                <h1 id="log_title">Debugger</h1>
-                <p id="log_body"></p>
-                <ul id="log_nav">
-                    <li><a id="minimize" href="">minimize</a></li>
-                    <li><a id="maximize" href="">maxmize</a></li>
-                    <li><a id="close" href="">close</a></li>
-                </ul>
-            </div>
-
-            <!-- Loader -->
-
-            <div class="overlay"></div>
-
-            <!-- Popup Container -->
-            <div id="popup_container" class="reveal-modal small" >
-            </div>
-			<!-- Navigation panel -->
-			<nav id="nav_panel" class="hide">
-			<div class="logo">Logo</div>
-			<div class="module_title">Automoile Engineering</div>
-			
-			<div class="tabs">
-				<span id="lec" class="tab tab-lecture-plan">Lecture Plan</span>
-				<span id="tut" class="tab tab-tutorials">Tutorials</span>
-				<span id="sec" class="tab tab-search">Search</span>
-			</div>
-			<div class="comp-title">For Dragonfly Education</div>
-			<div class="comp-details"></div>
-			<div id="lec_acc_container" class="acc-container lecture-container hide"></div>
-			<div id="tut_acc_container" class="acc-container tutorials-container hide"></div>
-			<div id="sec_acc_container" class="acc-container search-container hide">
-				<div id="search_panel_container">
-					<span class="left search-wrapper">
-						<input id="input_search"/>
-					</span>
-					<span class="left">
-						<button id="btn_search"></button>
-					</span>
+				<!-- Logger -->
+				<div id="logger" class="hide" style="display:none;">
+					<h1 id="log_title">Debugger</h1>
+					<p id="log_body"></p>
+					<ul id="log_nav">
+						<li><a id="minimize" href="">minimize</a></li>
+						<li><a id="maximize" href="">maxmize</a></li>
+						<li><a id="close" href="">close</a></li>
+					</ul>
 				</div>
-				<div id="search_results_container">
-				</div>
-			</div>
-			<div id="cat">
-				<a href="#" id="btnDEF" class="cat-btn def disabled">DEF</a>
-				<a href="#" id="btnDIA" class="cat-btn dia disabled">DIA</a>
-				<a href="#" id="btnDER" class="cat-btn der der_st disabled">DER</a>
-				<a href="#" id="btnAPP" class="cat-btn app app_st disabled">APP</a>
-			</div>
-			<div class="total-duration"><span class="left">Total Duration:</span><span class="right total-time"></span></div>
-			</nav>
-			<!-- The UI Top Band gets appended here -->
-				<div id="nav_header">
-					<span class="title">Title</span>
-					<span class="type">Type</span>
-				</div>
-            <!-- AJAX Page Wrapper -->
-            <div id="content_wrapper">
-                <section id="content" role="main" aria-live="polite" tabindex="-1">
-                    <!-- The Page Content gets loaded here -->
-                </section>
-               </div>
-             <!-- The UI Bottom Band gets appended here -->
-				<div id="nav_footer">
-					<button id="btn_play" type="button" class="ui-skin tis-btn ui-audio-panel-btn ui-play-btn disabled"></button>
-       				<button id="btn_replay" type="button" class="ui-skin tis-btn ui-audio-panel-btn ui-replay-btn disabled"></button>
-					<button id="btnPrev" class="ui-skin text-hide btn tis-btn disabled">Back</button>
-					<button id="btnNext" class="ui-skin text-hide btn tis-btn disabled">Next</button>
+				<!-- Loader -->
+				<div class="overlay"></div>
+				<!-- Popup Container -->
+				<div id="popup_container" class="reveal-modal small" ></div>
+				<!-- Navigation panel -->
+				<nav id="nav_panel" class="hide">
+					<div class="logo">Logo</div>
+					<div class="module_title">Automoile Engineering</div>
+					
+					<div class="tabs">
+						<span id="lec" class="tab tab-lecture-plan">Lecture Plan</span>
+						<span id="tut" class="tab tab-tutorials">Tutorials</span>
+						<span id="sec" class="tab tab-search">Search</span>
+					</div>
+					<div class="comp-title">For Dragonfly Education</div>
+					<div class="comp-details"></div>
+					<div id="lec_acc_container" class="acc-container lecture-container hide"></div>
+					<div id="tut_acc_container" class="acc-container tutorials-container hide"></div>
+					<div id="sec_acc_container" class="acc-container search-container hide">
+						<div id="search_panel_container">
+							<span class="left search-wrapper">
+								<input id="input_search"/>
+							</span>
+							<span class="left">
+								<button id="btn_search"></button>
+							</span>
+						</div>
+						<div id="search_results_container">
+						</div>
+					</div>
+					<div id="cat">
+						<a href="#" id="btnDEF" class="cat-btn def disabled">DEF</a>
+						<a href="#" id="btnDIA" class="cat-btn dia disabled">DIA</a>
+						<a href="#" id="btnDER" class="cat-btn der der_st disabled">DER</a>
+						<a href="#" id="btnAPP" class="cat-btn app app_st disabled">APP</a>
+					</div>
+					<div class="total-duration clearfix"><span class="left">Total Duration:</span><span class="right total-time"></span></div>
+				</nav>
+				<div id="content_area">
+					<!-- The UI Top Band gets appended here -->
+					<div id="nav_header">
+						<span class="title">Title</span>
+						<span class="type">Type</span>
+					</div>
+					<!-- AJAX Page Wrapper -->
+					<div id="content_wrapper">
+						<section id="content" role="main" aria-live="polite" tabindex="-1">
+							<!-- The Page Content gets loaded here -->
+						</section>
+					</div>
+					<!-- The UI Bottom Band gets appended here -->
+					<div id="nav_footer">
+						<button id="btnPrev" class="ui-skin text-hide btn tis-btn">Back</button>
+						<button id="btnNext" class="ui-skin text-hide btn tis-btn">Next</button>
+					</div> 
+					<div id="footer_bg">
+					</div> 
 				</div> 
             </div>
         </div>
