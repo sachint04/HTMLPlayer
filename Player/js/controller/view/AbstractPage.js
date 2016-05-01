@@ -243,7 +243,7 @@ define([
 			// ** Create a Swiffy Controller
 			if(!this.oSwiffyController){
 				this.oSwiffyController = null;
-		//		this.oSwiffyController = new SwiffyController();
+				this.oSwiffyController = new SwiffyController();
 			}
 		}
 		// ** Register the Audio Panel & Swiffy object with the Swiffy Controller

@@ -82,3 +82,32 @@
 .ui-widget-content a {
     color: #333333;
 }
+/*.ui-audio-panel .volume-icon {*/
+.ui-audio-panel .volume-cntrl {
+	position: absolute;
+    z-index: 0;
+    background-position:  -306px -2px;
+    width: 124px;
+	height: 30px;
+    right: 45px;
+    top: 7px;
+}
+.ui-skin.volume-icon.unmute,
+.ui-skin.volume-icon.mute {
+    background-position:  -306px -2px;
+	width: 30px;
+	height: 30px;
+    position: relative;
+    left: 3px;
+    top: 0px;
+    display: inline-block;
+}
+.ui-skin.volume-icon.hover {
+    background-position:  -306px -37px;
+}
+.ui-skin.volume-icon.unmute {
+    background-position: -306px -72px;
+}
+.ui-skin.volume-icon.unmute.hover {
+    background-position: -306px -107px;	
+}

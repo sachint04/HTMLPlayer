@@ -156,16 +156,18 @@ define([
 		this.panel.find('.tabs .tab').removeClass('selected');
 		this.panel.find('.acc-container').addClass('hide')
 		this.panel.find('#'+ sID+'_acc_container').removeClass('hide');
+		
 		if(sID == 'lec'){	
 			this.selectedComponent = this.oLecturePlan;
 			sType 		= 'Lectures';
 			sLabel 		= 'Lecture Plan';
 			str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
+			this.selectedComponent.setSelectedPage();
 		}else if(sID == 'tut'){
 			this.selectedComponent = this.oTutorials;
 			sLabel 		= 'Tutorials';
 			sType 		= 'Tutorials';
-			
+			this.selectedComponent.setSelectedPage();			
 		}else{
 			sLabel 		= 'Search';
 			sType 		= 'Search';
@@ -189,6 +191,8 @@ define([
 	
 	NavController.prototype.showSplash = function(p_sType){
 		this.updateHeaderState();
+		this.updateFooterState();
+		this.enableCatButtons(false);
 		this.sCurrentTopic = p_sType;
 		CourseController.loadPage('splash', 'splash', false);
 		//console.log("show Splash");		
@@ -266,7 +270,14 @@ define([
 		this.header.find('.title').html(this.getBoardName());
 		this.header.find('.type').html(filterPageType.call(this, p_oData._Type));
 	}
-	NavController.prototype.updateFooterState = function(){
+	NavController.prototype.updateFooterState = function(p_oData){
+		if(!p_oData){
+			this.footer.find('#btnPrev').addClass('disabled');
+			this.footer.find('#btnNext').addClass('disabled');
+			return;	
+		}
+			this.footer.find('#btnPrev').removeClass('disabled');
+			this.footer.find('#btnNext').removeClass('disabled');
 		if(this.hasPreviousPage()){
 			this.$prev.removeClass('disabled');	
 		}else{

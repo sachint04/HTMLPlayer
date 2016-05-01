@@ -258,15 +258,21 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 			return null;
 			
 		if (this.sSectionTitle == "Board") {
-			var aTarget = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
-			for (var i = 0; i < aTarget.length; i++) {
-				var oTarget = aTarget[i];
-				if (p_oTarget._ID === oTarget._ID) {
-					this._selectedPageIndex = i;
-					break;
-				}
-			};
+			if(p_oTarget){
+				var aTarget = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
+				for (var i = 0; i < aTarget.length; i++) {
+					var oTarget = aTarget[i];
+					if (p_oTarget._ID === oTarget._ID) {
+						this._selectedPageIndex = i;
+						break;
+					}
+				};
+			}else{
+				this.$panel.find('.selected').removeClass('selected');
+				this._selectedPageIndex = 0;
+			}
 		}else{
+			this.$panel.find('.selected').removeClass('selected');
 			this._selectedPageIndex = 0;
 		}
 	};

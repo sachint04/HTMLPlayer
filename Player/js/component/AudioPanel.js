@@ -243,14 +243,13 @@ define([
 			if(sItemId.indexOf('pause') > -1){this.$pauseBtn = $elem; sEventToDispatch = this.oEventDS.pause;}
 			if(sItemId.indexOf('replay') > -1){this.$replayBtn = $elem; sEventToDispatch = this.oEventDS.replay;}
 			if(sItemId.indexOf('stop') > -1){this.$stopBtn = $elem; sEventToDispatch = this.oEventDS.stop;}
-			if(sItemId.indexOf('mute') > -1 && sItemId.indexOf('unmute') < 0){this.$muteBtn = $elem; sEventToDispatch = this.oEventDS.mute;}
-			if(sItemId.indexOf('unmute') > -1){this.$unmuteBtn = $elem; sEventToDispatch = this.oEventDS.unmute;}
-			if(sItemId.indexOf('transcript') > -1){this.$transcriptBtn = $elem; sEventToDispatch = this.oEventDS.transcript;}
-
+			// if(sItemId.indexOf('mute') > -1 && sItemId.indexOf('unmute') < 0){this.$muteBtn = $elem; sEventToDispatch = this.oEventDS.mute;}			// if(sItemId.indexOf('unmute') > -1){this.$unmuteBtn = $elem; sEventToDispatch = this.oEventDS.unmute;}			if(sItemId.indexOf('transcript') > -1){this.$transcriptBtn = $elem; sEventToDispatch = this.oEventDS.transcript;}
+		
 			$elem.on('click', function(e) {
 	            oScope.handleUIEvents(e, this, sEventToDispatch);
 	        });
 		}
+			
 
 		if(sItemType === 'SLIDER'){
 			if(sItemId.indexOf('playhead_seek') > -1){
@@ -351,10 +350,23 @@ define([
 		this.$pauseBtn.addClass('hide');
 		this.nVolumeLevel = AudioManager.getVolume();
 		this.$volumeSlider.slider("value", this.nVolumeLevel);
+		this.addMuteEvents();
 		//this.$volumeSlider.trigger('stop');
 		//this.$unmuteBtn.addClass('hide');
 	};
 
+	AudioPanel.prototype.addMuteEvents						= function() {
+		var oScope = this;
+		this.$muteBtn 		= $('.ui-skin.volume-cntrl .mute'); 
+		this.$unmuteBtn 	= $('.ui-skin.volume-cntrl .unmute');
+		
+		this.$muteBtn.on('click', function(e) {
+            oScope.handleUIEvents(e, this, 'MUTE');
+        });
+		this.$unmuteBtn.on('click', function(e) {
+            oScope.handleUIEvents(e, this, 'UNMUTE');
+        });	
+	}
 	AudioPanel.prototype.handleUIEvents						= function(p_oEvent, p_domBtn, p_sEventToDispatch) {
 		//console.log('AudioPanel.handleUIEvents() | \n\tp_sEventToDispatch = '+p_sEventToDispatch/*+' : '+p_oEvent.type+' : Target = '+p_oEvent.target+' : Curr Target = '+p_oEvent.currentTarget*/);
 		if(p_oEvent.type !== 'slidechange' && p_oEvent.type !== 'slidestart' && p_oEvent.type !== 'slideend'){
@@ -381,12 +393,16 @@ define([
                         // DOES NOT work on iPad, hence used "setVolume"
                         AudioManager.mute(true);
                         AudioManager.setVolume(0);
+                        this.$muteBtn.addClass('hide');
+                        this.$unmuteBtn.removeClass('hide');
 				        break;
 					}
 					case 'UNMUTE':{
 						// DOES NOT work on iPad, hence used "setVolume"
                         AudioManager.mute(false);
                         AudioManager.setVolume(this.nVolumeLevel);
+                        this.$muteBtn.removeClass('hide');
+                        this.$unmuteBtn.addClass('hide');
 				        break;
 					}
 					case 'PLAYHEAD_SEEK_START':{
