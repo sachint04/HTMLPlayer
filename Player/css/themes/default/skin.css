@@ -212,5 +212,36 @@ body{
 /* Splash Page */
 .splash-page {
     position: relative;
-    top: -28px;
 }
+.splash-page .top {
+    height: 77px;
+    background-color: #49728C;
+    text-align: center;
+    width: 100%;
+    margin: 0px auto;
+    padding:10px;
+    position:relative;
+	display:inline-block;
+}
+.splash-page .stream-title {
+    color: #fff;
+    font-size: 2.3em;
+    height: 32px;
+    display: inline-block;
+    position: relative;
+    border-bottom: 1px solid #fff;
+    text-transform: uppercase;
+    margin: 0px !IMPORTANT;
+    position: relative;
+    width: 100%;
+}
+
+.splash-page .topic-title {
+    color: #fff;
+    font-size: 1.3em;
+    height: 22px;
+    /* border: 1px solid; */
+    position: relative;
+    margin: 0px;
+    padding-top: 5px;
+ }

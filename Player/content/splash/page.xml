@@ -1,6 +1,3 @@
-<data >
-	<text id="question" class="question">
-		<![CDATA[Welcome]]>
-	</text>
-	
+<data pageType="splash">
+	<component type="Splash" componentID="Splash"></component>	
 </data>

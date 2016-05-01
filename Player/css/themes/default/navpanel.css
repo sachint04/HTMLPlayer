@@ -84,10 +84,10 @@
 	float: left;
 }
 #nav_panel .logo {
-	display: block;
+	background-position:0 -109px;
+	width: 254px;
 	height: 45px;
-	width: 100%;
-	border: 1px solid;
+	display: inline-block;
 }
 #nav_panel .tabs {
 	display: inline-block;
@@ -193,9 +193,13 @@
 	color: #CBCBCB;
 }
 #nav_panel .acc-container {
-	height: 330px;
+	height: 326px;
 	overflow-y: scroll;
 	border: 2px solid #333333;
+}
+#nav_panel .acc-container.search-container {
+	height: 350px;
+	
 }
 #nav_panel .board-container {
 }
@@ -307,11 +311,20 @@
 }
 #btn_search {
     background-image: url("../../../images/spritesheet.png");
-    background-position-x: -445px;
+    background-position-x: -174px;
+	width: 23px;
+	height: 21px;
     background-color: transparent;
-    width: 25px;
-    height: 25px;
     border: 0;
+    margin-left:5px;
+    margin-top:1px;
+}
+#btn_search.hover {
+    background-position-x: -174px;	
+}
+#search_panel_container {
+    display: inline-block;
+    width: 100%;
 }
 .search-wrapper {
     width: 85%;

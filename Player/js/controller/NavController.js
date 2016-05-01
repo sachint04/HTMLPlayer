@@ -19,6 +19,7 @@ define([
 		this.oSearch;
 		this.jsonXMLData = null;
 		this.selectedComponent = null;
+		this.sCurrentTopic ="";
 		this.handleAccEvents  = this.handleAccEvents.bind(this);
 	};
 
@@ -145,9 +146,11 @@ define([
 		this.loadPage(oTarget);
 	};
 	NavController.prototype.onTabClicked = function(e){
+		e.preventDefault();
 		var $target = $(e.currentTarget),
 			sID 	= $target.attr('id'),
 			sType	= '',
+			sLabel = '',
 			str;
 		if($target.hasClass('selected'))return;
 		this.panel.find('.tabs .tab').removeClass('selected');
@@ -156,12 +159,16 @@ define([
 		if(sID == 'lec'){	
 			this.selectedComponent = this.oLecturePlan;
 			sType 		= 'Lectures';
+			sLabel 		= 'Lecture Plan';
 			str = '<span class="left">Total'+ sType+':'+ nBoard+'</span><span class="right">Total Topics:'+nPage +'</span>';
 		}else if(sID == 'tut'){
 			this.selectedComponent = this.oTutorials;
+			sLabel 		= 'Tutorials';
 			sType 		= 'Tutorials';
 			
 		}else{
+			sLabel 		= 'Search';
+			sType 		= 'Search';
 			//this.selectedComponent = this.oSearch;
 		}
 		if(sID == 'lec' || sID == 'tut'){
@@ -177,8 +184,15 @@ define([
 		this.panel.find('.total-time').html(this.selectedComponent.getTotalClockTime())
 		
 		$target.addClass('selected');
+		this.showSplash(sLabel)
 	}
 	
+	NavController.prototype.showSplash = function(p_sType){
+		this.updateHeaderState();
+		this.sCurrentTopic = p_sType;
+		CourseController.loadPage('splash', 'splash', false);
+		//console.log("show Splash");		
+	}
 	NavController.prototype.loadPage = function(p_oData){
 		var sFile 		= p_oData._FileName,
 		nTotalFrames	= p_oData._TotalFrame,
@@ -244,6 +258,11 @@ define([
 		this.selectedComponent.setSelectedPage(p_oData)
 	}
 	NavController.prototype.updateHeaderState = function(p_oData){
+		if(!p_oData){
+			this.header.addClass('hide');
+			return;	
+		}
+		this.header.removeClass('hide');
 		this.header.find('.title').html(this.getBoardName());
 		this.header.find('.type').html(filterPageType.call(this, p_oData._Type));
 	}

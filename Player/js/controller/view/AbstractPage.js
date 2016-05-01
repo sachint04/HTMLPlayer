@@ -32,7 +32,8 @@ define([
             applicationpanel : 'component/ApplicationPanel',
             applicationpanelstatic : 'component/ApplicationPanelStatic',
             quizpanel		: 'component/QuizPanel',
-            tutnumpanel		: 'component/TutNumPanel'
+            tutnumpanel		: 'component/TutNumPanel',
+            splash		: 'component/Splash'
         };
 
         this.bActivityLoaded = null;
@@ -177,6 +178,9 @@ define([
                 if (sComponentType === 'TUTNUMPANEL') {
                     createComponent.call(this, this.oComponentClassPath.tutnumpanel, oComponent);
                 }
+                if (sComponentType === 'SPLASH') {
+                    createComponent.call(this, this.oComponentClassPath.splash, oComponent);
+                }
             }
         } else {
             this.bComponentsLoaded = true;
@@ -239,7 +243,7 @@ define([
 			// ** Create a Swiffy Controller
 			if(!this.oSwiffyController){
 				this.oSwiffyController = null;
-				this.oSwiffyController = new SwiffyController();
+		//		this.oSwiffyController = new SwiffyController();
 			}
 		}
 		// ** Register the Audio Panel & Swiffy object with the Swiffy Controller
