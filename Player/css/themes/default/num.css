@@ -17,10 +17,10 @@
 	overflow-y:hidden;
 }
 .tut-num-container .question{
-	height:20%;
+	height:15%;
 }
 .tut-num-container #answer, .tut-num-container #steps {
-	height: 80%;
+	height: 85%;
 	width: 100%;
 	overflow-y:auto;
 }
