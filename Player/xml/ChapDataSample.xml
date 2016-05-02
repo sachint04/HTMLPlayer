@@ -5,7 +5,7 @@
 		<!-- AE XML For GGI University -->
 		<!--Lecture 1-->
 		<Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile" ID="1" sort="1" ChapName="Working Cycles of Engine">
-			<Board SubHeading="" ID="2" sort="1" BoardName="Sample Topic with a very very very very very very very very very long name" Type="Normal">
+			<Board SubHeading="" ID="2" sort="1" BoardName="Sample Topic" Type="Normal">
 				<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>
 				<Target Type="DEF" TotalFrame="3224" FileName="ME_EG_CON_U1_B3"/>
 			</Board>

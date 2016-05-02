@@ -1,7 +1,7 @@
 /* Tutorials Numeral component */
 
 .tut-num-container {
-	padding: 10px;
+	padding: 10px 0px;
 	height: 495px;
 	position: relative;
 	background: #e1ffff; /* Old browsers */
@@ -17,21 +17,19 @@
 	overflow-y:hidden;
 }
 .tut-num-container .question{
-	height:25%;
+	height:20%;
 }
 .tut-num-container #answer, .tut-num-container #steps {
-	height: 470px;
+	height: 80%;
 	width: 100%;
+	overflow-y:auto;
 }
 .tut-num-container #answer {
 	display: none;
-	height: 100%;
 }
 
 .tut-num-container #steps {
 	display: none;
-/*	overflow-y: auto;*/
-	height:auto;
 }
 
 .tut-num-container #answer img {

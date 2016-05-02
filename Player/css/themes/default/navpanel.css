@@ -268,17 +268,14 @@
 	/*height:50px;*/
 }
 #nav_panel .cat-btn {
-    /* width: 3em; */
     display: inline-block;
-    /* height: 2.5em; */
     border: 3px solid gray;
     padding: 5px 10px;
     text-align: center;
     border-radius: 0.5em;
-    /* vertical-align: middle; */
     color: gray;
     text-decoration: none;
-    margin-left: 0.6em;
+    margin-left: 0.5em;
     line-height: 100%;
 }
 #nav_panel .cat-btn.active {
