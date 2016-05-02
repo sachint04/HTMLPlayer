@@ -369,6 +369,7 @@
 }
 #nav_footer #btnPrev.disabled{
 	background-position: -207px -73px;
+	cursor:default;
 }
 #nav_footer #btnNext{
 	left: 130px;
@@ -378,6 +379,7 @@
 	background-position:  -245px -37px;
 }
 #nav_footer #btnNext.disabled{
+	cursor:default;
 	background-position:  -245px -73px;
 }
 /* End */

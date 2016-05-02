@@ -85,7 +85,7 @@ define([
 	
 	NavController.prototype.showBoardContent = function(){
 		var aType = this.selectedComponent.getPageTypeList();
-		if(aType && aType.length != undefined ){
+		if(aType && aType.length != undefined && aType.length > 0){
 			this.enableCatButtons(false);
 			for (var i=0; i < aType.length; i++) {
 				this.enableCatButtons(true, aType[i].toLowerCase());
@@ -238,23 +238,18 @@ define([
 				e.preventDefult();
 			}
 			if($(this).hasClass("disabled"))return;
-//			var oData =	oScope.loadNext();
 			if(oScope.selectedComponent){
 				oScope.selectedComponent.selectBoard("next");				
 			}
-			
-//			if(oData)oScope.updatePanelState(oData);			
 		});
 		this.$prev.click(function(e){
 			if(e.preventDefult){
 				e.preventDefult();
-			}
-			if($(this).hasClass("disabled"))return;
-			//var oData = oScope.loadPrevious();
+			}			if($(this).hasClass("disabled"))return;
+
 			if(oScope.selectedComponent){
 				oScope.selectedComponent.selectBoard("prev");
 			}
-//			if(oData)oScope.updatePanelState(oData);			
 		});
 	};
 	
@@ -278,16 +273,16 @@ define([
 		}
 			this.footer.find('#btnPrev').removeClass('disabled');
 			this.footer.find('#btnNext').removeClass('disabled');
-		if(this.hasPreviousPage()){
+		if(this.hasPrevBoard()){
 			this.$prev.removeClass('disabled');	
 		}else{
 			this.$prev.addClass('disabled');				
 		};
 			
-		if(this.hasNextPage()){
+		if(this.hasNextBoard()){
 			this.$next.removeClass('disabled');				
 		}else{
-			this.$next.removeClass('disabled');							
+			this.$next.addClass('disabled');							
 		};	
 	}
 	
@@ -324,6 +319,21 @@ define([
 		var result = null;
 		if(this.hasNextPage()){
 			result = this.selectedComponent.getPageList()[this.selectedComponent.getSelectedPageIndex() +1];
+		}
+		return result;
+	}
+	
+	NavController.prototype.hasNextBoard = function(){
+		var result = null;
+		if(this.selectedComponent){
+			result = (this.selectedComponent.hasNextBoard())
+		}
+		return result;
+	}
+	NavController.prototype.hasPrevBoard = function(){
+		var result = null;
+		if(this.selectedComponent){
+			result = (this.selectedComponent.hasPrevBoard())
 		}
 		return result;
 	}

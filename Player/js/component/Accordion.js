@@ -177,25 +177,22 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 			if (e.preventDefault) {
 				e.preventDefault();
 			};
-			oScope.onBoardClicked(e)
 			oScope.$selectedElem = $(this);
+			oScope.onBoardClicked(e)
 		});
 		return $elem;
 	};
 
 	Accordion.prototype.createTut = function(p_sSectionID, p_sBoardID, p_sNum, p_sBoardName) {
 		var oScope = this, str = '<div id="board_' + p_sSectionID + '_' + p_sBoardID + '" class="acc-board">' + '<span class="acc-board-num">' + p_sNum + ' </span>' + '<span class="acc-board-title">' + p_sBoardName + '</span>' + '<span class="DEF"><span>' + '<span class="DIA"><span>' + '<span class="DER"><span>' + '<span class="APP"><span>' + '</div>';
-
 		var $elem = $(str);
-
 		$elem.click(function(e) {
 			if (e.preventDefault) {
 				e.preventDefault();
 			}
-			oScope.onBoardClicked(e);
 			oScope.$selectedElem = $(this);
+			oScope.onBoardClicked(e);
 		});
-
 		return $elem;
 	};
 
@@ -262,7 +259,8 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 				var aTarget = (this.oBoard.Target.length != undefined) ? this.oBoard.Target : [this.oBoard.Target];
 				for (var i = 0; i < aTarget.length; i++) {
 					var oTarget = aTarget[i];
-					if (p_oTarget._ID === oTarget._ID) {
+					var attr = (p_oTarget._ID)?'_ID' : '_Type';
+					if (p_oTarget[attr] === oTarget[attr]) {
 						this._selectedPageIndex = i;
 						break;
 					}
@@ -272,7 +270,7 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 				this._selectedPageIndex = 0;
 			}
 		}else{
-			this.$panel.find('.selected').removeClass('selected');
+			// this.$panel.find('.selected').removeClass('selected');
 			this._selectedPageIndex = 0;
 		}
 	};
@@ -370,19 +368,83 @@ define(['jquery', 'component/AbstractComponent', 'util/EventDispatcher'], functi
 	}
 	
 	Accordion.prototype.selectBoard = function(p_dir) {
-			var $elem;
+			var $elem,sID,$parent,$chap,nIndex,nextID;
 		if(p_dir.toLowerCase() === "next"){
-			$elem = this.$selectedElem.next();
+			$elem = this.$selectedElem.next('.acc-board');
+			if($elem.length === 0){
+				$parent = this.$selectedElem.parent().prev();
+				sId 	= $parent.attr('id');
+				nIndex	= Number(sId);
+				nextID	= nIndex + 1;
+				$chap	= this.$panel.find('#'+nextID+'.acc-chap');
+				
+				if($chap.length > 0){
+					if(!$chap.hasClass('open'))$chap.trigger('click');
+					$elem = $chap.next('.board-container').find('.acc-board').eq(0);
+				}
+			}
 		}
 		if(p_dir.toLowerCase() === "prev"){
-			$elem = this.$selectedElem.prev();
+			$elem = this.$selectedElem.prev('.acc-board');
+			if($elem.length === 0){
+				$parent = this.$selectedElem.parent().prev();
+				sId 	= $parent.attr('id');
+				nIndex	= Number(sId);
+				nextID	= nIndex - 1;
+				$chap	= this.$panel.find('#'+nextID+'.acc-chap');
+				
+				if($chap.length > 0){
+					if(!$chap.hasClass('open'))$chap.trigger('click');
+
+					var len = $chap.next('.board-container').find('.acc-board').length;
+					$elem = $chap.next('.board-container').find('.acc-board').eq(len - 1);
+				}
+			}
 		}
 		if($elem.length > 0){
 			$elem.trigger("click");		
+		}else{
+
 		}
 //		this.$selectedElem.next().trigger("click");
 	}
 
+	Accordion.prototype.hasNextBoard = function() {
+		if(!this.$selectedElem)return false;
+		var $elem = this.$selectedElem.next('.acc-board');
+		if($elem.length === 0){
+			$parent = this.$selectedElem.parent().prev(),
+			sId 	= $parent.attr('id'),
+			nIndex	= Number(sId),
+			nextID	= nIndex + 1,
+			$elem	= this.$panel.find('#'+nextID+'.acc-chap');
+			
+			if($elem.length > 0){
+				var sID = '#board_'+nextID+'_1.acc-board';
+				$elem = $elem.next('.board-container').find(sID);
+			}
+		}
+		return $elem.length;
+	};
+	Accordion.prototype.hasPrevBoard = function() {
+		if(!this.$selectedElem)return false;
+		var $elem = this.$selectedElem.prev('.acc-board');
+		if($elem.length === 0){
+			$parent = this.$selectedElem.parent().prev(),
+			sId 	= $parent.attr('id'),
+			nIndex	= Number(sId),
+			nextID	= nIndex - 1,
+			$elem	= this.$panel.find('#'+nextID+'.acc-chap');
+			
+			if($elem.length > 0){
+				var sID = '#board_'+nextID+'_1.acc-board';
+				$elem = $elem.next('.board-container').find(sID);
+			}
+		}
+		return $elem.length;
+		
+	};
+	
 	Accordion.prototype.bindHandlers = function() {
 		//JSON.stringify('\n \t oCompConfig = '+p_oConfig);
 

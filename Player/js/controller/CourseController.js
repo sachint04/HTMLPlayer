@@ -47,11 +47,11 @@ define([
         if(this.oCurrentPage){
             $('#content').contents().wrapAll('<div id="temp_content"></div>');
 			var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;
-			if(bDrawClonePage){
-				drawClonePageImage.call(this);
-			}else{
+			// if(bDrawClonePage){
+				// drawClonePageImage.call(this);
+			// }else{
 				_loadPage.call(this);
-			}
+			//}
         }else{
             _loadPage.call(this);
         }
