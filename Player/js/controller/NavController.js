@@ -204,7 +204,7 @@ define([
 		
 		if(CourseController){
         	 this.selectedComponent.setSelectedPage(p_oData);
-        	CourseController.loadPage(sFile, sType);
+        	CourseController.loadPage(sFile, sType, false);
 			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
 		
