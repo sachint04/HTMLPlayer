@@ -14,7 +14,14 @@ define([
     'use strict';
 
     function CourseController(){
+    	this.sCurrentPage;
         this.oCurrentPage = null;
+	
+	this.sPage_1 = 'content';
+	this.oPage_1;
+	
+	this.sPage_2 = 'content_1';
+	this.oPage_2;		
         Constants.setLanguage('en');
 		
         this.onPageLoaded = onPageLoaded.bind(this);
@@ -39,17 +46,37 @@ define([
 
         //this.loadPage('ME_MP_DEF_U6_B1');
     }
-
+	
+	function getCurrentPageId(){
+		var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_1 : this.sPage_2;
+		return sPageId;
+	}
+	function swapPageHolder(){
+		var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_2 : this.sPage_1;
+		return sPageId;
+	}
+	
+	function getCurrentPageObject(){
+		var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_1 : this.oPage_2;
+		return oPage;
+	}
+	function swapPageObject(){
+		var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_2 : this.oPage_1;
+		return oPage;
+	}
+	
     CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage){
         console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
         Constants.setCurrentPageName(p_sFolderName);
 		Constants.setCurrentPageType(p_sPageType);
         if(this.oCurrentPage){
-            $('#content').contents().wrapAll('<div id="temp_content"></div>');
+			this.oCurrentPage.invalidate();
+			var sCurrentPageId = getCurrentPageId.call(this);
+            $('#'+sCurrentPageId).contents().wrapAll('<div id="temp_content"></div>');
 			var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;
-			// if(bDrawClonePage){
-				// drawClonePageImage.call(this);
-			// }else{
+			/*if(bDrawClonePage){
+				drawClonePageImage.call(this);
+			}else{*/
 				_loadPage.call(this);
 			//}
         }else{
@@ -80,26 +107,33 @@ define([
         });
     }
     function _loadPage(){
-		var sFolderName = Constants.getCurrentPageName();
-        var oResources = {
-            html: 'content/' + sFolderName + '/page.html',
-            xml: 'content/' + sFolderName + '/page.xml'/*,
-            // ** CSS can be removed if required as Swiffy Page doesnt require CSS
-            css: 'content/' + sFolderName + '/page.css'*/
-        };
-		//console.log(JSON.stringify(oResources));
-        if(this.oCurrentPage) {
-            this.oCurrentPage.destroy();
-			this.oCurrentPage = null;
-        }
-        this.oCurrentPage = new AbstractPage();
-        this.oCurrentPage.addEventListener('PAGE_LOADED', this.onPageLoaded);
-        this.oCurrentPage.init($('#content'), oResources, sFolderName);
+	var sFolderName = Constants.getCurrentPageName(),
+            oResources = {
+                html: 'content/' + sFolderName + '/page.html',
+                xml: 'content/' + sFolderName + '/page.xml'/*,
+                // ** CSS can be removed if required as Swiffy Page doesnt require CSS
+                css: 'content/' + sFolderName + '/page.css'*/
+            },
+            sNextPageHolderId = swapPageHolder.call(this),
+            oNextPageHolder = swapPageObject.call(this);
+	//console.log(JSON.stringify(oResources));	
+	AudioManager.destroyPlayList();
+		
+        oNextPageHolder = new AbstractPage();
+        oNextPageHolder.addEventListener('PAGE_LOADED', this.onPageLoaded);
+        oNextPageHolder.init($('#'+sNextPageHolderId), oResources, sFolderName);
     }
+	
     function onPageLoaded(data){
         //console.log('CourseController.onPageLoaded() | ');
-		$('#content').children('#temp_content').remove();
+		var sPrevPageHolderId = getCurrentPageId.call(this),
+			oPrevPage = getCurrentPageObject.call(this);
+		
+		if(sPrevPageHolderId){$('#'+sPrevPageHolderId).children('#temp_content').remove();}
+		if(oPrevPage){oPrevPage.hide(true); oPrevPage.destroy(); oPrevPage = null;}
+		this.sCurrentPage = swapPageHolder.call(this);
 		this.oCurrentPage = data.currentTarget;
+		this.oCurrentPage.hide(false);
 		$('#loader').addClass('hide');
 		$('.overlay').addClass('hide');
     }

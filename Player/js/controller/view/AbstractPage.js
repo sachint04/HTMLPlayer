@@ -58,6 +58,13 @@ define([
         //Constants.setCurrentPageName(p_sPageName);
         loadResources.call(this, p_oResources);
     };
+	AbstractPage.prototype.hide = function(p_bHide){
+		if(p_bHide){
+			$(this.$domView.parent()).addClass('hide');
+		}else{
+			$(this.$domView.parent()).removeClass('hide');
+		}
+	}
 	/*AbstractPage.prototype.refreshAudioData = function(){
 		AudioManager.destroyPlayList();
 		parseSoundsNode.call(this);
@@ -211,7 +218,7 @@ define([
         var oScope = this,
             Component = p_oComponentClass,
             sComponentID = p_oComponent._componentID,
-            oComponent = new Component();
+            oComponent = (typeof Component === "object") ? Component : new Component();
 
         //oCompConfig['componentID'] = sComponentID;
         oCompConfig['componentUID'] = this.sGUID + '|' + sComponentID;
@@ -292,12 +299,43 @@ define([
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded && this.bAudiosLoaded){
         //if(this.bActivityLoaded && this.bComponentsLoaded && this.bPageAssetsLoaded){
         if(this.bComponentsLoaded){
+			stackComponentsToMaintainDestroyOrder.call(this);
             //this.setContent();
             this.$domView.fadeIn().removeClass('hide').focus();
             // ** Call a Concrete class method to do its stuff and dispatch the 'PAGE_LOADED' event
             this.initialize();
         }
     };
+	function stackComponentsToMaintainDestroyOrder(){
+		if(!this.aComponents){return;}
+		var aTemp = [],
+			nLength = this.aComponents.length,
+			i;
+		for (i=0; i < nLength; i++) {
+			var oComponent = this.aComponents[i];
+			if(aTemp.length > 0){
+				aTemp.push(oComponent);
+				continue;
+			}
+			if(oComponent.toString() === 'component/SwiffyWidget'){
+				aTemp[0] = oComponent;
+				this.aComponents.splice(i, 1);
+				nLength = this.aComponents.length;
+				i = -1;
+				//debugger;
+			}
+		};
+		this.aComponents = aTemp;
+		//debugComponentStack.call(this);
+	}
+	function debugComponentStack(){
+		var i;
+		if(this.aComponents){
+	        for (i=0; i < this.aComponents.length; i++) {
+				console.log('Component['+i+'] = '+this.aComponents[i].toString());
+	        }
+        }
+	}
 
     // ** Stub Method to be implemented in the Final Page Class
     AbstractPage.prototype.initialize                       = function(){
@@ -308,11 +346,29 @@ define([
         this.$domView.focus();
     };
 
+	AbstractPage.prototype.invalidate = function(){
+		var i;
+		if(this.aComponents){
+	        for (i=0; i < this.aComponents.length; i++) {
+	            this.aComponents[i].invalidate();
+	        }
+        }
+		/*if(this.oQuizController){
+        	this.oQuizController.invalidate();
+        }
+        if(this.oTutNumController){
+        	this.oTutNumController.invalidate();
+        }
+        if(this.oSwiffyController){
+        	this.oSwiffyController.invalidate();
+        }*/
+	};
 	AbstractPage.prototype.destroy = function(){
 		var i;
             
         if(this.aComponents){
 	        for (i=0; i < this.aComponents.length; i++) {
+				//console.log('DESTROY | '+this.aComponents[i].toString());
 	            this.aComponents[i].destroy();
 	        };
     	    this.aComponents = null;
@@ -329,7 +385,7 @@ define([
         	this.oSwiffyController.destroy();
         	this.oSwiffyController = null;
         }
-		AudioManager.destroyPlayList();
+		//AudioManager.destroyPlayList();
 	}
     AbstractPage.prototype.toString = function(){
         return 'controller/view/AbstractPage';

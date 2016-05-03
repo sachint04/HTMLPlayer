@@ -17,7 +17,7 @@ define([
 		this.aSwiffyFrameMap;
 		this.bAudioListenersAdded;
 		this.sLastPlayedAudio;
-		this.nPositionUpdate;
+		this.nPositionUpdate = null;
 		this.bAudioComplete;
 		//** NOT_STARTED | IN_PROGRESS | PAUSED | COMPLETED
 		this.bPlaying;
@@ -31,6 +31,7 @@ define([
 		this.oCueCompleteEventInfo;
 
 		this.handleAudioPanelEvents = handleAudioPanelEvents.bind(this);
+		this.handleSwiffyAPIEvents = handleSwiffyAPIEvents.bind(this);
 
         return this;
     }
@@ -105,10 +106,12 @@ define([
             var oScope = this;
             this.nSwiffyReadyInterval = null;
             this.nSwiffyReadyInterval = setInterval(function(){
-                if(oScope.oSwiffy.api != null){
+                if(oScope.oSwiffy.api != null/* && oScope.oSwiffy.api.addedToStage*/){
                     clearInterval(oScope.nSwiffyReadyInterval);
-                    //console.log('SwiffyWidget.initiateSwiffy() | API loaded');
-                    onSwiffyAPILoaded.call(oScope);
+                    console.log('SwiffyWidget.initiateSwiffy() | API loaded');
+					setTimeout(function(){
+						onSwiffyAPILoaded.call(oScope);
+					}, 0);
                 }
             }, 100);
         }else{
@@ -381,33 +384,17 @@ define([
     // Swiffy Listeners
     function addSwiffyAPIListeners(){
         var oScope = this;
-        this.oSwiffy.api.addEventListener("ANIMATION_START", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.addEventListener("ANIMATION_CUE_START", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.addEventListener("ANIMATION_CUE_END", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.addEventListener("ANIMATION_COMPLETE", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
+		this.oSwiffy.api.addEventListener("ANIMATION_START", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.addEventListener("ANIMATION_CUE_START", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.addEventListener("ANIMATION_CUE_END", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.addEventListener("ANIMATION_COMPLETE", this.handleSwiffyAPIEvents);
     }
     function removeSwiffyAPIListeners(){
         var oScope = this;
-        this.oSwiffy.api.removeEventListener("ANIMATION_START", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.removeEventListener("ANIMATION_CUE_START", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.removeEventListener("ANIMATION_CUE_END", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
-        this.oSwiffy.api.removeEventListener("ANIMATION_COMPLETE", function(e){
-            handleSwiffyAPIEvents.call(oScope, e);
-        });
+		this.oSwiffy.api.removeEventListener("ANIMATION_START", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.removeEventListener("ANIMATION_CUE_START", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.removeEventListener("ANIMATION_CUE_END", this.handleSwiffyAPIEvents);
+        this.oSwiffy.api.removeEventListener("ANIMATION_COMPLETE", this.handleSwiffyAPIEvents);
     }
     function handleSwiffyAPIEvents(e){
         var sEventType = e.data.type;
@@ -475,12 +462,15 @@ define([
 
     function addPositionUpdateInterval(){
         var oScope = this;
-        this.nPositionUpdate = setInterval(function(e){
-            onPositionUpdate.call(oScope, e);
-        }, 100);
+		if(this.nPositionUpdate === null){
+			this.nPositionUpdate = setInterval(function(e){
+				onPositionUpdate.call(oScope, e);
+			}, 100);
+		}
     }
     function removePositionUpdateInterval(){
         clearInterval(this.nPositionUpdate);
+		this.nPositionUpdate = null;
     }
     function onPositionUpdate(e){
         //console.log("SwiffyWidget.onPositionUpdate() | "+this.oSwiffy.api.currentFrame+' : totalFrames = '+this.oSwiffy.api.totalFrames);
@@ -605,14 +595,34 @@ define([
         return this.bPlaying;
     };
 
+    SwiffyWidget.prototype.invalidate						= function () {
+		this.oSwiffy.api.stop();
+		AudioManager.stop();
+		removePositionUpdateInterval.call(this);
+		removeSwiffyAPIListeners.call(this);
+		removeAudioPanelListeners.call(this);
+	};
     SwiffyWidget.prototype.destroy						= function () {
     	//console.log('SwiffyWidget.destroy() | ');
     	// Stop any on-going animations
     	removePositionUpdateInterval.call(this);
 		removeSwiffyAPIListeners.call(this);
 		removeAudioPanelListeners.call(this);
+		//this.stop();
+		this.bPlaying = false;
+        this.bAnimationComplete = true;
+        this.bCueAudioComplete = true;
+        this.bCueAnimComplete = true;
+        this.oSeekInfo = null;
 
+        this.oSwiffy.api.stop();
+        this.oSwiffy.api.gotoAndStop(1);
+
+        AudioManager.stop();
+        //AudioManager.clearLastPlayedAudio();
+		
 		this.oSwiffy.destroy();
+
 		
 		this.oSwiffy = null;
 		this.oAudioPanel = null;
@@ -632,6 +642,7 @@ define([
 		this.oCueCompleteEventInfo = null;
 
 		this.handleAudioPanelEvents = null;
+		this.handleSwiffyAPIEvents = null;
 
 		this.prototype		= null;
 
