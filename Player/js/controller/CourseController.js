@@ -17,11 +17,11 @@ define([
     	this.sCurrentPage;
         this.oCurrentPage = null;
 	
-	this.sPage_1 = 'content';
-	this.oPage_1;
-	
-	this.sPage_2 = 'content_1';
-	this.oPage_2;		
+		this.sPage_1 = 'content';
+		this.oPage_1;
+		
+		this.sPage_2 = 'content_1';
+		this.oPage_2;		
         Constants.setLanguage('en');
 		
         this.onPageLoaded = onPageLoaded.bind(this);
