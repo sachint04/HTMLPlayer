@@ -231,6 +231,9 @@ define([
 		//console.log('#### Filtered text = '+sText);
 		return sText;
 	};
+	AbstractComponent.prototype.invalidate						= function() {
+	
+	};
 	/**
 	 * Destroys the Object
 	 */

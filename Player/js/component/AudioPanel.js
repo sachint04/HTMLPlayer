@@ -185,7 +185,7 @@ define([
 	};
     AudioPanel.prototype.init								= function(p_sID, p_oConfig, p_$xmlComponent) {
         //console.log('AudioPanel.init() | p_sID = ' + p_sID + ' : p_oConfig = ' + JSON.stringify(p_oConfig)+' : p_$xmlComponent = '+p_$xmlComponent[0]);
-
+		this.oConfig = {};
 		AbstractComponent.prototype.init.call(this, p_sID, p_oConfig, p_$xmlComponent);
     };
     AudioPanel.prototype.createComponent					= function(){
@@ -342,7 +342,10 @@ define([
 				$elem.find('.ui-slider-handle').off();
 				$elem.off();
 			}
-			$elem.slider( "destroy" );
+			// TODO: A quick fix. Instead check if the slider is initialized before calling destroy
+			try{
+				$elem.slider( "destroy" );
+			}catch(e){}
 		}
 	};
 	AudioPanel.prototype.initialize							= function(p_sType, p_sID, p_$elem, xmlNode){
@@ -772,6 +775,9 @@ define([
 		e.stopPropagation();
 		e.stopImmediatePropagation();
 	};
+    AudioPanel.prototype.invalidate							= function() {
+	
+	};
     AudioPanel.prototype.destroy							= function() {
 		if(this.$xmlData.item){
             if(this.$xmlData.item.length === undefined){this.$xmlData.item = [this.$xmlData.item];}
@@ -781,7 +787,8 @@ define([
                 this.unbindHandlers(aItems[i]);
             }
         }
-		AudioManager.destroyPlayList();
+		this.$xmlData = null;
+		//AudioManager.destroyPlayList();
 		
 		this.$playBtn = null;
         this.$pauseBtn = null;

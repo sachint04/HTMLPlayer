@@ -20,7 +20,7 @@ define([
     }
     SwiffyController.prototype.destroy = function(){
         try{
-            this.oAudioPanel.destroy();
+            //this.oAudioPanel.destroy();
             this.oSwiffyComponent.destroy();
         }catch(e){}
         this.oAudioPanel = null;

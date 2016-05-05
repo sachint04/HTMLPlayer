@@ -16853,13 +16853,18 @@
     var Zp = function(a, b) {
         var c = a.__swiffy_listeners,
             d = x(b);
-        if (c && c[d.type])
-            for (var c = c[d.type], e = 0; e < c.length && !d.ys; e++)
+        if (c && c[d.type]){
+            for (var c = c[d.type], e = 0; e < c.length && !d.ys; e++){
                 if (c[e].rn == d.Ei) try {
                     c[e].listener.call(null, b)
                 } catch (f) {
                     mg(f, !1)
                 }
+			}
+			/* Start - Vincent */
+			if(a.hasOwnProperty('aFrameMap') && d.type === 'addedToStage'){a.addedToStage = true;}
+			/* End - Vincent */
+		}
     };
     U.prototype.removeEventListener = function(a, b, c) {
         var d = this.__swiffy_listeners;
