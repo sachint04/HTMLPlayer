@@ -76,14 +76,13 @@ define([
 			var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;
 			/*if(bDrawClonePage){
 				drawClonePageImage.call(this);
-			}else{*/
-				_loadPage.call(this);
+			}else{*/				_loadPage.call(this);
 			//}
         }else{
             _loadPage.call(this);
         }
     }
-    function drawClonePageImage(){
+    /*function drawClonePageImage(){
         var oScope = this,
             domContent = document.getElementById('temp_content'),
             nContentWidth = domContent.offsetWidth,
@@ -105,9 +104,9 @@ define([
                 _loadPage.call(oScope);
             }
         });
-    }
+    }*/
     function _loadPage(){
-	var sFolderName = Constants.getCurrentPageName(),
+		var sFolderName = Constants.getCurrentPageName(),
             oResources = {
                 html: 'content/' + sFolderName + '/page.html',
                 xml: 'content/' + sFolderName + '/page.xml'/*,
@@ -116,8 +115,8 @@ define([
             },
             sNextPageHolderId = swapPageHolder.call(this),
             oNextPageHolder = swapPageObject.call(this);
-	//console.log(JSON.stringify(oResources));	
-	AudioManager.destroyPlayList();
+		//console.log(JSON.stringify(oResources));	
+		AudioManager.destroyPlayList();
 		
         oNextPageHolder = new AbstractPage();
         oNextPageHolder.addEventListener('PAGE_LOADED', this.onPageLoaded);
@@ -131,9 +130,11 @@ define([
 		
 		if(sPrevPageHolderId){$('#'+sPrevPageHolderId).children('#temp_content').remove();}
 		if(oPrevPage){oPrevPage.hide(true); oPrevPage.destroy(); oPrevPage = null;}
+		
 		this.sCurrentPage = swapPageHolder.call(this);
 		this.oCurrentPage = data.currentTarget;
 		this.oCurrentPage.hide(false);
+		
 		$('#loader').addClass('hide');
 		$('.overlay').addClass('hide');
     }

@@ -231,7 +231,7 @@ define([
 		//console.log('#### Filtered text = '+sText);
 		return sText;
 	};
-	AbstractComponent.prototype.invalidate							= function() {
+	AbstractComponent.prototype.invalidate						= function() {
 	
 	};
 	/**
