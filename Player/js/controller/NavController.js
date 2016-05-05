@@ -20,7 +20,9 @@ define([
 		this.jsonXMLData = null;
 		this.selectedComponent = null;
 		this.sCurrentTopic ="";
-		this.handleAccEvents  = this.handleAccEvents.bind(this);
+		this.oCurrentPage;
+		this.handleAccEvents  	= this.handleAccEvents.bind(this);
+		this.onPageLoad  		= this.onPageLoad.bind(this);
 	};
 
 	NavController.prototype = Object.create(EventDispatcher.prototype);
@@ -202,16 +204,26 @@ define([
 		nTotalFrames	= p_oData._TotalFrame,
 		sType			= filterPageType.call(this, p_oData._Type);
 		
+		this.oCurrentPage = p_oData;
 		if(CourseController){
-        	 this.selectedComponent.setSelectedPage(p_oData);
+			CourseController.addEventListener('PAGE_LOADED', this.onPageLoad)
+        	this.selectedComponent.setSelectedPage(p_oData);
         	CourseController.loadPage(sFile, sType, false);
 			//alert('board click next file name = '+ this.getNextPage()._FileName+ ' | Board name  = '+ this.getBoardName()+' | sType = ' +this.getPageType());	
 		}
 		
-		this.updateFooterState(p_oData);
-		this.updateHeaderState(p_oData);
+		// this.updateFooterState(p_oData);
+		// this.updateHeaderState(p_oData);
 		
 	}
+	
+	NavController.prototype.onPageLoad = function(evt){
+		CourseController.removeEventListener('PAGE_LOADED', this.onPageLoad);
+		
+		this.updateFooterState(this.oCurrentPage);
+		this.updateHeaderState(this.oCurrentPage);
+	}
+	
 	function filterPageType(p_sPageType){
 		var nUnderscoreIndex = p_sPageType.indexOf('_');
 		if(nUnderscoreIndex > -1){

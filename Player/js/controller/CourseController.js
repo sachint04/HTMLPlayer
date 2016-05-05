@@ -9,11 +9,13 @@ define([
     'jquery',
     'core/AudioManager',
     'model/Constants',
-    'controller/view/AbstractPage'
-], function($, AudioManager, Constants, AbstractPage){
+    'controller/view/AbstractPage',
+    'util/EventDispatcher'
+], function($, AudioManager, Constants, AbstractPage,EventDispatcher){
     'use strict';
 
     function CourseController(){
+    	EventDispatcher.call(this);
     	this.sCurrentPage;
         this.oCurrentPage = null;
 	
@@ -27,6 +29,10 @@ define([
         this.onPageLoaded = onPageLoaded.bind(this);
     }
 
+    CourseController.prototype = Object.create(EventDispatcher.prototype)
+	CourseController.prototype.constructor = CourseController;
+    	
+    	
     CourseController.prototype.init = function(){
         console.log('CourseController.init() | ');
         createCourseConfig.call(this);
@@ -65,7 +71,7 @@ define([
 		return oPage;
 	}
 	
-    CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage){
+    CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage, p_fCalla){
         console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
         Constants.setCurrentPageName(p_sFolderName);
 		Constants.setCurrentPageType(p_sPageType);
@@ -137,6 +143,7 @@ define([
 		
 		$('#loader').addClass('hide');
 		$('.overlay').addClass('hide');
+		this.dispatchEvent('PAGE_LOADED', {type:'PAGE_LOADED', target:this, page:this.oCurrentPage});
     }
     function pageDiaplayReady(){
         console.log('CourseController.pageDiaplayReady() | ');
