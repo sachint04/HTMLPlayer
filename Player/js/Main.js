@@ -85,16 +85,20 @@ require.config({
         'jqueryui':{
             deps: ['jquery']
         },
-        'jqueryuitouch':{
+        'jqueryuitouchpunch':{
+            deps: ['jquery', 'jqueryui']
+        },
+		'nosleep':{
             deps: ['jquery']
-        }
+		}
     },
     paths : {
         jquery              : 'libs/jquery-1.11.3.min',
         x2js                : 'libs/xml2json.min',
         sm2                 : 'libs/soundmanager2-jsmin',
         jqueryui            : 'libs/jquery-ui-1.11.3.min',
-        jqueryuitouch       : 'libs/jqueryui_touch',
+        jqueryuitouchpunch  : 'libs/jquery.ui.touch-punch.min',
+        nosleep				: 'libs/NoSleep.min'
     },
     /*baseUrl: "../../js",*/
     callback : init()

@@ -5,7 +5,10 @@
 define([
 ], function(){
     'use strict';
-
+	
+	var oVariables = {
+		nVolumeLevel: 10
+	};
     function Constants(){
         this.sAudioLanguage = null;
         this.oLocationPointer = null;
@@ -42,6 +45,12 @@ define([
     }
     Constants.prototype = {
         constructor: Constants,
+		setVariable: function(sProp, value){
+			oVariables[sProp] = value;
+		},
+		getVariable: function(sProp){
+			return oVariables[sProp];
+		},
         setLanguage: function(p_sLanguage){
             if(p_sLanguage !== 'en' || p_sLanguage !== 'hi'){
                 // ERROR

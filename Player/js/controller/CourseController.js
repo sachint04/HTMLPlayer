@@ -34,12 +34,12 @@ define([
     	
     	
     CourseController.prototype.init = function(){
-        console.log('CourseController.init() | ');
+        //console.log('CourseController.init() | ');
         createCourseConfig.call(this);
     };
 
     function createCourseConfig(){
-        console.log('CourseController.createCourseConfig() | ');
+        //console.log('CourseController.createCourseConfig() | ');
 
         // Add listener to the Course config modle and on its parse complete call the method below
         createUIController.call(this);
@@ -54,21 +54,25 @@ define([
     }
 	
 	function getCurrentPageId(){
-		var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_1 : this.sPage_2;
-		return sPageId;
+		return (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_1 : this.sPage_2;
+		/*var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_1 : this.sPage_2;
+		return sPageId;*/
 	}
 	function swapPageHolder(){
-		var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_2 : this.sPage_1;
-		return sPageId;
+		return (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_2 : this.sPage_1;
+		/*var sPageId = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.sPage_2 : this.sPage_1;
+		return sPageId;*/
 	}
 	
 	function getCurrentPageObject(){
-		var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_1 : this.oPage_2;
-		return oPage;
+		return (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? 'oPage_1' : 'oPage_2';
+		/*var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_1 : this.oPage_2;
+		return oPage;*/
 	}
 	function swapPageObject(){
-		var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_2 : this.oPage_1;
-		return oPage;
+		return (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? 'oPage_2' : 'oPage_1';
+		/*var oPage = (this.sCurrentPage && this.sCurrentPage === this.sPage_1) ? this.oPage_2 : this.oPage_1;
+		return oPage;*/
 	}
 	
     CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage, p_fCalla){
@@ -79,8 +83,8 @@ define([
 			this.oCurrentPage.invalidate();
 			var sCurrentPageId = getCurrentPageId.call(this);
             $('#'+sCurrentPageId).contents().wrapAll('<div id="temp_content"></div>');
-			var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;
-			/*if(bDrawClonePage){
+			/*var bDrawClonePage = (p_bDrawClonePage === null || p_bDrawClonePage === undefined) ? true : p_bDrawClonePage;
+			if(bDrawClonePage){
 				drawClonePageImage.call(this);
 			}else{*/				_loadPage.call(this);
 			//}
@@ -119,21 +123,26 @@ define([
                 // ** CSS can be removed if required as Swiffy Page doesnt require CSS
                 css: 'content/' + sFolderName + '/page.css'*/
             },
+			sPageHolderId = swapPageHolder.call(this),
+			sPageObjectID = swapPageObject.call(this)/*,
             sNextPageHolderId = swapPageHolder.call(this),
-            oNextPageHolder = swapPageObject.call(this);
+            oNextPageHolder = swapPageObject.call(this)*/;
 		//console.log(JSON.stringify(oResources));	
 		AudioManager.destroyPlayList();
-		
-        oNextPageHolder = new AbstractPage();
+        /*oNextPageHolder = new AbstractPage();
         oNextPageHolder.addEventListener('PAGE_LOADED', this.onPageLoaded);
-        oNextPageHolder.init($('#'+sNextPageHolderId), oResources, sFolderName);
+        oNextPageHolder.init($('#'+sNextPageHolderId), oResources, sFolderName);*/
+		this[sPageObjectID] = new AbstractPage();
+        this[sPageObjectID].addEventListener('PAGE_LOADED', this.onPageLoaded);
+        this[sPageObjectID].init($('#'+sPageHolderId), oResources, sFolderName);
+		//console.log('LOADing into = '+sPageHolderId+' : '+this.oPage_1+' : '+this.oPage_2);
     }
 	
     function onPageLoaded(data){
         //console.log('CourseController.onPageLoaded() | ');
 		var sPrevPageHolderId = getCurrentPageId.call(this),
-			oPrevPage = getCurrentPageObject.call(this);
-		
+			oPrevPage = this[getCurrentPageObject.call(this)];
+		//console.log('UNLOADing = '+sPrevPageHolderId+' : '+this.oPage_1+' : '+this.oPage_2);
 		if(sPrevPageHolderId){$('#'+sPrevPageHolderId).children('#temp_content').remove();}
 		if(oPrevPage){oPrevPage.hide(true); oPrevPage.destroy(); oPrevPage = null;}
 		
