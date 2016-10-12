@@ -111,11 +111,15 @@ define([
 	}
 	
     DerivationController.prototype.destroy = function(){
+		//console.log('DerivationController.destroy()');
+		this.oDerivationPanel.removeEventListener('DERIVATION_PANEL_BUTTON_CLICK', this.handelDerivationPanelClickEvents);
 		try{
 			this.oDerivationPanel.destroy();
 		}catch(e){};
+		this.oRefToCourseController  = null;
 		this.oDerivationPanel = null;
 		this.handelDerivationPanelClickEvents = null;
+		
 		SwiffyController.prototype.destroy.call(this);
     };
 

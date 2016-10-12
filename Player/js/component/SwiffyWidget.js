@@ -1,9 +1,11 @@
 define([
+    'jquery',
+    'nosleep',
     'component/AbstractComponent',
     'component/AudioPanel',
     'core/AudioManager',
     'util/MessageLogger'
-], function (AbstractComponent, AudioPanel, AudioManager, Logger) {
+], function ($, NoSleep, AbstractComponent, AudioPanel, AudioManager, Logger) {
 
     function SwiffyWidget() {
         //console.log('SwiffyWidget.CONSTRUCTOR() | ');
@@ -11,6 +13,8 @@ define([
 
         // define the class properties
 		this.oSwiffy;
+		this.oNoSleep = new NoSleep();
+		this.bWakeLockEnabled = false;
 		this.oAudioPanel;
 		this.jsonSwiffy;
 		this.nSwiffyReadyInterval;
@@ -467,11 +471,13 @@ define([
 			this.nPositionUpdate = setInterval(function(e){
 				onPositionUpdate.call(oScope, e);
 			}, 100);
+			enableNoSleep.call(this, true);
 		}
     }
     function removePositionUpdateInterval(){
         clearInterval(this.nPositionUpdate);
 		this.nPositionUpdate = null;
+		enableNoSleep.call(this, false);
     }
     function onPositionUpdate(e){
         //console.log("SwiffyWidget.onPositionUpdate() | "+this.oSwiffy.api.currentFrame+' : totalFrames = '+this.oSwiffy.api.totalFrames);
@@ -489,7 +495,19 @@ define([
             totalFrames:this.oSwiffy.api.totalFrames
         });
     }
-
+	
+	function enableNoSleep(p_bEnable){
+		if(p_bEnable === this.bWakeLockEnabled){return;}
+		
+		if (p_bEnable) {
+			this.oNoSleep.enable(); // keep the screen on!
+			this.bWakeLockEnabled = p_bEnable;
+		} else {
+			this.oNoSleep.disable(); // let the screen turn off.
+			this.bWakeLockEnabled = p_bEnable;
+		}
+	}
+	
     // Swiffy Widget API
     SwiffyWidget.prototype.play                         = function(e){
         //console.log('Swiffy.play() | \n\tbStopped = '+this.oSwiffy.api.bStopped+'\n\tbAnimationComplete = '+this.bAnimationComplete+'\n\toCueCompleteEventInfo = '+this.oCueCompleteEventInfo+'\n\tEQUALS = '+(!this.oSwiffy.api.bStopped || this.bAnimationComplete || this.oCueCompleteEventInfo));
@@ -626,6 +644,8 @@ define([
 
 		
 		this.oSwiffy = null;
+		this.oNoSleep = null;
+		this.bWakeLockEnabled = null;
 		this.oAudioPanel = null;
 		this.jsonSwiffy = null;
 		this.nSwiffyReadyInterval = null;

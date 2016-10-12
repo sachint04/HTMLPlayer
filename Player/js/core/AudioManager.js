@@ -283,19 +283,22 @@ define([
 	};
 
 	AudioManager.prototype.isMuted										= function(){
-		if(this.sPlayingSoundID){
+		//console.log('#### MUTED ### '+soundManager.muted);
+		/*if(this.sPlayingSoundID){
 			var oSound	= soundManager.getSoundById(this.sPlayingSoundID);
 			//console.log('AudioManager.isMuted() | '+oSound.muted);
 			return oSound.muted;
-		}
+		}*/
+		return soundManager.muted;
 	};
 	AudioManager.prototype.mute										= function(p_bMute){
 		//console.log('AudioManager.mute() | Curr Playing Sound ID = '+this.sPlayingSoundID+' : Mute = '+p_bMute);
-		if(this.sPlayingSoundID){
+		//if(this.sPlayingSoundID){
 			var oSound	= soundManager.getSoundById(this.sPlayingSoundID);
-			(p_bMute) ? oSound.mute() : oSound.unmute();
-			(p_bMute) ? this.dispatchEvent('AUDIO_MUTE', {type:'AUDIO_MUTE', target:this, soundID:oSound.id}) : this.dispatchEvent('AUDIO_UNMUTE', {type:'AUDIO_UNMUTE', target:this, soundID:oSound.id});;
-		}
+			//(p_bMute) ? oSound.mute() : oSound.unmute();
+			(p_bMute) ? soundManager.mute() : soundManager.unmute();
+			(p_bMute) ? this.dispatchEvent('AUDIO_MUTE', {type:'AUDIO_MUTE', target:this, soundID:oSound ? oSound.id : null}) : this.dispatchEvent('AUDIO_UNMUTE', {type:'AUDIO_UNMUTE', target:this, soundID:oSound ? oSound.id : null});
+		//}
 	};
 
 	AudioManager.prototype.stop										= function(){
@@ -316,7 +319,7 @@ define([
 	};
 
 	AudioManager.prototype.getVolume								= function(){
-		//console.log('AudioManager.mute() | Curr Playing Sound ID = '+this.sPlayingSoundID+' : Vol = '+p_nVol+' : Curr Vol = '+this.nCurrentVolume);
+		//console.log('AudioManager.getVolume() | Curr Playing Sound ID = '+this.sPlayingSoundID+' : Vol = '+p_nVol+' : Curr Vol = '+this.nCurrentVolume);
 		return this.nCurrentVolume;
 	};
 	AudioManager.prototype.setVolume								= function(p_nVol){

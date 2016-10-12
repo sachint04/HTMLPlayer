@@ -9005,7 +9005,7 @@
             b = new Oc(0, 0, a.Bd, a.Ad),
             c = new Oc(0, 0, window.innerWidth, window.innerHeight);
         c.translate(-a.Pk, -a.Qk);
-        b.xj(c);
+        //b.xj(c);
         return b
     };
     g.cw = function(a) {
@@ -16112,7 +16112,7 @@
 		//console.log('RQ CHECK >>>> '+(b instanceof Ht));
         a.__swiffy_constructor.apply(b, c)
 		if(b instanceof Ht){
-            console.log('<<<< RQ FOUND >>>> ');
+            //console.log('<<<< RQ FOUND >>>> ');
             //window.swiffyAPI = b;
             wk.prototype.api = b;
         }
