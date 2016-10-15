@@ -1,8 +1,9 @@
 define([
     'jquery',
     'util/EventDispatcher',
+    'util/LoadProgress',    
     'util/MessageLogger'
-], function ($, EventDispatcher, Logger) {
+], function ($, EventDispatcher, LoadProgress, Logger) {
     'use strict';
     
     function ResourceLoader() {
@@ -54,6 +55,7 @@ define([
         this.aResourceData[p_nIndex] = p_oData;
         //this.aResourceData[this.getFileName(this.aResourceList[p_nIndex])] = p_oData;
         this.aResourceData.count++;
+        LoadProgress.removeItem(1);
         //Logger.logDebug('ResourceLoader.onResourceLoad() | File Loaded = '+this.getFileName(this.aResourceList[p_nIndex])+' : Data Length = '+this.aResourceData.count+' : Resource Length = '+this.aResourceList.length);
         if (this.aResourceData.count === this.aResourceList.length) {
             this.dispatchEvent('RESOURCES_LOADED', {
@@ -106,6 +108,7 @@ define([
             this.aResourceList = new Array(p_aResourceList);
         }
         var nResourceListLength = this.aResourceList.length;
+        LoadProgress.addItem((this.aResourceList.length || 1));
         //Logger.logDebug('ResourceLoader.loadResource() | '+(this.getName() || "")+' : '+this.aResourceList+'\n\tResource List Length = '+nResourceListLength+"\n\tResource List is Array = "+(p_aResourceList instanceof Array)+"\n\tResource List is String = "+(typeof p_aResourceList === 'string'));
         this.aResourceData = [];
         this.aResourceData.count = 0;
