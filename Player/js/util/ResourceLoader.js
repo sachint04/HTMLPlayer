@@ -28,6 +28,16 @@ define([
             type: "GET",
             url: p_resourcePath,
             dataType: p_dataType,
+            xhrFields: {
+				onprogress: function (e) {
+					$('.progress-view').removeClass('hide');
+						if (e.lengthComputable) {
+							var w  = Math.floor(e.loaded / e.total * 100) + '%';
+							$('.progress-view .bar').css('width', w).html('Loading '+w);
+						}
+						
+					}
+				},
             success: function (p_data) {
                 oScope.dispatchEvent('RESOURCE_LOADED', {
                     type:'RESOURCE_LOADED',
@@ -37,6 +47,8 @@ define([
                     data:p_data,
                     index:p_nIndex
                 });
+                $('.progress-view').addClass('hide'); 
+                $('.progress-view .bar').css('width', 0);
                 onResourceLoad.call(oScope, p_data, p_nIndex);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -107,8 +119,16 @@ define([
         if (typeof p_aResourceList === 'string') {
             this.aResourceList = new Array(p_aResourceList);
         }
+        console.log('resource loader :' + 	p_aResourceList);
+        var len = p_aResourceList.length;  
+        if(!len){
+        	len = 0;
+        	for( var param in this.aResourceList){
+        		len++;
+        	}
+        }
+      //  LoadProgress.addItem(len);
         var nResourceListLength = this.aResourceList.length;
-        LoadProgress.addItem((this.aResourceList.length || 1));
         //Logger.logDebug('ResourceLoader.loadResource() | '+(this.getName() || "")+' : '+this.aResourceList+'\n\tResource List Length = '+nResourceListLength+"\n\tResource List is Array = "+(p_aResourceList instanceof Array)+"\n\tResource List is String = "+(typeof p_aResourceList === 'string'));
         this.aResourceData = [];
         this.aResourceData.count = 0;
