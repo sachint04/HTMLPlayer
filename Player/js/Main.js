@@ -80,7 +80,7 @@ if(!Array.prototype.indexOf){
 }
 // ** Declare the Require Config
 require.config({
-    waitseconds : 200,
+    waitseconds : 1000,
     shim:{
         'jqueryui':{
             deps: ['jquery']

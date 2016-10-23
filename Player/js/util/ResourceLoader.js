@@ -24,16 +24,19 @@ define([
     function load(p_resourcePath, p_dataType, p_nIndex) {
         //Logger.logDebug('ResourceLoader.load() | '+(this.getName() || "")+' | Path = ' + p_resourcePath+' : dataType = '+p_dataType);
         var oScope = this;
+       
         $.ajax({
             type: "GET",
             url: p_resourcePath,
             dataType: p_dataType,
             xhrFields: {
 				onprogress: function (e) {
-					$('.progress-view').removeClass('hide');
+					
 						if (e.lengthComputable) {
+							 $('.progress-overlay').removeClass('hide');
 							var w  = Math.floor(e.loaded / e.total * 100) + '%';
-							$('.progress-view .bar').css('width', w).html('Loading '+w);
+							$('.progress-view .bar').css('width', w)
+							// $('.progress-holder .progress-text').html(w);
 						}
 						
 					}
@@ -47,8 +50,9 @@ define([
                     data:p_data,
                     index:p_nIndex
                 });
-                $('.progress-view').addClass('hide'); 
+                $('.progress-overlay').addClass('hide'); 
                 $('.progress-view .bar').css('width', 0);
+               // $('.progress-holder .progress-text').html('0%');
                 onResourceLoad.call(oScope, p_data, p_nIndex);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -58,7 +62,11 @@ define([
                     filePath:p_resourcePath,
                     fileType:p_dataType
                 });
-                Logger.logError('Not able to load ' + p_dataType.toUpperCase() + ' file "' + p_resourcePath + '" with ERROR:"' + errorThrown + '"');
+				$('.progress-overlay').addClass('hide'); 
+                $('.progress-view .bar').css('width', 0);
+               // $('.progress-holder .progress-text').html('0%');
+
+                //Logger.logError('Not able to load ' + p_dataType.toUpperCase() + ' file "' + p_resourcePath + '" with ERROR:"' + errorThrown + '"');
             }
         });
     }
