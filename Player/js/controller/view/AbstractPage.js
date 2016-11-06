@@ -344,6 +344,7 @@ define([
         this.$domView.parent().scrollTop(0);
         $('html').scrollTop(0);
         this.$domView.focus();
+		this.oSwiffyController.autoPlay();
     };
 
 	AbstractPage.prototype.invalidate = function(){
@@ -364,6 +365,7 @@ define([
         }*/
 	};
 	AbstractPage.prototype.destroy = function(){
+		//console.log('AbstractPage.destroy() ');
 		var i;
             
         if(this.aComponents){

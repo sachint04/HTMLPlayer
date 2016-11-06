@@ -1,9 +1,8 @@
 define([
     'jquery',
     'util/EventDispatcher',
-    'util/LoadProgress',    
     'util/MessageLogger'
-], function ($, EventDispatcher, LoadProgress, Logger) {
+], function ($, EventDispatcher, Logger) {
     'use strict';
     
     function ResourceLoader() {
@@ -24,23 +23,10 @@ define([
     function load(p_resourcePath, p_dataType, p_nIndex) {
         //Logger.logDebug('ResourceLoader.load() | '+(this.getName() || "")+' | Path = ' + p_resourcePath+' : dataType = '+p_dataType);
         var oScope = this;
-       
         $.ajax({
             type: "GET",
             url: p_resourcePath,
             dataType: p_dataType,
-            xhrFields: {
-				onprogress: function (e) {
-					
-						if (e.lengthComputable) {
-							 $('.progress-overlay').removeClass('hide');
-							var w  = Math.floor(e.loaded / e.total * 100) + '%';
-							$('.progress-view .bar').css('width', w)
-							// $('.progress-holder .progress-text').html(w);
-						}
-						
-					}
-				},
             success: function (p_data) {
                 oScope.dispatchEvent('RESOURCE_LOADED', {
                     type:'RESOURCE_LOADED',
@@ -50,9 +36,6 @@ define([
                     data:p_data,
                     index:p_nIndex
                 });
-                $('.progress-overlay').addClass('hide'); 
-                $('.progress-view .bar').css('width', 0);
-               // $('.progress-holder .progress-text').html('0%');
                 onResourceLoad.call(oScope, p_data, p_nIndex);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -62,11 +45,7 @@ define([
                     filePath:p_resourcePath,
                     fileType:p_dataType
                 });
-				$('.progress-overlay').addClass('hide'); 
-                $('.progress-view .bar').css('width', 0);
-               // $('.progress-holder .progress-text').html('0%');
-
-                //Logger.logError('Not able to load ' + p_dataType.toUpperCase() + ' file "' + p_resourcePath + '" with ERROR:"' + errorThrown + '"');
+                Logger.logError('Not able to load ' + p_dataType.toUpperCase() + ' file "' + p_resourcePath + '" with ERROR:"' + errorThrown + '"');
             }
         });
     }
@@ -75,7 +54,6 @@ define([
         this.aResourceData[p_nIndex] = p_oData;
         //this.aResourceData[this.getFileName(this.aResourceList[p_nIndex])] = p_oData;
         this.aResourceData.count++;
-        LoadProgress.removeItem(1);
         //Logger.logDebug('ResourceLoader.onResourceLoad() | File Loaded = '+this.getFileName(this.aResourceList[p_nIndex])+' : Data Length = '+this.aResourceData.count+' : Resource Length = '+this.aResourceList.length);
         if (this.aResourceData.count === this.aResourceList.length) {
             this.dispatchEvent('RESOURCES_LOADED', {
@@ -127,15 +105,6 @@ define([
         if (typeof p_aResourceList === 'string') {
             this.aResourceList = new Array(p_aResourceList);
         }
-        console.log('resource loader :' + 	p_aResourceList);
-        var len = p_aResourceList.length;  
-        if(!len){
-        	len = 0;
-        	for( var param in this.aResourceList){
-        		len++;
-        	}
-        }
-      //  LoadProgress.addItem(len);
         var nResourceListLength = this.aResourceList.length;
         //Logger.logDebug('ResourceLoader.loadResource() | '+(this.getName() || "")+' : '+this.aResourceList+'\n\tResource List Length = '+nResourceListLength+"\n\tResource List is Array = "+(p_aResourceList instanceof Array)+"\n\tResource List is String = "+(typeof p_aResourceList === 'string'));
         this.aResourceData = [];
