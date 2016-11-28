@@ -124,7 +124,8 @@ body{
 .ui-replay-btn {
     width: 29px;
     height: 28px;
-    background-position: -112px 0;
+    background-position-x: -112px;
+    background-position-y: 0px;
     left: 65px;
     top: 7px;
     position: absolute;
