@@ -37,7 +37,7 @@ define([
 		$progress    = $('.progress-view');
 		$progressText 	= $('.progress-text');	
 		if(!$progress.length  ){
-			alert('progress view not found!');
+			//alert('progress view not found!');
 		}else{
 			w  = $progress.width();
 			console.log('width ' +w);

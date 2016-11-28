@@ -36,7 +36,7 @@ define([
 	AudioManager.prototype.init										= function(p_xmlSoundsNode){
 	    this.bPlaying = false;
         this.bComplete = true;
-		this.nCurrentVolume				= 10;
+		this.nCurrentVolume				= Constants.getVariable('nVolumeLevel');
 		this.aBackgroundLoadingAudios	= [];
 		this.aPreloadingAudios			= [];
 		//this.bAccumulatedTranscript		= StringUtil.sanitizeValue(CourseConfig.getConfig('audio_transcript').accumulateTranscript, false);

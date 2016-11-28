@@ -27,8 +27,9 @@ define([
         this.oComponentClassPath    = {
             audiopanel      : 'component/AudioPanel',
             swiffy          : 'component/SwiffyWidget',
-            derivationpanel : 'component/DerivationPanel',
+            createjs          : 'component/CreateJSWidget',
             derivationpanelstatic : 'component/DerivationPanelStatic',
+            derivationpanel : 'component/DerivationPanel',
             applicationpanel : 'component/ApplicationPanel',
             applicationpanelstatic : 'component/ApplicationPanelStatic',
             quizpanel		: 'component/QuizPanel',
@@ -85,6 +86,7 @@ define([
     }
     function onResourceLoaded(data){
         var sXmlData    = data.xml,
+            sJsData    = (data.js || ''),
             sCssData    = (data.css || ''),
             $htmlView   = $(data.html),
             oX2JS = new X2JS();
@@ -161,7 +163,9 @@ define([
                 //console.log('\tComponent Type = '+sComponentType+' : DOM View = '+this.$domView[0]);
 
                 // ** Add sections for each Component type
-                if (sComponentType === 'SWIFFY') {
+                if (sComponentType === 'CREATEJS') {
+                    createComponent.call(this, this.oComponentClassPath.createjs, oComponent);
+                }if (sComponentType === 'SWIFFY') {
                     createComponent.call(this, this.oComponentClassPath.swiffy, oComponent);
                 }
                 if (sComponentType === 'AUDIOPANEL') {
@@ -228,7 +232,8 @@ define([
     };
     function onComponentLoaded(e){
         var oScope = this,
-            oComponent = e.target;
+            oComponent = e.target,
+			sComponentType = oComponent.getConfig()._type;
         oComponent.removeEventListener('COMPONENT_LOADED', this.onComponentLoaded);
         // ** Storing a reference of the component in the array
         if(this.aComponents === null){this.aComponents = [];}
@@ -241,7 +246,7 @@ define([
 				this.oSwiffyController = new DerivationController(this);
 			}
 		}else if(this.jsonXMLData.data._pageType === "APP" || this.jsonXMLData.data._pageType === "APP_ST"){
-			// ** Create a Derivation Controller
+			// ** Create a Application Controller
 			if(!this.oSwiffyController){
 				this.oSwiffyController = null;
 				this.oSwiffyController = new ApplicationController(this);
@@ -254,30 +259,30 @@ define([
 			}
 		}
 		// ** Register the Audio Panel & Swiffy object with the Swiffy Controller
-		if(oComponent.getConfig()._type === 'swiffy'){
+		if(sComponentType === 'swiffy' || sComponentType === 'createjs'){
 			this.oSwiffyController.registerSwiffy(oComponent);
 		}
-		if(oComponent.getConfig()._type === 'audiopanel'){
+		if(sComponentType === 'audiopanel'){
 			this.oSwiffyController.registerAudioPanel(oComponent);
 		}
-		if(oComponent.getConfig()._type === 'derivationpanel'){
+		if(sComponentType === 'derivationpanel'){
 			this.oSwiffyController.registerDerivationPanel(oComponent);
 		}
-		if(oComponent.getConfig()._type === 'derivationpanel_static'){
+		if(sComponentType === 'derivationpanel_static'){
 			this.oSwiffyController.registerDerivationPanelStatic(oComponent);
 		}
-		if(oComponent.getConfig()._type === 'applicationpanel'){
+		if(sComponentType === 'applicationpanel'){
 			this.oSwiffyController.registerApplicationPanel(oComponent);
 		}
-		if(oComponent.getConfig()._type === 'applicationpanel_static'){
+		if(sComponentType === 'applicationpanel_static'){
 			this.oSwiffyController.registerApplicationPanelStatic(oComponent);
 		}
 
-        if(oComponent.getConfig()._type === 'quizpanel'){
+        if(sComponentType === 'quizpanel'){
         	this.oQuizController = new QuizController();
             this.oQuizController.registerQuizPanel(oComponent);
         }
-		if(oComponent.getConfig()._type === 'tutnumpanel'){
+		if(sComponentType === 'tutnumpanel'){
         	this.oTutNumController = new TutorialNumeralController();
             this.oTutNumController.registerPanel(oComponent);
         }
@@ -303,7 +308,10 @@ define([
             //this.setContent();
             this.$domView.fadeIn().removeClass('hide').focus();
             // ** Call a Concrete class method to do its stuff and dispatch the 'PAGE_LOADED' event
-            this.initialize();
+			var oScope = this;
+			setTimeout(function(){
+				oScope.initialize();
+			}, 1000);
         }
     };
 	function stackComponentsToMaintainDestroyOrder(){

@@ -80,7 +80,7 @@ if(!Array.prototype.indexOf){
 }
 // ** Declare the Require Config
 require.config({
-    waitseconds : 200,
+    waitseconds : 500,
     shim:{
         'jqueryui':{
             deps: ['jquery']
@@ -98,7 +98,8 @@ require.config({
         sm2                 : 'libs/soundmanager2-jsmin',
         jqueryui            : 'libs/jquery-ui-1.11.3.min',
         jqueryuitouchpunch  : 'libs/jquery.ui.touch-punch.min',
-        nosleep				: 'libs/NoSleep.min'
+        nosleep				: 'libs/NoSleep.min',
+		createjs			: 'libs/createjs-2015.11.26.min'
     },
     /*baseUrl: "../../js",*/
     callback : init()

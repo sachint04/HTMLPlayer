@@ -66,7 +66,8 @@ define([
 
     AudioPanel.prototype.listenTo                           = function(p_oSwiffyWidget){
         //console.log("AudioPanel.listenTo() | "/*+(p_oSwiffyWidget instanceof SwiffyWidget)*/);
-        if(p_oSwiffyWidget.toString().indexOf('SwiffyWidget') > -1){
+		var sWidget = p_oSwiffyWidget.toString();
+        if(sWidget.indexOf('SwiffyWidget') > -1 || sWidget.indexOf('CreateJSWidget') > -1){
             removeAudioManagerListeners.call(this);
             this.oSwiffyAnimRef = p_oSwiffyWidget;
 			this.showAudioControls(this.oSwiffyAnimRef.isAudioAvailable());
@@ -277,7 +278,7 @@ define([
 				sDirection			= StringUtil.sanitizeValue(oItem._direction, 'horizontal'),
 				// set up the slider options for the jQuery UI slider
 				sliderOptions	= {
-					value			: 0,
+					value			: Constants.getVariable('nVolumeLevel'),
 					step			: 1,
 					orientation		: sDirection,
 					range			: 'min',
@@ -288,7 +289,7 @@ define([
 				//Constants.setVariable('nVolumeLevel', AudioManager.getVolume());
 				//sliderOptions.value	= this.nVolumeLevel = AudioManager.getVolume();
 				//sliderOptions.value	= AudioManager.getVolume();
-				//console.log('#### VOLUME ### '+sliderOptions.value);
+				//console.log('#### VOLUME ### Slider Vol = '+(sliderOptions.value)+'\nAM Vol = '+(AudioManager.getVolume())+'\nConstants Vol = '+(Constants.setVariable('nVolumeLevel')));
 			}
 			
 			if(bSeekingAvailable){
@@ -369,7 +370,7 @@ define([
 		//this.nVolumeLevel = AudioManager.getVolume();
 		//Constants.setVariable('nVolumeLevel', AudioManager.getVolume());
 		//this.$volumeSlider.slider("value", this.nVolumeLevel);
-		this.$volumeSlider.slider("value", Constants.getVariable('nVolumeLevel'));
+		//this.$volumeSlider.slider("value", Constants.getVariable('nVolumeLevel'));
 		//console.log('#### VOLUME ### '+Constants.getVariable('nVolumeLevel'));
 		this.addMuteEvents();
 		//this.$volumeSlider.trigger('stop');
@@ -661,7 +662,7 @@ define([
 		}
 	}
 	function updatePlayState(){
-		if(!this.oSwiffyAnimRef.isAudioAvailable()){
+		if(this.oSwiffyAnimRef && !this.oSwiffyAnimRef.isAudioAvailable()){
 			this.$playBtn.addClass('hide');
 			this.$pauseBtn.addClass('hide');
 			return;

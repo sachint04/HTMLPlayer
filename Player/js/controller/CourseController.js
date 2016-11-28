@@ -76,7 +76,7 @@ define([
 	}
 	
     CourseController.prototype.loadPage = function(p_sFolderName, p_sPageType, p_bDrawClonePage, p_fCalla){
-        console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
+        //console.log('CourseController.loadPage() | Folder Name = '+p_sFolderName+' : Page Type = '+p_sPageType);
         Constants.setCurrentPageName(p_sFolderName);
 		Constants.setCurrentPageType(p_sPageType);
         if(this.oCurrentPage){
@@ -120,6 +120,7 @@ define([
             oResources = {
                 html: 'content/' + sFolderName + '/page.html',
                 xml: 'content/' + sFolderName + '/page.xml'/*,
+                js: 'content/' + sFolderName + '/page.js',
                 // ** CSS can be removed if required as Swiffy Page doesnt require CSS
                 css: 'content/' + sFolderName + '/page.css'*/
             },
@@ -143,8 +144,8 @@ define([
 		var sPrevPageHolderId = getCurrentPageId.call(this),
 			oPrevPage = this[getCurrentPageObject.call(this)];
 		//console.log('UNLOADing = '+sPrevPageHolderId+' : '+this.oPage_1+' : '+this.oPage_2);
-		if(sPrevPageHolderId){$('#'+sPrevPageHolderId).children('#temp_content').remove();}
 		if(oPrevPage){oPrevPage.hide(true); oPrevPage.destroy(); oPrevPage = null;}
+		if(sPrevPageHolderId){$('#'+sPrevPageHolderId).children('#temp_content').remove();}
 		
 		this.sCurrentPage = swapPageHolder.call(this);
 		this.oCurrentPage = data.currentTarget;
