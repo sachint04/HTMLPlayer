@@ -6,8 +6,8 @@
 		<!--Lecture 1-->
 		<Chap  Milestone="1" MilestoneName="Basics of an Automobile" LO="In this Milestone, we will understand the Basics of an Automobile" ID="1" sort="1" ChapName="Working Cycles of Engine">
 			<Board SubHeading="" ID="2" sort="1" BoardName="Sample Topic" Type="Normal">
-				<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>
 				<Target Type="DEF" TotalFrame="3224" FileName="ME_EG_CON_U1_B3"/>
+				<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1"/>
 			</Board>
 			<!--  
 				===================
@@ -31,7 +31,8 @@
 					ME_TD_APP_U9_B8_FS		- See Formulae (Static with scroll)
 			-->
 			<Board SubHeading="" ID="2" sort="1" BoardName="Otto Cycle" Type="Normal">
-				<Target Type="DIA" TotalFrame="5989" FileName="ME_TD_DIA_U9_B8"/>
+				<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1_CS6"/>
+				<Target Type="DEF" TotalFrame="5989" FileName="ME_TD_DIA_U9_B8"/>
 				<Target Type="DER" TotalFrame="9932" FileName="ME_TD_DER_U9_B8"/>
 				<Target Type="APP" TotalFrame="12972" FileName="ME_TD_APP_U9_B8"/>
 			</Board>
@@ -42,6 +43,7 @@
 			-->
 			<Board SubHeading="" ID="4" sort="2" BoardName="Dual Cycle" Type="Normal">
 				<Target Type="DEF" TotalFrame="3565" FileName="ME_IC_DEF_U2_B8"/>
+				<Target Type="DIA" TotalFrame="3224" FileName="ME_MP_DEF_U6_B1_SWIFFY"/>
 				<Target Type="DER_ST" TotalFrame="6000" FileName="EC_AC_DER_U1_B11_FD"/>
 				<Target Type="APP_ST" TotalFrame="6000" FileName="EC_AC_APP_U1_B10_FS"/>
 			</Board>
