@@ -93,9 +93,16 @@
 	display: inline-block;
 	width: 100%;
 }
+#nav_panel .tabs #lec.tab{
+	width: 41%;
+}
+#nav_panel .tabs #tut.tab{
+	width: 32%;
+}
+#nav_panel .tabs #sec.tab{
+	width: 27%;
+}
 #nav_panel .tabs .tab {
-
-	width: 33.3%;
 	color: #FFFFFF;
 	text-align: center;
 	padding: 2px;
@@ -275,7 +282,7 @@
     border-radius: 0.5em;
     color: gray;
     text-decoration: none;
-    margin-left: 0.5em;
+    margin-left: 0.2em;
     line-height: 100%;
 }
 #nav_panel .cat-btn.active {
